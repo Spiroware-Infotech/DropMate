@@ -16,12 +16,13 @@
 	   <div class="wrap">
 	      <div class="row">
 	         <section class="full-width">
-	            <form th:action="@{/login}" method="post" class="static-content">
+	            <form th:action="@{/perform_login}" method="post" class="static-content">
 	               <fieldset>
 	                  <h3>Login for partners</h3>
 	                  <p class="">
 	                     Forgotten your password? <a th:href="@{/forgotpwd}">Reset it here</a>.
 	                  </p>
+	                  <div th:if="${param.error}">Invalid credentials</div>
 	                  <div class="row">
 	                     <div class="f-item one-half">
 	                        <label for="log">Username</label>
@@ -36,10 +37,7 @@
 	                        <label for="rememberme">Remember Me </label>
 	                     </div>
 	                     <div class="f-item full-width">
-	                        <input type="hidden" id="_wpnonce" name="_wpnonce" value="9d0dab5fb3">
-	                        <input type="hidden" name="_wp_http_referer" value="/elementor/login-for-partners/">								
-	                        <input type="hidden" name="redirect_to" value="/elementor/login-for-partners/">
-	                        <input type="submit" id="login" name="login" value="Login" class="gradient-button" fdprocessedid="lak9gs">
+	                        <input type="submit" id="login" name="login" value="Login" class="gradient-button">
 	                     </div>
 	                  </div>
 	                  <p class="">

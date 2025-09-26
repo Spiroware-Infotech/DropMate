@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+	data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+	xmlns:th="http://www.w3.org/1999/xhtml">
+<body class="min-h-screen bg-black">
+ 
+     <head th:replace="common/header :: common-header" />
+	 <head th:replace="common/header :: navbar" />
+	 
+	<div class="wrap">
+		<nav class="breadcrumbs">
+		</nav>
+	</div>
+
+	<div class="main">
+	   <div class="wrap">
+	      <div class="row">
+	         <section class="full-width">
+	               <fieldset>
+	                  <h3>Enter OTP sent to your email/phone</h3>
+                      <div th:if="${param.error}">Invalid or expired OTP</div>
+					  <div th:if="${param.resent}">OTP resent</div>
+					 <form th:action="@{/otp}" method="post"  class="static-content">
+		                  <div class="row">
+		                     <div class="f-item one-half">
+		                        <label for="log">Enter the code we sent you by email</label>
+		                         <input type="text" name="otp" placeholder="6-digit code" required />
+		                     </div>
+		                     <div class="f-item full-width">
+		                        <input type="submit" id="verify" name="verify" value="Verify" class="gradient-button" >
+		                     </div>
+		                  </div>
+	                   </form>
+	                   <form th:action="@{/otp/resend}" method="post"  class="static-content">
+						    <button type="submit">Resend OTP</button>
+						  </form> 
+	               </fieldset>
+	         </section>
+	      </div>
+	   </div>
+	</div>
+	  
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+  
+</body>
+</html>

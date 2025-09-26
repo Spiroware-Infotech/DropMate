@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome Email</title>
+    <style>
+    
+    </style>
+</head>
+<body>
+
+	<!-- Include Header Fragment -->
+	<th:block th:replace="fragments/header :: header"></th:block>
+	
+	<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+	    <tr>
+	        <td>&nbsp;</td>
+	        <td class="container">
+	            <div class="content">
+	                <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main">
+	                    <tr>
+	                        <td class="wrapper">
+	                        	<div class="col-md-4 col-md-offset-4 marg" style="">
+									<center><img width="50" height="50" src="https://demo.itest.inilabs.xyz/uploads/images/site.png"></center> 
+								 </div>
+	                            <p>Hi <span th:text="${name}">User</span>,</p>
+	                            <p>Welcome to our online examination portal . Click <a th:href="${link}">here</a> to get started.</p>
+	                            <br/>
+	                            <p>A Robust Online Test Software For Conducting Remote Online Examinations.</p>
+	                            <p>Good luck! Thanks.</p>
+	                        </td>
+	                    </tr>
+	                </table>
+	                <!-- Include Footer Fragment -->
+	                <th:block th:replace="fragments/footer :: footer"></th:block>
+	               
+	            </div>
+	        </td>
+	        <td>&nbsp;</td>
+	    </tr>
+	</table>
+
+</body>
+</html>

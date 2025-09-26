@@ -55,6 +55,7 @@ public class SpringSecurityConfig {
                 .anyRequest().authenticated())
             .formLogin(login -> login
                     .loginPage("/login")
+                    .loginProcessingUrl("/perform_login")
                     .successHandler(customSuccessHandler)
                     .failureUrl("/login?error=true") // redirects back with error
                     .permitAll())

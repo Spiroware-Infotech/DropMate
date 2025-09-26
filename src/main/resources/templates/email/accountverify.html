@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Verify</title>
+    <style>
+    
+    </style>
+</head>
+<body>
+
+	<!-- Include Header Fragment -->
+	<th:block th:replace="fragments/header :: header"></th:block>
+	
+	<!-- <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+	    <tr>
+	        <td>&nbsp;</td>
+	        <td class="container">
+	            <div class="content">
+	                <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main">
+	                    <tr>
+	                        <td class="wrapper">
+	                        	<div class="col-md-4 col-md-offset-4 marg" style="">
+									<center><img width="50" height="50" src="cid:logo"></center> 
+								 </div>
+	                            <p>Dear <span th:text="${user.firstName}">User</span>,</p>
+	                            <p>Please click the link below to verify your registration</p>
+	                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+			                    <tbody>
+			                      <tr>
+			                        <td align="left">
+			                          <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+			                            <tbody>
+			                              <tr>
+			                                <td> <a th:href="${link}" target="_blank">VERIFY</a> </td>
+			                              </tr>
+			                            </tbody>
+			                          </table>
+			                        </td>
+			                      </tr>
+			                    </tbody>
+			                  </table>
+			                   <br/> <br/>
+                            <p>A Robust Online Test Software For Conducting Remote Online Examinations.</p>
+                            <p>Thanks.</p>
+                        </td>
+                       </tr>
+                   </table>
+                   
+                  Include Footer Fragment
+                  <th:block th:replace="fragments/footer :: footer"></th:block>
+	              
+	            </div>
+	        </td>
+	        <td>&nbsp;</td>
+	    </tr>
+	</table> -->
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center" style="padding: 18px;">
+                <table class="content" width="600" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse; border: 1px solid #cccccc;">
+                    <!-- Header -->
+                    <tr>
+                        <td class="header" style="background-color: #0f4c8b; padding: 10px; text-align: center; color: white; font-size: 20px;">
+                        	Please activate your account
+                        </td>
+                    </tr>
+
+                    <!-- Body -->
+                    <tr>
+                        <td class="body" style="padding: 40px; text-align: left; font-size: 14px; line-height: 1.6;">
+                        <div class="col-md-4 col-md-offset-4 marg" style="">
+							<center><img width="70" height="70" src="cid:logo"></center> 
+						 </div>
+                        <p>Dear <span th:text="${user.firstName}">User</span>,</p>
+                        	Thank you, for registration!.<br>
+                            Please click the link below to activate your account.   
+                            <br/> <br/>
+							<span class="btn btn-primary">
+								<a th:href="${link}" target="_blank">Activate</a>	
+							</span>         
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="body" style="padding: 40px; text-align: left; font-size: 14px; line-height: 1.6;">
+                           <hr/>
+                            SmartQuiz is a Online Examination System For Secure And Seamless Online Exams. A Robust Online Test Software For Conducting Remote Online Examinations.             
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td class="footer" style="background-color: #333333; padding: 15px; text-align: center; color: white; font-size: 14px;">
+							Copyright &copy; 2025 | SmartQuiz
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

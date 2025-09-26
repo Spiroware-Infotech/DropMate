@@ -1,5 +1,6 @@
 package com.dropmate.entity;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
@@ -84,6 +85,18 @@ public class User implements UserDetails {
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 
+	 // OTP-related
+    @Column(name="otp_hash")
+    private String otpHash; // store hashed otp (BCrypt) or encrypted
+    
+    @Column(name="otp_requested_at")
+    private Instant otpRequestedAt;
+    
+    @Column(name="otp_attempts")
+    private Integer otpAttempts = 0;
+
+    private boolean twoFactorAuthenticated = false; // optional - session-level better
+    
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "userid") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_id") })
