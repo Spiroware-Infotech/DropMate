@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+	data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+	xmlns:th="http://www.w3.org/1999/xhtml">
+<body class="min-h-screen bg-black">
+ 
+     <head th:replace="common/header :: common-header" />
+	 <head th:replace="common/header :: navbar" />
+	 
+	<div class="wrap">
+		<nav class="breadcrumbs">
+		</nav>
+	</div>
+
+	<div class="main">
+	   <div class="wrap">
+	      <div class="row">
+	         <section class="full-width">
+	            <form th:action="@{/login}" method="post" class="static-content">
+	               <fieldset>
+	                  <h3>Login for partners</h3>
+	                  <p class="">
+	                     Forgotten your password? <a th:href="@{/forgotpwd}">Reset it here</a>.
+	                  </p>
+	                  <div class="row">
+	                     <div class="f-item one-half">
+	                        <label for="log">Username</label>
+	                        <input type="text" name="username" placeholder="Username" onfocus="if (this.value == 'Username') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Username';}" required="required">
+	                     </div>
+	                     <div class="f-item one-half">
+	                        <label for="pwd">Password</label>
+	                        <input type="password" name="password" placeholder="Password" onfocus="if (this.value == 'Password') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Password';}" required="required">
+	                     </div>
+	                     <div class="f-item full-width checkbox">
+	                        <div class="checker"><span><input type="checkbox" name="rememberme"></span></div>
+	                        <label for="rememberme">Remember Me </label>
+	                     </div>
+	                     <div class="f-item full-width">
+	                        <input type="hidden" id="_wpnonce" name="_wpnonce" value="9d0dab5fb3">
+	                        <input type="hidden" name="_wp_http_referer" value="/elementor/login-for-partners/">								
+	                        <input type="hidden" name="redirect_to" value="/elementor/login-for-partners/">
+	                        <input type="submit" id="login" name="login" value="Login" class="gradient-button" fdprocessedid="lak9gs">
+	                     </div>
+	                  </div>
+	                  <p class="">
+	                     Don't have account? <a th:href="@{/signup}">Signup here</a>.
+	                  </p> 
+	               </fieldset>
+	            </form>
+	         </section>
+	      </div>
+	   </div>
+	   <!--// .wrap -->
+	</div>
+	  
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+	
+
+  
+</body>
+</html>

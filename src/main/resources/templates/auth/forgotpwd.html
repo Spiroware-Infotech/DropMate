@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+	data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+	xmlns:th="http://www.w3.org/1999/xhtml">
+<<body class="min-h-screen bg-black">
+ 
+     <head th:replace="common/header :: common-header" />
+	 <head th:replace="common/header :: navbar" />
+	 
+	<div class="wrap">
+		<nav class="breadcrumbs">
+		</nav>
+	</div>
+
+	<div class="main">
+	   <div class="wrap">
+	      <div class="row">
+	         <section class="full-width">
+	            <form id="login_form" method="post" action="https://themes.themeenergy.com/elementor/login-for-partners/" class="static-content">
+	               <fieldset>
+	                  <h3>Reset password</h3>
+	                  <div class="row">
+	                    <div class="f-item full-width">
+							<label for="user_email">Username or email address</label>
+							<input type="text" name="user_email" id="user_email" value="" fdprocessedid="5cebxr">
+						</div>
+	                      
+	                     <br/> <br/> <br/> <br/>
+	                     <div class="f-item full-width">
+	                        <input type="hidden" id="_wpnonce" name="_wpnonce" value="9d0dab5fb3">
+	                        <input type="hidden" name="_wp_http_referer" value="/elementor/login-for-partners/">								
+	                        <input type="hidden" name="redirect_to" value="/elementor/login-for-partners/">
+	                        <input type="submit" id="reset" name="reset" value="Reset password" class="gradient-button" fdprocessedid="qbk1dy">
+	                     </div>
+	                  </div>
+	                  <p class="">
+	                     Have account already? <a th:href="@{/login}">Login here</a>.
+	                  </p>  
+	               </fieldset>
+	            </form>
+	         </section>
+	      </div>
+	   </div>
+	   <!--// .wrap -->
+	</div>
+	  
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+	
+
+  
+</body>
+</html>

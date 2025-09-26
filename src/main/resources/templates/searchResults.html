@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+	data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+	xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<head th:replace="common/header :: common-header" />
+<head th:replace="common/header :: navbar" />
+<style type="text/css">
+	.sort-by {
+	  font-family: Arial, sans-serif;
+	}
+	.sort-by h3 {
+	  margin: 0 0 5px 0;
+	  font-weight: 600;
+	  color: #333;
+	}
+	.sort-by .route {
+	  display: flex;
+	  align-items: center;
+	  gap: 5px; /* space between elements */
+	  font-size: 16px;
+	  color: #555;
+	  margin-top: 14px;
+	}
+	.sort-by .route .arrow {
+	  color: #999;
+	  font-weight: bold;
+	}
+
+</style>	
+<main class="main">		
+	<div class="wrap">
+		<!--breadcrumbs-->
+		<nav class="breadcrumbs">
+			<!--crumbs-->
+			<ul>
+				<li><a href="#" title="Home">Home</a></li>
+				<li>Search results</li>                                       
+			</ul>
+			<!--//crumbs-->
+			
+			<!--top right navigation-->
+			<ul class="top-right-nav">
+				<li><a href="#" title="Back to results">Back to results</a></li>
+				<li><a href="#" title="Change search">Change search</a></li>
+			</ul>
+			<!--//top right navigation-->
+		</nav>
+		<!--//breadcrumbs-->
+		
+		<div class="row">
+			<!--sidebar-->
+			<aside class="one-fourth left-sidebar">
+				<article class="widget refine-search-results">
+					<h4>Sort by</h4>
+					<dl>
+						<dt class="">Departure time</dt>
+						<dd style="height: auto;">
+								<div class="checkbox">
+									<div class="checker" id="uniform-ch1"><span><input type="checkbox" id="ch1" name="price"></span></div>
+									<label for="ch1">0 - 49 $</label>
+								</div>
+								<div class="checkbox">
+									<div class="checker" id="uniform-ch2"><span><input type="checkbox" id="ch2" name="price"></span></div>
+									<label for="ch2">50 - 99 $</label>
+								</div>
+								<div class="checkbox">
+									<div class="checker" id="uniform-ch3"><span><input type="checkbox" id="ch3" name="price"></span></div>
+									<label for="ch3">100 -149 $</label>
+								</div>
+								<div class="checkbox">
+									<div class="checker" id="uniform-ch4"><span><input type="checkbox" id="ch4" name="price"></span></div>
+									<label for="ch4">150 - 199 $</label>
+								</div>
+								<div class="checkbox">
+									<div class="checker" id="uniform-ch5"><span><input type="checkbox" id="ch5" name="price"></span></div>
+									<label for="ch5">200 $ +</label>
+								</div>
+							</dd>
+						
+						<dt>Trust and safety</dt>
+						<dd style="display: none; height: auto;">
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch6"><span><input type="checkbox" id="ch6" name="accommodation"></span></div>
+								<label for="ch6">Hotel</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch7"><span><input type="checkbox" id="ch7" name="accommodation"></span></div>
+								<label for="ch7">Hostel</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch8"><span><input type="checkbox" id="ch8" name="accommodation"></span></div>
+								<label for="ch8">Apart Hotel</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch9"><span><input type="checkbox" id="ch9" name="accommodation"></span></div>
+								<label for="ch9">Guest House</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch30"><span><input type="checkbox" id="ch30" name="accommodation"></span></div>
+								<label for="ch30">Apartment</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch31"><span><input type="checkbox" id="ch31" name="accommodation"></span></div>
+								<label for="ch31">Bed &amp; Breakfast</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch32"><span><input type="checkbox" id="ch32" name="accommodation"></span></div>
+								<label for="ch32">Residence</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch33"><span><input type="checkbox" id="ch33" name="accommodation"></span></div>
+								<label for="ch33">Farm stay</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch34"><span><input type="checkbox" id="ch34" name="accommodation"></span></div>
+								<label for="ch34">All-inclusive resort</label>
+							</div>
+						</dd>
+						
+						<dt>Star rating</dt>
+						<dd style="display: none; height: auto;">
+							<span class="stars-info">3 or more</span>
+							<div id="star" data-rating="3" style="cursor: pointer; width: 110px;"><img src="images/ico/star-rating-on.png" alt="1" title="bad">&nbsp;<img src="images/ico/star-rating-on.png" alt="2" title="poor">&nbsp;<img src="images/ico/star-rating-on.png" alt="3" title="regular">&nbsp;<img src="images/ico/star-rating-off.png" alt="4" title="good">&nbsp;<img src="images/ico/star-rating-off.png" alt="5" title="gorgeous"><input type="hidden" name="score" value="3"></div>
+						</dd>
+						
+						<dt>Amenities</dt>
+						<dd style="display: none; height: auto;">
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch35"><span><input type="checkbox" id="ch35" name="facilities"></span></div>
+								<label for="ch35">Wi-Fi</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch36"><span><input type="checkbox" id="ch36" name="facilities"></span></div>
+								<label for="ch36">Parking</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch37"><span><input type="checkbox" id="ch37" name="facilities"></span></div>
+								<label for="ch37">Airport Shuttle</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch38"><span><input type="checkbox" id="ch38" name="facilities"></span></div>
+								<label for="ch38">Meeting /&nbsp;Banquet Facilities</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch39"><span><input type="checkbox" id="ch39" name="facilities"></span></div>
+								<label for="ch39">Swimming pool</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch40"><span><input type="checkbox" id="ch40" name="facilities"></span></div>
+								<label for="ch40">Restaurant</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch41"><span><input type="checkbox" id="ch41" name="facilities"></span></div>
+								<label for="ch41">Fitness Centre</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch42"><span><input type="checkbox" id="ch42" name="facilities"></span></div>
+								<label for="ch42">SPA &amp; Wellness&nbsp;Centre</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch43"><span><input type="checkbox" id="ch43" name="facilities"></span></div>
+								<label for="ch43">Pets allowed</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch44"><span><input type="checkbox" id="ch44" name="facilities"></span></div>
+								<label for="ch44">Lift</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch45"><span><input type="checkbox" id="ch45" name="facilities"></span></div>
+								<label for="ch45">Air condition</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch46"><span><input type="checkbox" id="ch46" name="facilities"></span></div>
+								<label for="ch46">Family rooms</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch47"><span><input type="checkbox" id="ch47" name="facilities"></span></div>
+								<label for="ch47">Non - smoking rooms</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch48"><span><input type="checkbox" id="ch48" name="facilities"></span></div>
+								<label for="ch48">Rooms/facilities for disabled guests</label>
+							</div>
+						</dd>
+						
+						<dt>Payment options</dt>
+						<dd style="display: none; height: auto;">
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch86"><span><input type="checkbox" id="ch86" name="theme"></span></div>
+								<label for="ch86">American Express</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch87"><span><input type="checkbox" id="ch87" name="theme"></span></div>
+								<label for="ch87">Visa</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch88"><span><input type="checkbox" id="ch88" name="theme"></span></div>
+								<label for="ch88">Euro/Mastercard</label>
+							</div>
+							<div class="checkbox">
+								<div class="checker" id="uniform-ch89"><span><input type="checkbox" id="ch89" name="theme"></span></div>
+								<label for="ch89">Diners Club</label>
+							</div>
+						</dd>
+					</dl>
+				</article>
+			</aside>
+		
+			<!--three-fourth content-->
+			<div class="three-fourth">
+				<div class="sort-by">
+				  <h3>Saturday, 27 September</h3>
+				  <div class="route">
+				    <span class="city">Hyderabad</span>
+				    <span class="arrow">→</span>
+				    <span class="city">Kurnool</span>
+				  </div>
+				</div>
+
+				
+				<div class="row deals  results">
+					<!--deal-->
+					<article class="full-width">
+						<figure><a href="hotel.html" title=""><img src="images/uploads/hotel1.jpg" alt=""></a></figure>
+						<div class="details" style="height: 285.5px;">
+							<h3>Best ipsum hotel 
+								<span class="stars">
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+								</span>
+							</h3>
+							<span class="address">London  •  <a href="#">Show on map</a></span>
+							<span class="rating"> 8 /10</span>
+							<span class="price">Price per night from  <em>$ 50</em> </span>
+							<div class="description">
+								<p>Overlooking the Aqueduct and Nature Park, Lorem Ipsum Hotel is situated 5 minutes’ walk from London’s Zoological Gardens and a metro station. <a href="hotel.html">More info</a></p>
+							</div>
+							<a href="hotel.html" title="Book now" class="gradient-button">Book now</a>
+						</div>
+					</article>
+					<!--//deal-->
+					
+					<!--deal-->
+					<article class="full-width">
+						<figure><a href="hotel.html" title=""><img src="images/uploads/hotel2.jpg" alt=""></a></figure>
+						<div class="details" style="height: 285.5px;">
+							<h3>Tropicana hotel
+								<span class="stars">
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+								</span>
+							</h3>
+							<span class="address">London  •  <a href="#">Show on map</a></span>
+							<span class="rating"> 9 /10</span>
+							<span class="price">Price per night from  <em>$ 80</em> </span>
+							<div class="description">
+								<p>Overlooking the Aqueduct and Nature Park, Lorem Ipsum Hotel is situated 5 minutes’ walk from London’s Zoological Gardens and a metro station. <a href="hotel.html">More info</a></p>
+							</div>
+							<a href="hotel.html" title="Book now" class="gradient-button">Book now</a>
+						</div>
+					</article>
+					<!--//deal-->
+					
+					<!--deal-->
+					<article class="full-width">
+						<figure><a href="hotel.html" title=""><img src="images/uploads/hotel3.jpg" alt=""></a></figure>
+						<div class="details" style="height: 285.5px;">
+							<h3>Spa Resort hotel
+								<span class="stars">
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+								</span>
+							</h3>
+							<span class="address">London  •  <a href="#">Show on map</a></span>
+							<span class="rating"> 8 /10</span>
+							<span class="price">Price per night from  <em>$ 70</em> </span>
+							<div class="description">
+								<p>Overlooking the Aqueduct and Nature Park, Lorem Ipsum Hotel is situated 5 minutes’ walk from London’s Zoological Gardens and a metro station. <a href="hotel.html">More info</a></p>
+							</div>
+							<a href="hotel.html" title="Book now" class="gradient-button">Book now</a>
+						</div>
+					</article>
+					<!--//deal-->
+					
+					<!--deal-->
+					<article class="full-width">
+						<figure><a href="hotel.html" title=""><img src="images/uploads/hotel4.jpg" alt=""></a></figure>
+						<div class="details" style="height: 285.5px;">
+							<h3>Spa Resort hotel
+								<span class="stars">
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+								</span>
+							</h3>
+							<span class="address">London  •  <a href="#">Show on map</a></span>
+							<span class="rating"> 8 /10</span>
+							<span class="price">Price per night from  <em>$ 70</em> </span>
+							<div class="description">
+								<p>Overlooking the Aqueduct and Nature Park, Lorem Ipsum Hotel is situated 5 minutes’ walk from London’s Zoological Gardens and a metro station. <a href="hotel.html">More info</a></p>
+							</div>
+							<a href="hotel.html" title="Book now" class="gradient-button">Book now</a>
+						</div>
+					</article>
+					<!--//deal-->
+					
+					<!--deal-->
+					<article class="full-width">
+						<figure><a href="hotel.html" title=""><img src="images/uploads/hotel5.jpg" alt=""></a></figure>
+						<div class="details" style="height: 285.5px;">
+							<h3>Best ipsum hotel 
+								<span class="stars">
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+								</span>
+							</h3>
+							<span class="address">London  •  <a href="#">Show on map</a></span>
+							<span class="rating"> 8 /10</span>
+							<span class="price">Price per night from  <em>$ 50</em> </span>
+							<div class="description">
+								<p>Overlooking the Aqueduct and Nature Park, Lorem Ipsum Hotel is situated 5 minutes’ walk from London’s Zoological Gardens and a metro station. <a href="hotel.html">More info</a></p>
+							</div>
+							<a href="hotel.html" title="Book now" class="gradient-button">Book now</a>
+						</div>
+					</article>
+					<!--//deal-->
+					
+					<!--deal-->
+					<article class="full-width">
+						<figure><a href="hotel.html" title=""><img src="images/uploads/hotel6.jpg" alt=""></a></figure>
+						<div class="details" style="height: 285.5px;">
+							<h3>Tropicana hotel
+								<span class="stars">
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+								</span>
+							</h3>
+							<span class="address">London  •  <a href="#">Show on map</a></span>
+							<span class="rating"> 9 /10</span>
+							<span class="price">Price per night from  <em>$ 80</em> </span>
+							<div class="description">
+								<p>Overlooking the Aqueduct and Nature Park, Lorem Ipsum Hotel is situated 5 minutes’ walk from London’s Zoological Gardens and a metro station. <a href="hotel.html">More info</a></p>
+							</div>
+							<a href="hotel.html" title="Book now" class="gradient-button">Book now</a>
+						</div>
+					</article>
+					<!--//deal-->
+					
+					<!--deal-->
+					<article class="full-width">
+						<figure><a href="hotel.html" title=""><img src="images/uploads/hotel1.jpg" alt=""></a></figure>
+						<div class="details" style="height: 285.5px;">
+							<h3>Best ipsum hotel 
+								<span class="stars">
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+								</span>
+							</h3>
+							<span class="address">London  •  <a href="#">Show on map</a></span>
+							<span class="rating"> 8 /10</span>
+							<span class="price">Price per night from  <em>$ 50</em> </span>
+							<div class="description">
+								<p>Overlooking the Aqueduct and Nature Park, Lorem Ipsum Hotel is situated 5 minutes’ walk from London’s Zoological Gardens and a metro station. <a href="hotel.html">More info</a></p>
+							</div>
+							<a href="hotel.html" title="Book now" class="gradient-button">Book now</a>
+						</div>
+					</article>
+					<!--//deal-->
+					
+					<!--deal-->
+					<article class="full-width">
+						<figure><a href="hotel.html" title=""><img src="images/uploads/hotel2.jpg" alt=""></a></figure>
+						<div class="details" style="height: 285.5px;">
+							<h3>Tropicana hotel
+								<span class="stars">
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+								</span>
+							</h3>
+							<span class="address">London  •  <a href="#">Show on map</a></span>
+							<span class="rating"> 9 /10</span>
+							<span class="price">Price per night from  <em>$ 80</em> </span>
+							<div class="description">
+								<p>Overlooking the Aqueduct and Nature Park, Lorem Ipsum Hotel is situated 5 minutes’ walk from London’s Zoological Gardens and a metro station. <a href="hotel.html">More info</a></p>
+							</div>
+							<a href="hotel.html" title="Book now" class="gradient-button">Book now</a>
+						</div>
+					</article>
+					<!--//deal-->
+					
+					<!--deal-->
+					<article class="full-width">
+						<figure><a href="hotel.html" title=""><img src="images/uploads/hotel3.jpg" alt=""></a></figure>
+						<div class="details" style="height: 285.5px;">
+							<h3>Spa Resort hotel
+								<span class="stars">
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+								</span>
+							</h3>
+							<span class="address">London  •  <a href="#">Show on map</a></span>
+							<span class="rating"> 8 /10</span>
+							<span class="price">Price per night from  <em>$ 70</em> </span>
+							<div class="description">
+								<p>Overlooking the Aqueduct and Nature Park, Lorem Ipsum Hotel is situated 5 minutes’ walk from London’s Zoological Gardens and a metro station. <a href="hotel.html">More info</a></p>
+							</div>
+							<a href="hotel.html" title="Book now" class="gradient-button">Book now</a>
+						</div>
+					</article>
+					<!--//deal-->
+					
+					<!--deal-->
+					<article class="full-width">
+						<figure><a href="hotel.html" title=""><img src="images/uploads/hotel4.jpg" alt=""></a></figure>
+						<div class="details" style="height: 285.5px;">
+							<h3>Spa Resort hotel
+								<span class="stars">
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+								</span>
+							</h3>
+							<span class="address">London  •  <a href="#">Show on map</a></span>
+							<span class="rating"> 8 /10</span>
+							<span class="price">Price per night from  <em>$ 50</em> </span>
+							<div class="description">
+								<p>Overlooking the Aqueduct and Nature Park, Lorem Ipsum Hotel is situated 5 minutes’ walk from London’s Zoological Gardens and a metro station. <a href="hotel.html">More info</a></p>
+							</div>
+							<a href="hotel.html" title="Book now" class="gradient-button">Book now</a>
+						</div>
+					</article>
+					<!--//deal-->
+					
+					<!--deal-->
+					<article class="full-width">
+						<figure><a href="hotel.html" title=""><img src="images/uploads/hotel5.jpg" alt=""></a></figure>
+						<div class="details" style="height: 285.5px;">
+							<h3>Best ipsum hotel 
+								<span class="stars">
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+								</span>
+							</h3>
+							<span class="address">London  •  <a href="#">Show on map</a></span>
+							<span class="rating"> 8 /10</span>
+							<span class="price">Price per night from  <em>$ 50</em> </span>
+							<div class="description">
+								<p>Overlooking the Aqueduct and Nature Park, Lorem Ipsum Hotel is situated 5 minutes’ walk from London’s Zoological Gardens and a metro station. <a href="hotel.html">More info</a></p>
+							</div>
+							<a href="hotel.html" title="Book now" class="gradient-button">Book now</a>
+						</div>
+					</article>
+					<!--//deal-->
+					
+					<!--deal-->
+					<article class="full-width">
+						<figure><a href="hotel.html" title=""><img src="images/uploads/hotel6.jpg" alt=""></a></figure>
+						<div class="details" style="height: 285.5px;">
+							<h3>Tropicana hotel
+								<span class="stars">
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+									<i class="material-icons"></i>
+								</span>
+							</h3>
+							<span class="address">London  •  <a href="#">Show on map</a></span>
+							<span class="rating"> 9 /10</span>
+							<span class="price">Price per night from  <em>$ 80</em> </span>
+							<div class="description">
+								<p>Overlooking the Aqueduct and Nature Park, Lorem Ipsum Hotel is situated 5 minutes’ walk from London’s Zoological Gardens and a metro station. <a href="hotel.html">More info</a></p>
+							</div>
+							<a href="hotel.html" title="Book now" class="gradient-button">Book now</a>
+						</div>
+					</article>
+					<!--//deal-->
+					
+					<!--bottom navigation-->
+					<div class="bottom-nav">
+						<!--back up button-->
+						<a href="#" class="scroll-to-top" title="Back up">Back up</a> 
+						<!--//back up button-->
+						
+						<!--pager-->
+						<div class="pager">
+							<span><a href="#">First page</a></span>
+							<span><a href="#">&lt;</a></span>
+							<span class="current">1</span>
+							<span><a href="#">2</a></span>
+							<span><a href="#">3</a></span>
+							<span><a href="#">4</a></span>
+							<span><a href="#">5</a></span>
+							<span><a href="#">6</a></span>
+							<span><a href="#">7</a></span>
+							<span><a href="#">8</a></span>
+							<span><a href="#">&gt;</a></span>
+							<span><a href="#">Last page</a></span>
+						</div>
+						<!--//pager-->
+					</div>
+					<!--//bottom navigation-->
+				</div>
+			</div>
+			<!--//three-fourth content-->
+		</div>
+		<!--//main content-->
+	</div>
+</main>
+
+
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+  
+</body>
+</html>	

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:fragment="common-header">
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="Share Rides, Save Money, Deliver Items">
+	<meta name="description" content="Share Rides, Save Money, Deliver Items ">
+	<meta name="author" content="dropmate.com">
+	<title>Share Rides, Save Money, Deliver Items | DropMate</title>
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/theme-turqoise.css" id="template-color">
+	<link rel="stylesheet" href="/css/lightslider.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800|Roboto+Slab:400,700&amp;subset=latin,latin-ext,greek-ext,greek,cyrillic,vietnamese,cyrillic-ext">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<script src="https://use.fontawesome.com/webfontloader/1.6.24/webfontloader.js"></script><script src="https://use.fontawesome.com/e808bf9397.js"></script>
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="stylesheet" href="/css/styler.css" type="text/css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/e808bf9397.css" media="all">
+	<style type="text/css">
+	
+	</style>
+</head>
+
+<body class="myaccount">
+
+  <div th:fragment="navbar">
+    <!--- loading animation -->
+    <div class="loading" style="display: none;">
+        <div class="ball"></div>
+        <div class="ball1"></div>
+    </div>
+    <!--- //loading animation -->
+    
+    <!--header-->
+    <header class="header">
+        <div class="wrap">
+           <div class="logo" style="font-size: xx-large;">
+				<a th:href="@{/}" title="Book Your Travel">
+					<!-- <img src="images/dmlogo.png" alt="Book Your Travel"> -->
+					DropMate
+				</a>
+			</div>
+            
+            <div class="search" align="right">
+				<a href="hotel.html" title="Publish a ride" class="gradient-button">Publish a ride</a>
+			</div>
+            
+            <div class="contact">
+                <span>24/7 Support number</span>
+                <span class="number">1- 555 - 555 - 555</span>
+            </div>
+        </div>
+        
+        <nav class="main-nav">
+			<div class="wrap">
+					<!-- <div class="menu-collapser" style="display: none;">
+						Main Menu
+						<div class="collapse-button">
+							<span class="icon-bar"></span><span class="icon-bar"></span><span
+								class="icon-bar"></span>
+						</div>
+					</div> -->
+					<ul class="slimmenu" id="nav">
+						
+						<li class="current"><a href="#" title="Contact" >Dashboard</a></li>
+						<li class="has-submenu">
+							<a href="#" title="Blog">Blog</a>
+							<ul style="display: none;">
+								<li><a href="#" title="Single Post">Single Post</a></li>
+							</ul>
+						</li>
+						<li><a th:href="@{/logout}">Logout</a></li>
+					</ul>
+				</div>
+		</nav>
+		
+    </header>    
+</div>
+
+<!-- Inner Navigation Fragment -->
+<div th:fragment="inner-nav">
+    <nav class="inner-nav" style="width: 20.4%;">
+        <ul>
+            <li class="active">
+            	<a th:href="@{/my-bookings}" title="My Bookings">My Bookings</a>
+            </li>
+            <li><a th:href="@{/my-reviews}" title="My Reviews">My Reviews</a></li>
+            <li><a th:href="@{/settings}" title="Settings">Settings</a></li>
+            
+        </ul>
+    </nav>
+</div>
+
+	
+<div th:fragment="body-bottom-scripts">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.uniform.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.slimmenu.min.js"></script>
+	<script type="text/javascript" src="/js/lightslider.min.js"></script>
+	<script type="text/javascript" src="/js/scripts.js"></script>
+	<script type="text/javascript">	
+		(function( $ ) {
+			$(document).ready(function(){
+				$('.form').hide();
+				$('#form1').show();
+				$('.f-item:nth-child(1)').addClass('active');
+				$('.f-item:nth-child(1) span').addClass('checked');		
+
+				$('#hero-gallery').lightSlider({
+					gallery:true,
+					item:1,
+					pager:false,
+					gallery:false,
+					slideMargin: 0,
+					speed:2000,
+					pause:6000,
+					mode: 'fade',
+					auto:true,
+					loop:true,
+					onSliderLoad: function() {
+						$('#hero-gallery').removeClass('cS-hidden');
+					}  
+				});			
+			});
+		})(jQuery);
+	</script>
+ 
+ <script type="text/javascript">
+ $(document).ready(function(){
+	  let count = 1;
+
+	  // Hide dropdown by default
+	  $(".dropdown-menu").hide();
+
+	  // Toggle dropdown when clicking the readonly input
+	  $("#passenger-label").click(function(e){
+	    $(".dropdown-menu").toggle(); 
+	    e.stopPropagation();
+	  });
+
+	  // Increment
+	  $(".plus").click(function(e){
+	    e.preventDefault();
+	    e.stopPropagation();
+	    count++;
+	    $(".count").text(count);
+	    $("#passenger-label").val(count + " Passenger" + (count > 1 ? "s" : ""));
+	    $("#passenger-count").val(count); // update hidden input
+	  });
+
+	  // Decrement
+	  $(".minus").click(function(e){
+	    e.preventDefault();
+	    e.stopPropagation();
+	    if(count > 1){
+	      count--;
+	      $(".count").text(count);
+	      $("#passenger-label").val(count + " Passenger" + (count > 1 ? "s" : ""));
+	      $("#passenger-count").val(count); // update hidden input
+	    }
+	  });
+
+	  // Close dropdown when clicking outside
+	  $(document).click(function(){
+	    $(".dropdown-menu").hide();
+	  });
+
+	  // Close dropdown on form submit
+	  $("#main-search").on("submit", function(){
+	    $(".dropdown-menu").hide();
+	  });
+	});
+
+	</script>
+ <div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div>
+ <span id="PING_IFRAME_FORM_DETECTION" style="display: none;"></span>
+ 
+</div>
+  
+</body>
+</html>

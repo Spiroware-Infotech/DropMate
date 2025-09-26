@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+	data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+	xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<head th:replace="common/authheader :: common-header" />
+<head th:replace="common/authheader :: navbar" />
+
+  <main class="main">        
+        <div class="wrap">
+            <nav class="breadcrumbs">
+                <ul>
+                    <li><a th:href="@{/}" title="Home">Home</a></li>
+                    <li><a th:href="@{/user/dashboard}" title="Dashboard">Dashboard</a></li>                                    
+                </ul>
+            </nav>
+            
+            <div class="row">
+                <section class="three-fourth" style="width: 100%">
+                    <!-- Include inner navigation -->
+                    <div th:replace="common/authheader :: inner-nav"></div>
+                    
+                    <section id="" class="tab-content" style="width: 77.4%;">
+						<!--booking-->
+						<article class="bookings">
+							<h2><a href="#">Best ipsum hotel</a></h2>
+							<div class="b-info">
+								<table>
+									<tbody><tr>
+										<th>Booking number</th>
+										<td>123378673755</td>
+									</tr>
+									<tr>
+										<th>Room</th>
+										<td>Twin room with balcony</td>
+									</tr>
+									<tr>
+										<th>Check-in Date</th>
+										<td>23-05-14</td>
+									</tr>
+									<tr>
+										<th>Check-out Date</th>
+										<td>30-05-14</td>
+									</tr>
+									<tr>
+										<th>Total Price:</th>
+										<td><strong>$ 55,00</strong></td>
+									</tr>
+								</tbody></table>
+							</div>
+							
+							<div class="actions">
+								<a href="#" class="gradient-button">Change booking</a>
+								<a href="#" class="gradient-button">Cancel booking</a>
+								<a href="#" class="gradient-button">View confirmation</a>
+								<a href="#" class="gradient-button">Print confirmation</a>
+							</div>
+						</article>
+						<!--//booking-->
+						
+						<!--booking-->
+						<article class="bookings">
+							<h2><a href="#">Lorem ipsum hotel and spa</a></h2>
+							<div class="b-info">
+								<table>
+									<tbody><tr>
+										<th>Booking number</th>
+										<td>3378673755</td>
+									</tr>
+									<tr>
+										<th>Room</th>
+										<td>Twin room with balcony</td>
+									</tr>
+									<tr>
+										<th>Check-in Date</th>
+										<td>23-01-12</td>
+									</tr>
+									<tr>
+										<th>Check-out Date</th>
+										<td>25-01-12</td>
+									</tr>
+									<tr>
+										<th>Total Price:</th>
+										<td><strong>$ 35,00</strong></td>
+									</tr>
+								</tbody></table>
+							</div>
+							
+							<div class="actions">
+								<a href="#" class="gradient-button">Book again</a>
+								<a href="#" class="gradient-button">Remove from list</a>
+							</div>
+						</article>
+						<!--//booking-->
+						
+						<!--booking-->
+						<article class="bookings">
+							<h2><a href="#">Lorem ipsum hotel and spa</a></h2>
+							<div class="b-info">
+								<table>
+									<tbody><tr>
+										<th>Booking number</th>
+										<td>3378673755</td>
+									</tr>
+									<tr>
+										<th>Room</th>
+										<td>Twin room with balcony</td>
+									</tr>
+									<tr>
+										<th>Check-in Date</th>
+										<td>23-01-12</td>
+									</tr>
+									<tr>
+										<th>Check-out Date</th>
+										<td>25-01-12</td>
+									</tr>
+									<tr>
+										<th>Total Price:</th>
+										<td><strong>$ 35,00</strong></td>
+									</tr>
+								</tbody></table>
+							</div>
+							
+							<div class="actions">
+								<a href="#" class="gradient-button">Book again</a>
+								<a href="#" class="gradient-button">Remove from list</a>
+							</div>
+						</article>
+						<!--//booking-->
+						
+						<!--booking-->
+						<article class="bookings">
+							<h2><a href="#">Lorem ipsum hotel and spa</a></h2>
+							<div class="b-info">
+								<table>
+									<tbody><tr>
+										<th>Booking number</th>
+										<td>3378673755</td>
+									</tr>
+									<tr>
+										<th>Room</th>
+										<td>Twin room with balcony</td>
+									</tr>
+									<tr>
+										<th>Check-in Date</th>
+										<td>23-01-12</td>
+									</tr>
+									<tr>
+										<th>Check-out Date</th>
+										<td>25-01-12</td>
+									</tr>
+									<tr>
+										<th>Total Price:</th>
+										<td><strong>$ 35,00</strong></td>
+									</tr>
+								</tbody></table>
+							</div>
+							
+							<div class="actions">
+								<a href="#" class="gradient-button">Book again</a>
+								<a href="#" class="gradient-button">Remove from list</a>
+							</div>
+						</article>
+						<!--//booking-->
+					</section>
+					
+                </section>
+            </div>
+        </div>
+    </main>
+
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+ 
+  
+</body>
+</html>
+	
+	
+	
+	
+	
