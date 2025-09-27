@@ -72,7 +72,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 
             // 3. Store username in session to check later
             session.setAttribute("OTP_USER", user.getUsername());
-
+            session.setAttribute("OTP_EXPIRY", System.currentTimeMillis() + (5 * 60 * 1000)); // 5 mins
+            
             // Redirect to OTP page
             return "/otp";
         }

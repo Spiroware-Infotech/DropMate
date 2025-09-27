@@ -26,7 +26,7 @@ public class SpringSecurityConfig {
 	CustomSuccessHandler customSuccessHandler;
 
 	 
-	private final String[] WHITE_LIST_URL = { "/**","/login","/static/**"};
+	private final String[] WHITE_LIST_URL = { "/**","/login","/otp","/static/**"};
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {

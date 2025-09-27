@@ -31,7 +31,6 @@ public class OtpController {
 
 	private final UserRepository userRepo;
 	private final OtpService otpService;
-	private final AuthenticationManager authenticationManager;
 	private final UserDetailsService userDetailsService;
 	private final CustomSuccessHandler customSuccessHandler;
 
@@ -39,7 +38,6 @@ public class OtpController {
 			UserDetailsService userDetailsService, CustomSuccessHandler customSuccessHandler) {
 		this.userRepo = userRepo;
 		this.otpService = otpService;
-		this.authenticationManager = authenticationManager;
 		this.userDetailsService = userDetailsService;
 		this.customSuccessHandler = customSuccessHandler;
 	}
@@ -61,8 +59,12 @@ public class OtpController {
 			HttpServletResponse response) throws IOException, ServletException {
 
 		String username = (String) session.getAttribute("OTP_USER");
-		if (username == null) {
-			response.sendRedirect("/login?error");
+		Long expiryTime = (Long) session.getAttribute("OTP_EXPIRY");
+
+		// If no OTP in session or expired
+		if (username == null || expiryTime == null || System.currentTimeMillis() > expiryTime) {
+			session.invalidate(); // clear everything
+			response.sendRedirect("/login?otpExpired");
 			return;
 		}
 
@@ -87,6 +89,7 @@ public class OtpController {
 
 		// Cleanup OTP session info
 		session.removeAttribute("OTP_USER");
+		session.removeAttribute("OTP_EXPIRY"); // no need to keep expiry after success
 		session.setAttribute("OTP_VERIFIED", true);
 
 		// Delegate to CustomSuccessHandler → this will redirect based on role

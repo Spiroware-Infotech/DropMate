@@ -16,7 +16,11 @@
 	<link rel="shortcut icon" href="images/favicon.ico">
 	<link rel="stylesheet" href="/css/styler.css" type="text/css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/e808bf9397.css" media="all">
-	
+	<style type="text/css">
+	.mandatory{
+		color: red;
+	}
+	</style>
 </head>
 
  <body>
@@ -39,7 +43,18 @@
 			</div>
 			
 			<div class="search" align="right">
-				<a href="hotel.html" title="Publish a ride" class="gradient-button">Publish a ride</a>
+				<a th:if="${#authorization.expression('isAuthenticated()')}" 
+				   th:href="@{/hotel}" 
+				   class="gradient-button">
+				   Publish a ride
+				</a>
+				
+				<a th:if="${#authorization.expression('!isAuthenticated()')}" 
+				   th:href="@{/login}" 
+				   class="gradient-button">
+				   Publish a ride
+				</a>
+
 			</div>
 			
 			<div class="contact">

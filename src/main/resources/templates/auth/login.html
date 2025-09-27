@@ -22,7 +22,7 @@
 	                  <p class="">
 	                     Forgotten your password? <a th:href="@{/forgotpwd}">Reset it here</a>.
 	                  </p>
-	                  <div th:if="${param.error}">Invalid credentials</div>
+	                  <div th:if="${param.error}" class="mandatory">Invalid credentials <br/></div>
 	                  <div class="row">
 	                     <div class="f-item one-half">
 	                        <label for="log">Username</label>
