@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.dropmate.dto.TripRequest;
+import com.dropmate.dto.TripResponse;
 import com.dropmate.entity.Trip;
 import com.dropmate.entity.TripStop;
 import com.dropmate.entity.User;
@@ -49,5 +51,35 @@ public class TripService {
 
 	public List<Trip> searchTrips(String originWkt, double radius, Timestamp from, Timestamp to) {
 		return tripRepository.findUpcomingTripsNear(from, to, originWkt, radius);
+	}
+
+	public TripResponse getTripById(Long tripId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void updateTrip(Long tripId, TripRequest tripRequest) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deleteTrip(Long tripId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<TripResponse> searchTrips(String from, String to, String date) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void createTrip(TripRequest tripRequest) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<TripResponse> getAllTrips() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

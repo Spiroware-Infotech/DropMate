@@ -14,12 +14,4 @@ public class LoginController {
         return "auth/login";
     }
     
-   
-    
-    @GetMapping("/forgotpwd")
-    public String forgotpwd(Model model, Authentication authentication) {
-        model.addAttribute("forPwdAct","current_page_item");
-        return "auth/forgotpwd";
-    }
-    
 }
