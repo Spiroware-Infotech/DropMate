@@ -10,7 +10,7 @@ import com.dropmate.enums.KycStatus;
 import com.dropmate.enums.VehicleType;
 
 @Repository
-public interface DriverProfileRepository extends JpaRepository<DriverProfile, String> {
+public interface DriverProfileRepository extends JpaRepository<DriverProfile, Long> {
     List<DriverProfile> findByVehicleType(VehicleType vehicleType);
     List<DriverProfile> findByKycStatus(KycStatus kycStatus);
 }

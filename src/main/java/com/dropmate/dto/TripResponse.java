@@ -1,5 +1,7 @@
 package com.dropmate.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TripResponse {
-    private Long id;
+    private String id;
 
     // Driver info
     private Long driverId;
@@ -30,8 +32,8 @@ public class TripResponse {
     private int cargoSlotsAvailable;
 
     // Pricing
-    private double pricePerSeat;
-    private double pricePerKg;
+    private BigDecimal pricePerSeat;
+    private BigDecimal pricePerKg;
 
     // Status
     private String status;

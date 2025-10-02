@@ -68,7 +68,7 @@ public class OtpService {
 			return false;
 		if (user.getOtpRequestedAt().plus(OTP_VALID_DURATION).isBefore(Instant.now()))
 			return false;
-		boolean matches = passwordEncoder.matches(rawOtp, user.getOtpHash());
+		boolean matches = passwordEncoder.matches(rawOtp.strip(), user.getOtpHash());
 		user.setOtpAttempts(user.getOtpAttempts() + 1);
 		if (matches) {
 			// clear OTP on success
