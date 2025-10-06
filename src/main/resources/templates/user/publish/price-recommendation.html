@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light"
+      data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none">
+<head>
+    <title>Price Recommendation</title>
+    <!-- Include your common header & navbar -->
+    <th:block th:replace="common/authheader :: common-header"></th:block>
+    <th:block th:replace="common/authheader :: navbar"></th:block>
+
+    <style>
+      
+        .header{float: none; text-align:center;border-bottom:1px solid #eef1f4;height: 0px;}
+        .header h1{font-size:24px;font-weight:600;color:#1a1a1a;margin-bottom:10px;}
+        .price-section{padding:30px;text-align:center;border-bottom:1px solid #eef1f4;}
+        .price-display{font-size:48px;font-weight:700;color:#00a698;margin:20px 0;display:flex;align-items:center;justify-content:center;gap:10px;}
+        .currency{font-size:24px;color:#666;}
+        .price-controls{display:flex;align-items:center;justify-content:center;gap:15px;margin:25px 0;}
+        .control-btn{width:50px;height:50px;border-radius:50%;border:2px solid #00a698;color:#00a698;font-size:24px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;}
+        .control-btn:hover{background:#00a698;color:white;}
+        .control-btn:disabled{border-color:#ccc;color:#ccc;cursor:not-allowed;}
+        .control-btn:disabled:hover{color:#ccc;}
+        .price-input{width:120px;text-align:center;font-size:48px;font-weight:700;border:none;background:transparent;color:#00a698;outline:none;}
+        .price-input::-webkit-outer-spin-button,.price-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+        .price-input[type=number]{-moz-appearance:textfield;}
+        .recommendation-section{padding:20px 30px;border-bottom:1px solid #eef1f4;}
+        .recommended-price{text-align:center;color:#666;font-size:16px;margin-bottom:15px;}
+        .price-range-bar{height:6px;background:#e0e0e0;border-radius:3px;margin:20px 0;position:relative;}
+        .price-range-fill{height:100%;background:#00a698;border-radius:3px;width:70%;position:relative;}
+        .price-indicator{position:absolute;top:-25px;transform:translateX(-50%);background:#00a698;color:white;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:600;white-space:nowrap;}
+        .price-indicator::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid #00a698;}
+        .feedback-section{padding:20px 30px;text-align:center;}
+        .feedback{background:#e8f5e8;border:1px solid #4caf50;border-radius:12px;padding:15px;color:#2e7d32;font-size:14px;}
+        .feedback.warning{background:#fff3e0;border-color:#ff9800;color:#e65100;}
+        .feedback.low{background:#ffebee;border-color:#f44336;color:#c62828;}
+        .action-section{padding:25px 30px 30px;}
+        .continue-btn{width:100%;padding:16px;background:#00a698;color:white;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:background 0.3s ease;}
+        .continue-btn:hover{background:#008c7a;}
+        .quick-buttons{display:flex;gap:10px;margin-top:15px;}
+        .quick-btn{flex:1;padding:10px;border:1px solid #00a698;color:#00a698;border-radius:6px;cursor:pointer;font-size:14px;transition:all 0.3s ease;}
+        .quick-btn:hover{background:#00a698;color:white;}
+        .quick-btn.active{background:#00a698;color:white;}
+    </style>
+</head>
+
+<body>
+<main class="main">
+    <div class="wrap">
+        <div class="row">
+            <div class="full-width ">
+                <form th:action="@{/user/ride/return-trip}" th:object="${tripRequest}" >
+                  <article class="static-content post">
+                    <div class="header">
+                        <h1>Set your price per seat</h1>
+                    </div>
+
+                    <!-- Price Section -->
+                    <div class="price-section">
+                        <div class="price-display">
+                            <span class="currency">₹</span>
+                            <input type="number" th:field="*{price}" class="price-input" id="priceInput" min="50" max="500" step="5" />
+                        </div>
+                        <div class="price-controls">
+                            <button type="button" class="control-btn" id="decreaseBtn" onclick="changePrice(-5)">-</button>
+                            <div style="text-align:center;"><div style="font-size:14px;color:#666;margin-bottom:5px;">Per seat</div></div>
+                            <button type="button" class="control-btn" id="increaseBtn" onclick="changePrice(5)">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Recommendation Section -->
+                    <div class="recommendation-section">
+                        <div class="recommended-price">
+                            Recommended price: <strong>₹100 - ₹210</strong>
+                        </div>
+                        <div class="price-range-bar">
+                            <div class="price-range-fill" id="priceRangeFill">
+                                <div class="price-indicator" id="priceIndicator">₹200</div>
+                            </div>
+                        </div>
+                        <div class="quick-buttons">
+                            <button type="button" class="quick-btn" onclick="setQuickPrice(100)">₹100</button>
+                            <button type="button" class="quick-btn" onclick="setQuickPrice(150)">₹150</button>
+                            <button type="button" class="quick-btn active" onclick="setQuickPrice(200)">₹200</button>
+                            <button type="button" class="quick-btn" onclick="setQuickPrice(210)">₹210</button>
+                        </div>
+                    </div>
+
+                    <!-- Feedback -->
+                    <div class="feedback-section">
+                        <div class="feedback" id="priceFeedback">
+                            Perfect price for this ride! You'll get passengers in no time.
+                        </div>
+                    </div>
+
+                    <!-- Continue Button -->
+                    <div class="action-section">
+                        <button type="submit" class="continue-btn">Continue</button>
+                    </div>
+                   </article> 
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    const minPrice = 50;
+    const maxPrice = 500;
+    const step = 5;
+    const recommendedMin = 100;
+    const recommendedMax = 210;
+
+    // Initialize price from input value
+    let currentPrice = parseInt(document.getElementById('priceInput').value) || 200;
+
+    function updateDisplay() {
+        const priceInput = document.getElementById('priceInput');
+        const decreaseBtn = document.getElementById('decreaseBtn');
+        const increaseBtn = document.getElementById('increaseBtn');
+        const priceFeedback = document.getElementById('priceFeedback');
+        const priceRangeFill = document.getElementById('priceRangeFill');
+        const priceIndicator = document.getElementById('priceIndicator');
+
+        // Update input value
+        priceInput.value = currentPrice;
+
+        // Update buttons
+        decreaseBtn.disabled = currentPrice <= minPrice;
+        increaseBtn.disabled = currentPrice >= maxPrice;
+
+        // Price indicator
+        priceIndicator.textContent = `₹${currentPrice}`;
+
+        // Range fill width
+        const rangePercentage = ((currentPrice - minPrice) / (maxPrice - minPrice)) * 100;
+        priceRangeFill.style.width = `${Math.min(rangePercentage, 100)}%`;
+
+        // Update feedback
+        if (currentPrice >= recommendedMin && currentPrice <= recommendedMax) {
+            priceFeedback.textContent = "Perfect price for this ride! You'll get passengers in no time.";
+            priceFeedback.className = "feedback";
+        } else if (currentPrice < recommendedMin) {
+            priceFeedback.textContent = "Price is below recommended range. You might attract more passengers but earn less.";
+            priceFeedback.className = "feedback warning";
+        } else {
+            priceFeedback.textContent = "Price is above recommended range. You might earn more but attract fewer passengers.";
+            priceFeedback.className = "feedback low";
+        }
+
+        // Quick buttons
+        document.querySelectorAll('.quick-btn').forEach(btn => {
+            const price = parseInt(btn.textContent.replace('₹', ''));
+            btn.classList.toggle('active', price === currentPrice);
+        });
+    }
+
+    function changePrice(amount) {
+        const newPrice = currentPrice + amount;
+        if (newPrice >= minPrice && newPrice <= maxPrice) {
+            currentPrice = newPrice;
+            updateDisplay();
+        }
+    }
+
+    function setQuickPrice(price) {
+        if (price >= minPrice && price <= maxPrice) {
+            currentPrice = price;
+            updateDisplay();
+        }
+    }
+
+    document.getElementById('priceInput').addEventListener('input', function(e) {
+        let value = parseInt(e.target.value) || minPrice;
+        value = Math.max(minPrice, Math.min(maxPrice, value));
+        value = Math.round(value / step) * step;
+        currentPrice = value;
+        updateDisplay();
+    });
+
+    // Keyboard support
+    document.addEventListener('keydown', function(event) {
+        if(event.key === 'ArrowUp'){ changePrice(step); event.preventDefault(); }
+        else if(event.key === 'ArrowDown'){ changePrice(-step); event.preventDefault(); }
+    });
+
+    // Initialize display
+    updateDisplay();
+</script>
+
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+</body>
+</html>

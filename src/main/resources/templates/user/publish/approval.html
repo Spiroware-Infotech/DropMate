@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+      data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="common/authheader :: common-header"></head>
+<head th:replace="common/authheader :: navbar"></head>
+
+<body>
+<style>
+   
+
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .header {
+        text-align: center;
+        border-bottom: 1px solid #eef1f4;
+    }
+
+
+    .benefits-list {
+        padding: 30px;
+        border-bottom: 1px solid #eef1f4;
+    }
+
+    .benefit-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .benefit-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .benefit-checkbox {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #00a698;
+        border-radius: 4px;
+        background: white;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .benefit-checkbox.checked {
+        background: #00a698;
+    }
+
+    .benefit-checkbox.checked::after {
+        content: '✓';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .benefit-title {
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 5px;
+        font-size: 16px;
+    }
+
+    .benefit-description {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .toggle-section {
+        padding: 30px;
+        text-align: center;
+        border-bottom: 1px solid #eef1f4;
+    }
+
+    .toggle-container {
+        display: inline-flex;
+        align-items: center;
+        background: #f8f9fa;
+        border-radius: 50px;
+        padding: 4px;
+        margin-bottom: 20px;
+    }
+
+    .toggle-option {
+        padding: 12px 24px;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 500;
+        border: none;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .toggle-option.active {
+        color: #00a698;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .toggle-option:not(.active) {
+        color: #666;
+    }
+
+    .current-setting {
+        background: #fff9e6;
+        border: 1px solid #ffe58f;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    .current-setting h3 {
+        color: #d48806;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .current-setting p {
+        color: #666;
+        font-size: 13px;
+    }
+
+    .action-section {
+        padding: 25px 30px 30px;
+        text-align: center;
+    }
+
+
+
+</style>
+
+<main class="main">
+    <div class="wrap">
+        <div class="row">
+            <div class="full-width">
+                <form th:action="@{/user/ride/price-recommendation}" >
+                    <article class="static-content post">
+                        <div class="">
+                            <div class="header">
+                                <h1>Enable Instant Booking for your passengers</h1>
+                            </div>
+
+                            <div class="toggle-section">
+                                <div class="toggle-container">
+                                    <button type="button" class="toggle-option active" id="instantBtn"
+                                            onclick="toggleSetting(event, 'instant')">Enable Instant Booking</button> &nbsp;&nbsp;&nbsp;
+                                    <button type="button" class="toggle-option" id="reviewBtn"
+                                            onclick="toggleSetting(event, 'review')">Review every request</button>
+                                </div>
+
+                                <div class="current-setting" id="currentSetting">
+                                    <h3>Instant Booking Enabled</h3>
+                                    <p>Passengers can book instantly without waiting for approval.</p>
+                                </div>
+                            </div>
+
+
+                            <div class="row" align="right">
+                                <div class="f-item full-width">
+                                    <button type="submit" class="gradient-button">Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    let currentSetting = 'instant';
+
+    function toggleSetting(event, setting) {
+        event.preventDefault();
+        currentSetting = setting;
+        document.getElementById('instantBookingInput').value = (setting === 'instant');
+
+        document.getElementById('instantBtn').classList.toggle('active', setting === 'instant');
+        document.getElementById('reviewBtn').classList.toggle('active', setting === 'review');
+
+        document.getElementById('checkbox1').classList.toggle('checked', setting === 'instant');
+        document.getElementById('checkbox2').classList.toggle('checked', setting === 'instant');
+
+        const current = document.getElementById('currentSetting');
+        if (setting === 'instant') {
+            current.innerHTML = `
+                <h3>Instant Booking Enabled</h3>
+                <p>Passengers can book instantly without waiting for approval.</p>
+            `;
+            current.style.background = '#e6f7ff';
+            current.style.borderColor = '#91d5ff';
+        } else {
+            current.innerHTML = `
+                <h3>Review every request before it expires</h3>
+                <p>You'll manually approve or decline each booking request.</p>
+            `;
+            current.style.background = '#fff9e6';
+            current.style.borderColor = '#ffe58f';
+        }
+    }
+
+    function validateForm() {
+        // You can validate or log form data here before submission if needed
+        return true;
+    }
+</script>
+
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+</body>
+</html>

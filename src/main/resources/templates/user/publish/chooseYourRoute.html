@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+	data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+	xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<style>
+    #map {
+      height: 400px;
+      width: 100%;
+    }
+    #pac-input {
+      width: 300px;
+      padding: 8px;
+      margin-top: 10px;
+    }
+  </style>	
+<head th:replace="common/authheader :: common-header" />
+<head th:replace="common/authheader :: navbar" />
+
+<main class="main">		
+		<div class="wrap">
+			
+			<div class="row">
+				<!--full-width content-->
+				<div class="full-width">
+					<form th:action="@{/user/ride/departure-date}">
+					<article class="static-content post">
+						 <div id="container">
+						      <div id="sidebar">
+						        <h2>Available Routes</h2>
+						        <h5>What is your route?</h5>
+						        <div id="routes"></div>
+						      </div>
+						      <div id="map"></div>
+						    </div>
+						<input type="hidden" id="selectedDistance" name="distance" />
+						<input type="hidden" id="selectedDuration" name="duration" />
+						<input type="hidden" id="selectedRouteSummary" name="routeSummary" />
+						<div class="row" align="right">
+							<div class="f-item full-width">
+								<button type="submit" class="gradient-button" >Continue </button>
+							</div>
+						</div>
+					</article>
+					</form>
+				</div>
+			</div>
+			
+		</div>
+	</main>
+  
+<style>
+    
+      #container {
+        display: flex;
+        height: 100vh;
+      }
+      #sidebar {
+        width: 28%;
+        padding: 20px;
+        overflow-y: auto;
+      }
+      #map {
+        flex: 1;
+      }
+      .route-option {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+      }
+      .route-option.active {
+        background: #e3f2fd;
+        border-color: #2196f3;
+      }
+      .route-option:hover {
+        background: #f5f5f5;
+      }
+      .route-title {
+        font-weight: 600;
+        font-size: 11px;
+      }
+      .route-desc {
+        font-size: 12px;
+        color: #555;
+      }
+    </style>
+
+<input type="hidden" id="origin" th:value="${ride.departure}">
+<input type="hidden" id="destination" th:value="${ride.arrival}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+      let map, directionsService;
+      let polylines = [];
+
+      // Change this to your locations
+      const origin = $("#origin").val();
+      const destination = $("#destination").val();
+      
+      console.log("Origin:", origin);
+      console.log("Destination:", destination);
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 7,
+          center: { lat: 13.0827, lng: 80.2707 }, // Chennai area
+        });
+
+        directionsService = new google.maps.DirectionsService();
+
+        // Request routes
+        directionsService.route(
+          {
+            origin: origin,
+            destination: destination,
+            travelMode: google.maps.TravelMode.DRIVING,
+            provideRouteAlternatives: true,
+          },
+          (response, status) => {
+            if (status === "OK") {
+              displayRoutes(response);
+            } else {
+              alert("Directions request failed: " + status);
+            }
+          }
+        );
+      }
+
+      function displayRoutes(result) {
+        const routesDiv = document.getElementById("routes");
+        routesDiv.innerHTML = "";
+
+        result.routes.forEach((route, index) => {
+          const leg = route.legs[0];
+          const routeDiv = document.createElement("div");
+          routeDiv.classList.add("route-option");
+          if (index === 0) routeDiv.classList.add("active");
+          
+          routeDiv.innerHTML = `
+            <div class="route-title">
+              ${leg.duration.text} - ${route.summary}
+            </div>
+            <div class="route-desc">
+              ${leg.distance.text} (${route.warnings.includes("toll") ? "Tolls" : "Possible Tolls"})
+            </div>
+          `;
+			          	  
+          routeDiv.addEventListener("click", () => highlightRoute(index, result));
+
+          routesDiv.appendChild(routeDiv);
+        });
+
+        highlightRoute(0, result); // highlight first route
+      }
+
+      function highlightRoute(index, result) {
+        // Clear old polylines
+        polylines.forEach((p) => p.setMap(null));
+        polylines = [];
+
+        // Draw selected route in blue, others in gray
+        result.routes.forEach((route, i) => {
+          const polyline = new google.maps.Polyline({
+            path: route.overview_path,
+            strokeColor: i === index ? "#1976D2" : "#BDBDBD",
+            strokeOpacity: 1.0,
+            strokeWeight: i === index ? 6 : 4,
+            map: map,
+          });
+          polylines.push(polyline);
+        });
+
+        // Fit map to selected route bounds
+        map.fitBounds(result.routes[index].bounds);
+
+     	  // Get selected route leg info
+		  const selectedLeg = result.routes[index].legs[0];
+		  const distanceText = selectedLeg.distance.text;  // e.g. "12.4 km"
+		  const distanceValue = selectedLeg.distance.value; // in meters
+		  const durationText = selectedLeg.duration.text;  // e.g. "18 mins"
+		  const durationValue = selectedLeg.duration.value; // in seconds
+		  const routeSummary = result.routes[index].summary;
+		  
+		  console.log("Selected Route Distance:", distanceText);
+		  console.log("Selected Route Duration:", durationText);
+		
+		  // Set these values to hidden input fields
+		  $("#selectedDistance").val(distanceValue);  // meters
+		  $("#selectedDuration").val(durationValue);  // seconds
+		  $("#selectedRouteSummary").val(routeSummary);
+		  
+		  
+        // Update sidebar highlight
+        document
+          .querySelectorAll(".route-option")
+          .forEach((el, i) =>
+            el.classList.toggle("active", i === index)
+          );
+      }
+    </script>
+
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwOasTpcrO7ONE6nzs1kdcppDYO2rfZcA&callback=initMap"
+    ></script>
+
+   
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+ 
+  
+</body>
+</html>
+	
+	
+	
+	
+	

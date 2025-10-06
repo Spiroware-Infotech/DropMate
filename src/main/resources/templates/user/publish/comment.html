@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+      data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="common/authheader :: common-header"></head>
+<head th:replace="common/authheader :: navbar"></head>
+
+<body>
+<style>
+       
+
+        .header {
+            text-align: center;
+            border-bottom: 1px solid #eef1f4;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .options-section {
+            padding: 30px;
+        }
+
+        .option-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .option-card:hover {
+            border-color: #00a698;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 166, 152, 0.1);
+        }
+
+        .option-card.selected {
+            border-color: #00a698;
+            background: #f8fffe;
+        }
+
+        .option-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 24px;
+            height: 24px;
+            background: #00a698;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .option-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .option-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .benefits-section {
+            padding: 0 30px 30px;
+        }
+
+        .benefits-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+
+        .benefits-list {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .benefit-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .benefit-icon {
+            color: #00a698;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 2px;
+            min-width: 16px;
+        }
+
+        .benefit-text {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .action-section {
+            padding: 25px 30px 30px;
+            border-top: 1px solid #eef1f4;
+        }
+
+        .continue-btn {
+            width: 100%;
+            padding: 16px;
+            background: #00a698;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .continue-btn:hover {
+            background: #008c7a;
+        }
+
+        .continue-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Animation for selection */
+        @keyframes selectAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .option-card.selected {
+            animation: selectAnimation 0.3s ease;
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+                border-radius: 12px;
+            }
+            
+            .header {
+                padding: 30px 20px 20px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .options-section {
+                padding: 20px;
+            }
+            
+            .option-card {
+                padding: 20px;
+            }
+        }
+    </style>
+
+<main class="main">
+    <div class="wrap">
+        <div class="row">
+            <div class="full-width">
+                <form th:action="@{/user/ride/price-recommendation}" >
+                    <article class="static-content post">
+                        <div class="">
+					        <div class="header">
+					            <h1>Ready to publish your ride?</h1>
+					            <p>Would you like to add a comment for your passengers?</p>
+					        </div>
+					
+					        <div class="benefits-section">
+								<textarea
+									placeholder="Flexible about where and when to meet? Not taking the motorway? Got limited space in your boot? Keep passengers in the loop."
+									class="kirk-textarea-element" name="comment" maxlength="10000"
+									title="Ready to publish your ride?"></textarea>
+							</div>
+					        <div class="action-section">
+					            <button class="continue-btn" id="continueBtn" >Publish ride</button>
+					        </div>
+					    </div>
+                    </article>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+ <script>
+    
+    </script>
+
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+</body>
+</html>

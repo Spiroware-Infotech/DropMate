@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+	data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+	xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<head th:replace="common/authheader :: common-header" />
+<head th:replace="common/authheader :: navbar" />
+
+<main class="main">
+	<div class="wrap">
+		<div class="row">
+			<section class="full-width">
+				<article id="post-647"
+					class="static-content post post-647 page type-page status-publish hentry">
+					<h1 class="entry-title">Publish Type</h1>
+					<div class="page-content" align="center">
+						<div class="woocommerce">
+							<div class="woocommerce-notices-wrapper"></div>
+							<a th:href="@{/user/publish/ride}" class="gradient-button" >Passengers</a> | 
+							<a th:href="@{/user/publish/delivery}" class="gradient-button" >Items Delivery</a>
+						</div>
+					</div>
+				</article>
+			</section>
+		</div>
+	</div>
+	<!--// .wrap -->
+</main>
+
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+ 
+  
+</body>
+</html>
+	
+	
+	
+	
+	

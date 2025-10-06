@@ -1,4 +1,4 @@
-package com.dropmate.controller;
+package com.dropmate.auth.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dropmate.dto.DeliveryRequest;
 import com.dropmate.dto.TripRequest;
@@ -14,7 +15,7 @@ import com.dropmate.service.DeliveryService;
 import com.dropmate.service.TripService;
 
 @Controller
-@RequestMapping("/publish")
+@RequestMapping("/user/publish")
 public class PublishRidesController {
 
 	private final TripService tripService;
@@ -28,16 +29,10 @@ public class PublishRidesController {
 	// Step 1: Select type (Passenger Ride or Delivery)
 	@GetMapping("/select-type")
 	public String selectTypePage() {
-		return "publish/select-type"; // page with buttons: Passenger Ride / Delivery
+		return "user/publish/select-type"; // page with buttons: Passenger Ride / Delivery
 	}
-
-	// Step 2: Passenger ride form
-	@GetMapping("/ride")
-	public String showRideForm(Model model) {
-		model.addAttribute("tripRequest", new TripRequest());
-		return "publish/ride-form"; // trip creation form
-	}
-
+	
+	
 	// Step 2a: Submit Passenger ride form
 	@PostMapping("/ride")
 	public String publishRide(@ModelAttribute TripRequest tripRequest, Model model) {
@@ -49,7 +44,7 @@ public class PublishRidesController {
 	@GetMapping("/delivery")
 	public String showDeliveryForm(Model model) {
 		model.addAttribute("deliveryRequest", new DeliveryRequest());
-		return "publish/delivery-form"; // delivery creation form
+		return "user/publish/delivery-form"; // delivery creation form
 	}
 
 	// Step 2a: Submit Delivery form
@@ -63,13 +58,13 @@ public class PublishRidesController {
 	@GetMapping("/ride/{tripId}/confirm")
 	public String confirmRide(@PathVariable Long tripId, Model model) {
 		model.addAttribute("trip", tripService.getTripById(tripId));
-		return "publish/ride-confirm"; // confirmation page
+		return "user/publish/ride-confirm"; // confirmation page
 	}
 
 	// Optional: Confirm page for Delivery
 	@GetMapping("/delivery/{deliveryId}/confirm")
 	public String confirmDelivery(@PathVariable Long deliveryId, Model model) {
 		model.addAttribute("delivery", deliveryService.getDeliveryById(deliveryId));
-		return "publish/delivery-confirm"; // confirmation page
+		return "user/publish/delivery-confirm"; // confirmation page
 	}
 }

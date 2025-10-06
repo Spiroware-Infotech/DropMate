@@ -37,7 +37,7 @@
 						<div class="row">
 							<div class="f-item full-width">
 								<label for="destination3">Pick Up</label>
-								<input type="text" placeholder="City, region, district or specific airport" id="destination3" name="destination">
+								<input type="text" placeholder="City, region, district or specific airport" id="pickup" name="destination" >
 							</div>
 						</div>
 					</div>
@@ -48,7 +48,7 @@
 								<div class="row">
 									<div class="f-item full-width">
 										<label for="destination4">Drop Off</label>
-										<input type="text" placeholder="City, region, district or specific airport" id="destination4" name="destination">
+										<input type="text" placeholder="City, region, district or specific airport" id="dropoff" name="destination">
 									</div>
 								</div>
 							</div>
@@ -203,8 +203,45 @@
 	</main>
 	<!--//main-->
 	
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwOasTpcrO7ONE6nzs1kdcppDYO2rfZcA&libraries=places"></script>
+ <script type="text/javascript">
+    function initAutocomplete() {
+      const input = document.getElementById("pickup");
+      const dropoff = document.getElementById("dropoff");
+      
+      // Create autocomplete object
+      const autocomplete = new google.maps.places.Autocomplete(input);
+      const dropoffAutocomplete = new google.maps.places.Autocomplete(dropoff);
+      
+      // Listen when a place is selected
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+
+        console.log("Full place object:", place);
+        console.log("Name:", place.name);
+        console.log("Address:", place.formatted_address);
+        console.log("Latitude:", place.geometry?.location.lat());
+        console.log("Longitude:", place.geometry?.location.lng());
+      });
+      
+      dropoffAutocomplete.addListener("place_changed", () => {
+          const place = autocomplete.getPlace();
+
+          console.log("Full place object:", place);
+          console.log("Name:", place.name);
+          console.log("Address:", place.formatted_address);
+          console.log("Latitude:", place.geometry?.location.lat());
+          console.log("Longitude:", place.geometry?.location.lng());
+        });
+      
+    }
+    
+  
+    window.onload = initAutocomplete;
+    
+  </script>	
 <div th:replace="common/footer :: footerbar"></div>
 <div th:replace="common/header :: body-bottom-scripts"></div>
-  
+
 </body>
 </html>

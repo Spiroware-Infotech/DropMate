@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+	data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+	xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<head th:replace="common/authheader :: common-header" />
+<head th:replace="common/authheader :: navbar" />
+
+<main class="main">		
+		<div class="wrap">
+			
+			<div class="row">
+			
+				<aside class="one-fourth right-sidebar">
+				<form th:action="@{/user/ride/departure}">
+					<article class="hotel-details booking-details">
+						<h1>Create a Ride 
+						</h1>
+						<dl class="booking-info">
+							<input type="text" placeholder="City, region, district" id="pickup" name="fromInputValue" >
+						</dl>
+						<dl class="booking-info">
+							<input type="text" placeholder="City, region, district" id="dropoff" name="toInputValue">
+						</dl>
+						<dl class="booking-info">
+							<div class="f-item one-half espinner">
+						      <label for="passenger-label">Passenger</label>
+						      <div class="dropdown">
+						        <input type="text" id="passenger-label" value="1 Passenger" readonly>
+						         <input type="hidden" id="passenger-count" name="passgrCount" value="1">
+						        <br/>
+						        <div class="dropdown-menu">
+						          <div class="counter" style="margin-left: 11px;">
+						            <div>
+						              <button type="button" class="btn minus">−</button>
+						              <span class="count">1</span>
+						              <button type="button" class="btn plus">+</button>
+						            </div>
+						          </div>
+						        </div>
+						      </div>
+						    </div>
+						</dl>
+						<div class="row">
+							<div class="f-item full-width">
+								<button type="submit" class="gradient-button" >Publish a ride </button>
+							</div>
+						</div>
+					</article>
+					</form>
+				</aside>
+				
+				<div class="three-fourth">
+				</div>
+				
+			</div>
+		</div>
+	</main>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwOasTpcrO7ONE6nzs1kdcppDYO2rfZcA&libraries=places"></script>
+<script type="text/javascript">
+    function initAutocomplete() {
+      const input = document.getElementById("pickup");
+      const dropoff = document.getElementById("dropoff");
+      
+      // Create autocomplete object
+      const autocomplete = new google.maps.places.Autocomplete(input);
+      const dropoffAutocomplete = new google.maps.places.Autocomplete(dropoff);
+      
+      // Listen when a place is selected
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+
+        console.log("Full place object:", place);
+        console.log("Name:", place.name);
+        console.log("Address:", place.formatted_address);
+        console.log("Latitude:", place.geometry?.location.lat());
+        console.log("Longitude:", place.geometry?.location.lng());
+      });
+      
+      dropoffAutocomplete.addListener("place_changed", () => {
+          const place = autocomplete.getPlace();
+
+          console.log("Full place object:", place);
+          console.log("Name:", place.name);
+          console.log("Address:", place.formatted_address);
+          console.log("Latitude:", place.geometry?.location.lat());
+          console.log("Longitude:", place.geometry?.location.lng());
+        });
+      
+    }
+    
+  
+    window.onload = initAutocomplete;
+    
+  </script>
+  
+  
+  	
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+ 
+  
+</body>
+</html>
+	
+	
+	
+	
+	

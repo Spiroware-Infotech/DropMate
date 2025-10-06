@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+      data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="common/authheader :: common-header"></head>
+<head th:replace="common/authheader :: navbar"></head>
+
+<body>
+<main class="main">
+    <div class="wrap">
+        <div class="row">
+            <div class="full-width">
+                <form id="passengerForm" th:action="@{/user/ride/approval}" method="get">
+                    <article class="static-content post">
+                        <div class="">
+                            <div class="header">
+                                <h1>So how many BlaBlaCar passengers can you take?</h1>
+                                <div class="passenger-count" id="passengerCount">3</div>
+                            </div>
+
+                            <div class="passenger-controls">
+                                <button type="button" class="control-btn" id="decreaseBtn">-</button>
+                                <div class="passenger-count-display">
+                                    <span id="currentCount">3</span>
+                                </div>
+                                <button type="button" class="control-btn" id="increaseBtn">+</button>
+                            </div>
+
+                            <div class="passenger-options">
+                                <div class="options-header">Passenger options</div>
+                                <div class="option-item">
+                                    <span class="option-icon">•</span>
+                                    <span>Max. 2 in the back<br>
+                                        <small>Think comfort, keep the middle seat empty</small>
+                                    </span>
+                                </div>
+                                <div class="comfort-note" id="comfortNote">
+                                    For better comfort, we recommend maximum 3 passengers
+                                </div>
+                            </div>
+
+                            <input type="hidden" id="hiddenCount" name="seats" value="0">
+
+                            <div class="row" align="right">
+                                <div class="f-item full-width">
+                                    <button type="submit" class="gradient-button continue-btn">Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+   
+
+    .header {
+        text-align: center;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+  
+    .passenger-count {
+        font-size: 32px;
+        font-weight: bold;
+        color: #00a698;
+    }
+
+    .passenger-controls {
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .control-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid #00a698;
+        color: #00a698;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .control-btn:hover {
+        background: #00a698;
+        color: white;
+    }
+
+    .control-btn:disabled {
+        border-color: #ccc;
+        color: #ccc;
+        cursor: not-allowed;
+        background: white;
+    }
+
+    .passenger-options {
+        padding: 20px;
+        background: #f8f9fa;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .options-header {
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .option-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 10px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .option-icon {
+        color: #00a698;
+        font-weight: bold;
+        min-width: 20px;
+    }
+
+    .continue-btn {
+        width: 100%;
+        padding: 15px;
+        background: #00a698;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .continue-btn:hover {
+        background: #008c7a;
+    }
+
+    .comfort-note {
+        text-align: center;
+        color: #666;
+        font-size: 12px;
+        margin-top: 8px;
+        font-style: italic;
+    }
+</style>
+
+<!-- ✅ SCRIPT -->
+<script>
+    let passengerCount = 3;
+    const maxPassengers = 4;
+    const minPassengers = 1;
+
+    const countDisplay = document.getElementById('currentCount');
+    const passengerDisplay = document.getElementById('passengerCount');
+    const comfortNote = document.getElementById('comfortNote');
+    const hiddenInput = document.getElementById('hiddenCount');
+
+    const decreaseBtn = document.getElementById('decreaseBtn');
+    const increaseBtn = document.getElementById('increaseBtn');
+
+    function updateDisplay() {
+        passengerDisplay.textContent = passengerCount;
+        countDisplay.textContent = passengerCount;
+        hiddenInput.value = passengerCount;
+
+        decreaseBtn.disabled = passengerCount <= minPassengers;
+        increaseBtn.disabled = passengerCount >= maxPassengers;
+
+        if (passengerCount >= 4) {
+            comfortNote.textContent = "Maximum capacity reached for optimal comfort";
+            comfortNote.style.color = "#ff6b6b";
+        } else if (passengerCount === 3) {
+            comfortNote.textContent = "For better comfort, we recommend maximum 3 passengers";
+            comfortNote.style.color = "#666";
+        } else {
+            comfortNote.textContent = "Comfortable seating arrangement";
+            comfortNote.style.color = "#00a698";
+        }
+    }
+
+    increaseBtn.addEventListener('click', function () {
+        if (passengerCount < maxPassengers) {
+            passengerCount++;
+            updateDisplay();
+        }
+    });
+
+    decreaseBtn.addEventListener('click', function () {
+        if (passengerCount > minPassengers) {
+            passengerCount--;
+            updateDisplay();
+        }
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === '+' || event.key === 'ArrowUp') {
+            if (passengerCount < maxPassengers) passengerCount++;
+        } else if (event.key === '-' || event.key === 'ArrowDown') {
+            if (passengerCount > minPassengers) passengerCount--;
+        }
+        updateDisplay();
+    });
+
+    updateDisplay();
+</script>
+
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+</body>
+</html>

@@ -16,8 +16,8 @@ public class TripRequest {
     private String destinationName;
 
     // Date/Time
-    private String startTime; // e.g., "2025-09-27 10:00"
-    private String endTime;   // optional
+    private String startDate; // e.g., "2025-09-27"
+    private String startTime;   // 10:00
 
     // Seats / cargo
     private int seatsTotal;
@@ -35,4 +35,5 @@ public class TripRequest {
 
     // Status (optional, mostly for admin or updates)
     private String status;
+    
 }

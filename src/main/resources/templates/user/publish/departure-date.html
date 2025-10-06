@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+	data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+	xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<style>
+    #map {
+      height: 400px;
+      width: 100%;
+    }
+    #pac-input {
+      width: 300px;
+      padding: 8px;
+      margin-top: 10px;
+    }
+  </style>	
+<head th:replace="common/authheader :: common-header" />
+<head th:replace="common/authheader :: navbar" />
+
+<main class="main">		
+		<div class="wrap">
+			
+			<div class="row">
+				<!--full-width content-->
+				<div class="full-width">
+					<form th:action="@{/user/ride/departure-date/time}">
+					<article class="static-content post">
+						  <div style="text-align:center;">
+							  <h2>When are you going?</h2>
+							  <input id="calendar" type="hidden" name="departureDate">
+						  </div>
+						
+						<div class="row" align="right">
+							<div class="f-item full-width">
+								<button type="submit" class="gradient-button" >Continue </button>
+							</div>
+						</div>
+					</article>
+					</form>
+				</div>
+			</div>
+			
+		</div>
+	</main>
+  
+<style>
+    
+   
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/bundle.js"></script>
+<script>
+  const picker = new Litepicker({
+    element: document.getElementById('calendar'),
+    inlineMode: true,
+    singleMode: true,
+    numberOfMonths: 2,
+    numberOfColumns: 2,
+    minDate: new Date(),
+    format: 'YYYY-MM-DD',
+    setup: (picker) => {
+      picker.on('selected', (date1) => {
+        console.log('Selected:', date1.format('YYYY-MM-DD'));
+      });
+    }
+  });
+</script>
+
+   
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+ 
+  
+</body>
+</html>
+	
+	
+	
+	
+	
