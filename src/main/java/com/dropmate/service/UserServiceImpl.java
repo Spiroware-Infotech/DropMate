@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dropmate.config.SecurityUtil;
 import com.dropmate.dto.RegistrationDto;
+import com.dropmate.entity.DriverProfile;
 import com.dropmate.entity.PublicUser;
 import com.dropmate.entity.Role;
 import com.dropmate.entity.User;
@@ -34,7 +35,8 @@ public class UserServiceImpl implements UserService {
 	private final RoleRepository roleRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final PublicUserRepository publicUserRepository;
-
+	
+	
 	@Override
 	public User saveUser(RegistrationDto registrationDto) {
 		log.info("UserServiceImpl ---> saveUser ");
@@ -156,5 +158,6 @@ public class UserServiceImpl implements UserService {
 
 			return true;
 		}
+
 	
 }

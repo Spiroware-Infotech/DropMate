@@ -34,7 +34,7 @@ public class DeliveryService {
 		trip.setDestinationName(request.getDestinationName());
 
 		if (request.getStartTime() != null) {
-			trip.setStartTime(LocalDateTime.parse(request.getStartTime(), formatter));
+			trip.setStartDate(LocalDateTime.parse(request.getStartTime(), formatter));
 		}
 		if (request.getEndTime() != null) {
 			trip.setEndTime(LocalDateTime.parse(request.getEndTime(), formatter));

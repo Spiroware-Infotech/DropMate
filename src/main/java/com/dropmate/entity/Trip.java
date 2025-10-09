@@ -1,13 +1,16 @@
 package com.dropmate.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 
+import com.dropmate.enums.TripType;
 import com.dropmate.enums.TripStatus;
 import com.dropmate.enums.VehicleType;
 
@@ -43,6 +46,10 @@ public class Trip {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "vehicle_type", nullable = false)
 	private VehicleType vehicleType;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "trip_type", nullable = false)
+	private TripType tripType;
 
 	@Column(name = "origin_name", columnDefinition = "TEXT")
 	private String originName;
@@ -59,11 +66,11 @@ public class Trip {
 	@Column(name = "route_geom", columnDefinition = "LINESTRING")
 	private LineString routeGeom;
 
-	@Column(name = "start_time", nullable = false)
-	private LocalDateTime startTime;
+	@Column(name = "start_date", nullable = false)
+	private LocalDate startDate;
 
-	@Column(name = "end_time")
-	private LocalDateTime endTime;
+	@Column(name = "start_time")
+	private LocalTime startTime;
 
 	@Column(name = "seats_total")
 	private Integer seatsTotal = 0;

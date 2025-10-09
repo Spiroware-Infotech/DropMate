@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.dropmate.dto.RegistrationDto;
+import com.dropmate.entity.DriverProfile;
 import com.dropmate.entity.User;
 
 public interface UserService {
@@ -27,4 +28,6 @@ public interface UserService {
 
 	// verify user
 	public boolean verify(String verificationCode);
+
+	
 }

@@ -8,7 +8,7 @@ import com.dropmate.entity.Booking;
 import com.dropmate.entity.Trip;
 import com.dropmate.entity.User;
 import com.dropmate.enums.BookingStatus;
-import com.dropmate.enums.BookingType;
+import com.dropmate.enums.TripType;
 import com.dropmate.repository.BookingRepository;
 import com.dropmate.repository.TripRepository;
 import com.dropmate.repository.TripStopRepository;
@@ -38,7 +38,7 @@ public class BookingService {
 		booking.setTrip(trip);
 		booking.setBooker(new User());
 		booking.getBooker().setUserId(userId);
-		booking.setType(BookingType.PASSENGER);
+		booking.setType(TripType.PASSENGER);
 		booking.setSeatsBooked(seats);
 		booking.setPrice(price);
 		booking.setStatus(BookingStatus.CONFIRMED);
@@ -60,7 +60,7 @@ public class BookingService {
 		booking.setTrip(trip);
 		booking.setBooker(new User());
 		booking.getBooker().setUserId(userId);
-		booking.setType(BookingType.DELIVERY);
+		booking.setType(TripType.DELIVERY);
 		booking.setCargoWeightKg(weight);
 		booking.setPrice(price);
 		booking.setStatus(BookingStatus.CONFIRMED);
@@ -74,7 +74,7 @@ public class BookingService {
 				.orElseThrow(() -> new RuntimeException("Booking not found"));
 
 		Trip trip = booking.getTrip();
-		if (booking.getType() == BookingType.PASSENGER) {
+		if (booking.getType() == TripType.PASSENGER) {
 			trip.setSeatsAvailable(trip.getSeatsAvailable() + booking.getSeatsBooked());
 		} else {
 			trip.setCargoSlotsAvailable(trip.getCargoSlotsAvailable() + 1);

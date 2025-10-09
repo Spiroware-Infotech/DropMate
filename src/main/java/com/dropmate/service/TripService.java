@@ -1,7 +1,9 @@
 package com.dropmate.service;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,10 @@ public class TripService {
 	public Trip createTrip(Long driverId, Trip trip, List<TripStop> stops) {
 		User driver = userRepository.findById(driverId).orElseThrow(() -> new RuntimeException("Driver not found"));
 
+		trip.setId(UUID.randomUUID().toString());
 		trip.setUser(driver);
+		trip.setCreatedAt(LocalDateTime.now());
+		trip.setUpdatedAt(LocalDateTime.now());
 		Trip savedTrip = tripRepository.save(trip);
 
 		if (stops != null) {

@@ -20,4 +20,5 @@ public class RideRequest {
 	private double distance;
 	private double duration;
 	private String summary;
+	private String vehicleType; // e.g., "CAR"
 }

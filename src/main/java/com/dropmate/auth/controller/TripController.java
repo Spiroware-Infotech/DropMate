@@ -16,7 +16,7 @@ import com.dropmate.dto.TripResponse;
 import com.dropmate.service.TripService;
 
 @Controller
-@RequestMapping("/trips")
+@RequestMapping("/user/trip")
 public class TripController {
 
     private final TripService tripService;
@@ -25,6 +25,13 @@ public class TripController {
         this.tripService = tripService;
     }
 
+    @GetMapping(value = "/details")
+    public String tripById(Model model) {
+        List<TripResponse> trips = tripService.getAllTrips();
+        model.addAttribute("trips", trips);
+        return "user/trip/ride-details"; 
+    }
+    
     // 1. Show all trips
     @GetMapping
     public String listTrips(Model model) {

@@ -9,7 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.dropmate.enums.BookingStatus;
-import com.dropmate.enums.BookingType;
+import com.dropmate.enums.TripType;
 import com.dropmate.enums.PaymentStatus;
 
 import jakarta.persistence.CascadeType;
@@ -47,7 +47,7 @@ public class Booking {
     private User booker;
 
     @Enumerated(EnumType.STRING)
-    private BookingType type;
+    private TripType type;
 
     private Integer seatsBooked = 0;
     private BigDecimal cargoWeightKg = BigDecimal.ZERO;

@@ -58,8 +58,8 @@
 										<label for="datepicker6">Departing on</label>
 										<div class="row" style="">
 											<div class="f-item one-half active">
-												<div class="datepicker-wrap"><input type="text" placeholder="" id="datepicker6" name="datepicker6" class="hasDatepicker">
-												<img class="ui-datepicker-trigger" src="images/calendar.png" alt="..." title="..."></div>
+												<div class="datepicker-wrap"><input type="text" placeholder="" id="datepicker" name="datepicker6" class="hasDatepicker">
+												<img class="ui-datepicker-trigger" src="/images/calendar.png" alt="..." title="..."></div>
 											</div>
 										</div>
 									</div>
@@ -204,6 +204,7 @@
 	<!--//main-->
 	
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwOasTpcrO7ONE6nzs1kdcppDYO2rfZcA&libraries=places"></script>
+
  <script type="text/javascript">
     function initAutocomplete() {
       const input = document.getElementById("pickup");
@@ -240,6 +241,7 @@
     window.onload = initAutocomplete;
     
   </script>	
+
 <div th:replace="common/footer :: footerbar"></div>
 <div th:replace="common/header :: body-bottom-scripts"></div>
 

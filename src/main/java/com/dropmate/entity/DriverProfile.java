@@ -34,11 +34,6 @@ public class DriverProfile {
     @Column(name = "user_id", length = 36)
     private Long userId;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "vehicle_type", nullable = false)
     private VehicleType vehicleType;

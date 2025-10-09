@@ -1,5 +1,5 @@
 package com.dropmate.enums;
 
-public enum BookingType {
+public enum TripType {
 	PASSENGER, DELIVERY
 }
