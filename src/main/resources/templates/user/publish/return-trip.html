@@ -192,49 +192,61 @@
     <div class="wrap">
         <div class="row">
             <div class="full-width">
-                <form th:action="@{/user/ride/comment}" >
+                <form th:action="@{/user/ride/comment}" th:object="${tripRequest}">
                     <article class="static-content post">
-                        <div class="">
-					        <div class="header">
-					            <h1>Coming back as well?<br>Publish your return ride now!</h1>
-					            <p>Maximize your chances and save time</p>
-					        </div>
-					
-					        <div class="options-section">
-					            <div class="option-card" id="yesOption" onclick="selectOption('yes')">
-					                <div class="option-title">Yes, sure!</div>
-					                <div class="option-description">Create your return ride now and get more bookings</div>
-					            </div>
-					
-					            <div class="option-card" id="laterOption" onclick="selectOption('later')">
-					                <div class="option-title">I'll publish my return ride later</div>
-					                <div class="option-description">You can always create it from your trips</div>
-					            </div>
-					        </div>
-					
-					        <div class="benefits-section">
-					            <div class="benefits-title">Why publish your return ride now?</div>
-					            <div class="benefits-list">
-					                <div class="benefit-item">
-					                    <span class="benefit-icon">•</span>
-					                    <span class="benefit-text">Reach passengers looking for round trips</span>
-					                </div>
-					                <div class="benefit-item">
-					                    <span class="benefit-icon">•</span>
-					                    <span class="benefit-text">Save time by setting up both rides at once</span>
-					                </div>
-					                <div class="benefit-item">
-					                    <span class="benefit-icon">•</span>
-					                    <span class="benefit-text">Increase your chances of getting fully booked</span>
-					                </div>
-					            </div>
-					        </div>
-					
-					        <div class="action-section">
-					            <button class="continue-btn" id="continueBtn" onclick="continueToNext()" disabled>Continue</button>
-					        </div>
-					    </div>
-                    </article>
+			            <div class="">
+			              <div class="header">
+			                <h1>Coming back as well?<br>Publish your return ride now!</h1>
+			                <p>Maximize your chances and save time</p>
+			              </div>
+			
+			              <!-- Hidden field to hold selection -->
+			              <input type="hidden" th:field="*{returnRideOption}" id="returnRideOption" />
+			
+			              <!-- Options -->
+			              <div class="options-section">
+			                <div class="option-card" id="yesOption" onclick="selectOption('yes')">
+			                  <div class="option-title">Yes, sure!</div>
+			                  <div class="option-description">
+			                    Create your return ride now and get more bookings
+			                  </div>
+			                </div>
+			
+			                <div class="option-card" id="laterOption" onclick="selectOption('later')">
+			                  <div class="option-title">I'll publish my return ride later</div>
+			                  <div class="option-description">
+			                    You can always create it from your trips
+			                  </div>
+			                </div>
+			              </div>
+			
+			              <!-- Benefits -->
+			              <div class="benefits-section">
+			                <div class="benefits-title">Why publish your return ride now?</div>
+			                <div class="benefits-list">
+			                  <div class="benefit-item">
+			                    <span class="benefit-icon">•</span>
+			                    <span class="benefit-text">Reach passengers looking for round trips</span>
+			                  </div>
+			                  <div class="benefit-item">
+			                    <span class="benefit-icon">•</span>
+			                    <span class="benefit-text">Save time by setting up both rides at once</span>
+			                  </div>
+			                  <div class="benefit-item">
+			                    <span class="benefit-icon">•</span>
+			                    <span class="benefit-text">Increase your chances of getting fully booked</span>
+			                  </div>
+			                </div>
+			              </div>
+			
+			              <!-- Continue -->
+			              <div class="action-section">
+			                <button type="submit" class="continue-btn" id="continueBtn" disabled>
+			                  Continue
+			                </button>
+			              </div>
+			            </div>
+			          </article>
                 </form>
             </div>
         </div>
@@ -242,55 +254,56 @@
 </main>
 
  <script>
-        let selectedOption = null;
+  let selectedOption = null;
 
-        function selectOption(option) {
-            selectedOption = option;
-            
-            // Remove selection from all options
-            document.querySelectorAll('.option-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            
-            // Add selection to chosen option
-            document.getElementById(option + 'Option').classList.add('selected');
-            
-            // Enable continue button
-            document.getElementById('continueBtn').disabled = false;
-        }
+  function selectOption(option) {
+    selectedOption = option;
 
-        function continueToNext() {
-            if (!selectedOption) return;
-            
-            if (selectedOption === 'yes') {
-                // Redirect to return ride creation page
-                //alert('Redirecting to return ride creation...');
-                 window.location.href = '/user/ride/create-return-ride';
-            } else {
-                // Continue without return ride
-                // alert('Continuing without return ride...');
-                // window.location.href = '/next-page';
-            }
-            
-            // Here you would typically submit the form or navigate
-            // Example for form submission:
-            // document.getElementById('returnRideForm').submit();
-        }
+    // Remove selection
+    document.querySelectorAll('.option-card').forEach(card => {
+      card.classList.remove('selected');
+    });
 
-        // Keyboard support
-        document.addEventListener('keydown', function(event) {
-            if (event.key === '1') {
-                selectOption('yes');
-                event.preventDefault();
-            } else if (event.key === '2') {
-                selectOption('later');
-                event.preventDefault();
-            } else if (event.key === 'Enter' && selectedOption) {
-                continueToNext();
-                event.preventDefault();
-            }
-        });
-    </script>
+    // Add selection
+    document.getElementById(option + 'Option').classList.add('selected');
+
+    // Set hidden field value for backend
+    document.getElementById('returnRideOption').value = option;
+
+    // Enable continue button
+    document.getElementById('continueBtn').disabled = false;
+  }
+
+  // Handle form submission manually if needed
+  document.getElementById('returnRideForm').addEventListener('submit', function (e) {
+    if (!selectedOption) {
+      e.preventDefault();
+      alert('Please select an option before continuing.');
+      return;
+    }
+
+    // Optional: redirect logic depending on selection
+    if (selectedOption === 'yes') {
+      this.action = '/user/ride/create-return-ride';
+    } else {
+      this.action = '/user/ride/comment';
+    }
+  });
+
+  // Keyboard support
+  document.addEventListener('keydown', function (event) {
+    if (event.key === '1') {
+      selectOption('yes');
+      event.preventDefault();
+    } else if (event.key === '2') {
+      selectOption('later');
+      event.preventDefault();
+    } else if (event.key === 'Enter' && selectedOption) {
+      document.getElementById('returnRideForm').submit();
+      event.preventDefault();
+    }
+  });
+</script>
 
 <div th:replace="common/footer :: footerbar"></div>
 <div th:replace="common/header :: body-bottom-scripts"></div>

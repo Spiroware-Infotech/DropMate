@@ -34,10 +34,10 @@ public class DeliveryService {
 		trip.setDestinationName(request.getDestinationName());
 
 		if (request.getStartTime() != null) {
-			trip.setStartDate(LocalDateTime.parse(request.getStartTime(), formatter));
+			//trip.setStartDate(LocalDateTime.parse(request.getStartTime(), formatter));
 		}
 		if (request.getEndTime() != null) {
-			trip.setEndTime(LocalDateTime.parse(request.getEndTime(), formatter));
+			//trip.setEndTime(LocalDateTime.parse(request.getEndTime(), formatter));
 		}
 
 		trip.setSeatsTotal(0);
@@ -79,10 +79,10 @@ public class DeliveryService {
 		if (request.getDestinationName() != null)
 			trip.setDestinationName(request.getDestinationName());
 		if (request.getStartTime() != null) {
-			trip.setStartTime(LocalDateTime.parse(request.getStartTime(), formatter));
+			//trip.setStartTime(LocalDateTime.parse(request.getStartTime(), formatter));
 		}
 		if (request.getEndTime() != null) {
-			trip.setEndTime(LocalDateTime.parse(request.getEndTime(), formatter));
+			//trip.setEndTime(LocalDateTime.parse(request.getEndTime(), formatter));
 		}
 		if (request.getCargoSlots() != null) {
 			trip.setCargoSlotsTotal(request.getCargoSlots());
@@ -113,7 +113,7 @@ public class DeliveryService {
 		resp.setOriginName(trip.getOriginName());
 		resp.setDestinationName(trip.getDestinationName());
 		resp.setStartTime(trip.getStartTime() != null ? trip.getStartTime().toString() : null);
-		resp.setEndTime(trip.getEndTime() != null ? trip.getEndTime().toString() : null);
+		//resp.setEndTime(trip.getEndTime() != null ? trip.getEndTime().toString() : null);
 		resp.setSeatsTotal(trip.getSeatsTotal());
 		resp.setSeatsAvailable(trip.getSeatsAvailable());
 		resp.setCargoSlotsTotal(trip.getCargoSlotsTotal());

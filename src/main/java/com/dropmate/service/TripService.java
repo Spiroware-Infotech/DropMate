@@ -58,9 +58,8 @@ public class TripService {
 		return tripRepository.findUpcomingTripsNear(from, to, originWkt, radius);
 	}
 
-	public TripResponse getTripById(Long tripId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Trip getTripById(String tripId) {
+		return tripRepository.findById(tripId).orElse(null);
 	}
 
 	public void updateTrip(Long tripId, TripRequest tripRequest) {

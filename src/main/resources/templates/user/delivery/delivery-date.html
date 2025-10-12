@@ -4,14 +4,10 @@
 	xmlns:th="http://www.w3.org/1999/xhtml">
 <body>
 <style>
-    #map {
-      height: 400px;
-      width: 100%;
-    }
-    #pac-input {
-      width: 300px;
-      padding: 8px;
-      margin-top: 10px;
+    .litepicker .day-item.is-today {
+      border: 1px solid #007bff;
+      background-color: #e9f2ff;
+      font-weight: bold;
     }
   </style>	
 <head th:replace="common/authheader :: common-header" />
@@ -23,11 +19,11 @@
 			<div class="row">
 				<!--full-width content-->
 				<div class="full-width">
-					<form th:action="@{/user/ride/departure-date/time}">
+					<form th:action="@{/user/delivery/date}">
 					<article class="static-content post">
 						  <div style="text-align:center;">
 							  <h2>When are you going?</h2>
-							  <input id="calendar" type="hidden" name="departureDate">
+							  <input id="calendar" type="hidden" name="startTime">
 						  </div>
 						
 						<div class="row" align="right">
@@ -47,9 +43,9 @@
     
    
 </style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css">
 <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/bundle.js"></script>
- <script>
+  <script>
     const today = new Date();
 
     const picker = new Litepicker({

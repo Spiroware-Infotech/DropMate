@@ -8,7 +8,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.dropmate.dto.RideRequest;
 
 @Controller
 @RequestMapping("/user")
@@ -29,7 +32,13 @@ public class DashBoardController {
 	        }
 //		PaymentCalculations paymentStatastics= paymentService.getPaymentStasticts();
 //		
-//		model.addObject("paymentStatastics",paymentStatastics);
+		model.addAttribute("activePage","dashboard");
 		return "user/dashboard";
+	}
+	
+	@GetMapping(value = "/profile")
+	public String profile(Model model) {
+		model.addAttribute("activePage","profile");
+		return "user/profile";
 	}
 }

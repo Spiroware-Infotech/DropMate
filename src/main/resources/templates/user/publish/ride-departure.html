@@ -23,7 +23,7 @@
 			<div class="row">
 				<!--full-width content-->
 				<div class="full-width">
-					<form th:action="@{/user/ride/arrival}" >
+					<form th:action="@{/user/ride/arrival}" method="post">
 					<article class="static-content post">
 						<header class="entry-header">
 							<h1>Pick-up</h1>
@@ -33,6 +33,7 @@
 							</div>
 							</div>
 						</header>
+						<input type="hidden" id="sourceJson" name="sourceJson" />
 						<br/>
 						<div class="entry-featured">
 							<figure>
@@ -119,23 +120,33 @@
 	      } else {
 	        bounds.extend(place.geometry.location);
 	      }
+	      
+	     //set the place details
+	      setPlaceData(place);
+    		
 	    });
 	    map.fitBounds(bounds);
 	  });
 	}
 
+ function setPlaceData(place) {
+	  const placeData = {
+	    name: place.name,
+	    address: place.formatted_address,
+	    latitude: place.geometry?.location.lat(),
+	    longitude: place.geometry?.location.lng()
+	  };
+	  console.log("Place Data:", placeData);
+	  document.getElementById("sourceJson").value = JSON.stringify(placeData);
+ } 
+ 
 	window.initAutocomplete = initAutocomplete;
 </script>
 
-<script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwOasTpcrO7ONE6nzs1kdcppDYO2rfZcA&callback=initAutocomplete&libraries=places&v=weekly"
-      defer
-    ></script>
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwOasTpcrO7ONE6nzs1kdcppDYO2rfZcA&callback=initAutocomplete&libraries=places&v=weekly" defer></script>
    
 <div th:replace="common/footer :: footerbar"></div>
 <div th:replace="common/header :: body-bottom-scripts"></div>
- 
   
 </body>
 </html>

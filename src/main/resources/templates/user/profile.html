@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+      data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="common/authheader :: common-header"></head>
+<head th:replace="common/authheader :: navbar"></head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<body>
+<style>
+  .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+  }
+
+  .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #3a86ff;
+  }
+
+  .nav-links {
+      display: flex;
+      gap: 25px;
+  }
+
+  .nav-links a {
+      text-decoration: none;
+      color: #555;
+      font-weight: 500;
+      transition: color 0.3s;
+  }
+
+  .nav-links a:hover {
+      color: #3a86ff;
+  }
+
+  .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+  }
+
+  .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #3a86ff;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+  }
+
+  .dashboard-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #2d3748;
+  }
+
+  .profile-container {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 30px;
+  }
+
+  @media (max-width: 768px) {
+      .profile-container {
+          grid-template-columns: 1fr;
+      }
+  }
+
+  .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      padding: 25px;
+      margin-bottom: 25px;
+  }
+
+  .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+  }
+
+  .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #2d3748;
+  }
+
+  .profile-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+  }
+
+  .user-info-card {
+      text-align: center;
+      padding: 30px 20px;
+  }
+
+  .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3a86ff, #8338ec);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: bold;
+      margin: 0 auto 15px;
+  }
+
+  .user-name {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: #2d3748;
+  }
+
+  .user-level {
+      display: inline-block;
+      padding: 5px 15px;
+      background-color: #f0f9ff;
+      color: #0369a1;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+  }
+
+  .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+  }
+
+  .stat-item {
+      text-align: center;
+      padding: 15px 10px;
+      background-color: #f8fafc;
+      border-radius: 8px;
+  }
+
+  .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #3a86ff;
+      margin-bottom: 5px;
+  }
+
+  .stat-label {
+      font-size: 12px;
+      color: #718096;
+  }
+
+  .progress-section {
+      margin-bottom: 30px;
+  }
+
+  .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+  }
+
+  .progress-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2d3748;
+  }
+
+  .progress-percentage {
+      font-size: 14px;
+      color: #3a86ff;
+      font-weight: 600;
+  }
+
+  .progress-bar {
+      height: 8px;
+      background-color: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 15px;
+  }
+
+  .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3a86ff, #8338ec);
+      border-radius: 4px;
+      width: 33%; /* 2 out of 6 complete */
+  }
+
+  .progress-text {
+      font-size: 14px;
+      color: #718096;
+  }
+
+  .action-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+  }
+
+  .action-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background-color: #f8fafc;
+      border-radius: 8px;
+      transition: all 0.3s;
+      cursor: pointer;
+  }
+
+  .action-item:hover {
+      background-color: #edf2f7;
+      transform: translateY(-2px);
+  }
+
+  .action-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4a5568;
+      margin-right: 15px;
+      font-size: 18px;
+  }
+
+  .action-details {
+      flex: 1;
+  }
+
+  .action-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 3px;
+  }
+
+  .action-description {
+      font-size: 13px;
+      color: #718096;
+  }
+
+  .action-status {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+  }
+
+  .status-pending {
+      background-color: #fef3c7;
+      color: #d97706;
+  }
+
+  .status-complete {
+      background-color: #d1fae5;
+      color: #065f46;
+  }
+
+  .verification-section {
+      margin-top: 30px;
+  }
+
+  .verification-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background-color: #f0f9ff;
+      border-radius: 8px;
+      margin-bottom: 10px;
+  }
+
+  .verification-number {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #3a86ff;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-right: 15px;
+  }
+
+  .verification-text {
+      flex: 1;
+      font-weight: 500;
+      color: #2d3748;
+  }
+
+  .btn {
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+  }
+
+  .btn-primary {
+      background-color: #3a86ff;
+      color: white;
+  }
+
+  .btn-primary:hover {
+      background-color: #2563eb;
+  }
+
+  .btn-outline {
+      background-color: transparent;
+      border: 1px solid #e2e8f0;
+      color: #4a5568;
+  }
+
+  .btn-outline:hover {
+      background-color: #f7fafc;
+  }
+
+  .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e2e8f0;
+  }
+
+  .account-details {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+  }
+
+  .detail-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background-color: #f8fafc;
+      border-radius: 8px;
+  }
+
+  .detail-label {
+      font-weight: 500;
+      color: #4a5568;
+  }
+
+  .detail-value {
+      font-weight: 600;
+      color: #2d3748;
+  }
+
+  .detail-actions {
+      display: flex;
+      gap: 10px;
+  }
+
+  @media (max-width: 768px) {
+      .nav-links {
+          display: none;
+      }
+      
+      .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .detail-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+      }
+      
+      .detail-actions {
+          align-self: flex-end;
+      }
+  }
+</style>
+
+<main class="main">
+    <div class="wrap">
+        <div class="row">
+            <div class="full-width">
+                    <article class="static-content post">
+                         <div class="">
+					        <div class="profile-container">
+					            <div class="profile-sidebar">
+					                <div class="card user-info-card">
+					                    <div class="profile-avatar">L</div>
+					                    <h2 class="user-name">Lakshman</h2>
+					                    <div class="user-level">Newcomer</div>
+					                    
+					                    <div class="stats-grid">
+					                        <div class="stat-item">
+					                            <div class="stat-value">8</div>
+					                            <div class="stat-label">Rides</div>
+					                        </div>
+					                        <div class="stat-item">
+					                            <div class="stat-value">4.7</div>
+					                            <div class="stat-label">Rating</div>
+					                        </div>
+					                        <div class="stat-item">
+					                            <div class="stat-value">12</div>
+					                            <div class="stat-label">Passengers</div>
+					                        </div>
+					                    </div>
+					                </div>
+					                
+					                <div class="card">
+					                    <div class="card-header">
+					                        <h2 class="card-title">Account</h2>
+					                    </div>
+					                    
+					                    <div class="account-details">
+					                        <div class="detail-item">
+					                            <div class="detail-label">Email</div>
+					                            <div class="detail-value">lakshman@example.com</div>
+					                            <div class="detail-actions">
+					                                <button class="btn btn-outline">Edit</button>
+					                            </div>
+					                        </div>
+					                        
+					                        <div class="detail-item">
+					                            <div class="detail-label">Phone</div>
+					                            <div class="detail-value">+91 98765 43210</div>
+					                            <div class="detail-actions">
+					                                <button class="btn btn-outline">Edit</button>
+					                            </div>
+					                        </div>
+					                        
+					                        <div class="detail-item">
+					                            <div class="detail-label">Password</div>
+					                            <div class="detail-value">••••••••</div>
+					                            <div class="detail-actions">
+					                                <button class="btn btn-outline">Change</button>
+					                            </div>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					            
+					            <div class="profile-main">
+					                <div class="card">
+					                    <div class="card-header">
+					                        <h2 class="card-title">Complete your profile</h2>
+					                    </div>
+					                    
+					                    <div class="progress-section">
+					                        <div class="progress-header">
+					                            <div class="progress-title">Profile Completion</div>
+					                            <div class="progress-percentage">33%</div>
+					                        </div>
+					                        <div class="progress-bar">
+					                            <div class="progress-fill"></div>
+					                        </div>
+					                        <div class="progress-text">2 out of 6 complete</div>
+					                    </div>
+					                    
+					                    <div class="action-list">
+					                        <div class="action-item">
+					                            <div class="action-icon">
+					                                <i class="fas fa-camera"></i>
+					                            </div>
+					                            <div class="action-details">
+					                                <div class="action-title">Add profile picture</div>
+					                                <div class="action-description">Show passengers who you are</div>
+					                            </div>
+					                            <div class="action-status status-pending">Pending</div>
+					                        </div>
+					                        
+					                        <div class="action-item">
+					                            <div class="action-icon">
+					                                <i class="fas fa-user-edit"></i>
+					                            </div>
+					                            <div class="action-details">
+					                                <div class="action-title">Edit personal details</div>
+					                                <div class="action-description">Keep your information up to date</div>
+					                            </div>
+					                            <div class="action-status status-pending">Pending</div>
+					                        </div>
+					                        
+					                        <div class="action-item">
+					                            <div class="action-icon">
+					                                <i class="fas fa-shield-alt"></i>
+					                            </div>
+					                            <div class="action-details">
+					                                <div class="action-title">Verify your profile</div>
+					                                <div class="action-description">Increase trust with verification</div>
+					                            </div>
+					                            <div class="action-status status-pending">Pending</div>
+					                        </div>
+					                    </div>
+					                    
+					                    <div class="verification-section">
+					                        <h3 class="section-title">Identity Verification</h3>
+					                        <div class="verification-item">
+					                            <div class="verification-number">1</div>
+					                            <div class="verification-text">Verify your Govt. ID</div>
+					                            <button class="btn btn-primary">Verify</button>
+					                        </div>
+					                    </div>
+					                </div>
+					                
+					                <div class="card">
+					                    <div class="card-header">
+					                        <h2 class="card-title">Trust & Safety</h2>
+					                    </div>
+					                    
+					                    <div class="action-list">
+					                        <div class="action-item">
+					                            <div class="action-icon">
+					                                <i class="fas fa-star"></i>
+					                            </div>
+					                            <div class="action-details">
+					                                <div class="action-title">Review your ratings</div>
+					                                <div class="action-description">See what passengers say about you</div>
+					                            </div>
+					                            <div class="action-status status-complete">Complete</div>
+					                        </div>
+					                        
+					                        <div class="action-item">
+					                            <div class="action-icon">
+					                                <i class="fas fa-car"></i>
+					                            </div>
+					                            <div class="action-details">
+					                                <div class="action-title">Vehicle information</div>
+					                                <div class="action-description">Add details about your vehicle</div>
+					                            </div>
+					                            <div class="action-status status-pending">Pending</div>
+					                        </div>
+					                        
+					                        <div class="action-item">
+					                            <div class="action-icon">
+					                                <i class="fas fa-credit-card"></i>
+					                            </div>
+					                            <div class="action-details">
+					                                <div class="action-title">Payment methods</div>
+					                                <div class="action-description">Add your preferred payment options</div>
+					                            </div>
+					                            <div class="action-status status-complete">Complete</div>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+                    </article>
+            </div>
+        </div>
+    </div>
+</main>
+
+ <script>
+  // Filter functionality
+  document.querySelectorAll('.filter-btn').forEach(button => {
+      button.addEventListener('click', function() {
+          document.querySelectorAll('.filter-btn').forEach(btn => {
+              btn.classList.remove('active');
+          });
+          this.classList.add('active');
+          
+          // In a real app, this would filter the rides
+          alert(`Filtering by: ${this.textContent}`);
+      });
+  });
+  
+  // Ride card interactions
+  document.querySelectorAll('.ride-actions .btn-primary').forEach(button => {
+      button.addEventListener('click', function() {
+          const rideCard = this.closest('.ride-card');
+          const startLocation = rideCard.querySelector('.location-name').textContent;
+          alert(`Showing details for ride from ${startLocation}`);
+      });
+  });
+  
+  document.querySelectorAll('.ride-actions .btn-outline').forEach(button => {
+      button.addEventListener('click', function() {
+          const rideCard = this.closest('.ride-card');
+          const startLocation = rideCard.querySelector('.location-name').textContent;
+          alert(`Creating a new ride based on your trip from ${startLocation}`);
+      });
+  });
+</script>
+
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+</body>
+</html>

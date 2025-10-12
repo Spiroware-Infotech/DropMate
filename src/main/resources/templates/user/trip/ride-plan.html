@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+      data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="common/authheader :: common-header"></head>
+<head th:replace="common/authheader :: navbar"></head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<body>
+<style>
+
+      .logo {
+          font-size: 24px;
+          font-weight: 700;
+          color: #3a86ff;
+      }
+
+      .nav-links {
+          display: flex;
+          gap: 25px;
+      }
+
+      .nav-links a {
+          text-decoration: none;
+          color: #555;
+          font-weight: 500;
+          transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+          color: #3a86ff;
+      }
+
+      .user-profile {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+      }
+
+      .user-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: #3a86ff;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+      }
+
+      .dashboard-title {
+          font-size: 28px;
+          color: #2d3748;
+      }
+
+      .card {
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+          padding: 25px;
+          margin-bottom: 25px;
+      }
+
+      .card-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+      }
+
+      .card-title {
+          font-size: 20px;
+          font-weight: 600;
+          color: #2d3748;
+      }
+
+      .verification-section {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+      }
+
+      .verification-item {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          padding: 15px;
+          border-radius: 8px;
+          background-color: #f8fafc;
+      }
+
+      .verification-icon {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          background-color: #e2e8f0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #4a5568;
+          font-size: 20px;
+      }
+
+      .verification-text h3 {
+          font-size: 16px;
+          margin-bottom: 5px;
+          color: #2d3748;
+      }
+
+      .verification-text p {
+          font-size: 14px;
+          color: #718096;
+      }
+
+      .verification-action {
+          margin-left: auto;
+      }
+
+      .btn {
+          padding: 10px 20px;
+          border-radius: 6px;
+          border: none;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s;
+      }
+
+      .btn-primary {
+          background-color: #3a86ff;
+          color: white;
+      }
+
+      .btn-primary:hover {
+          background-color: #2563eb;
+      }
+
+      .btn-outline {
+          background-color: transparent;
+          border: 1px solid #e2e8f0;
+          color: #4a5568;
+      }
+
+      .btn-outline:hover {
+          background-color: #f7fafc;
+      }
+
+      .ride-date {
+          font-size: 18px;
+          font-weight: 600;
+          margin-bottom: 15px;
+          color: #2d3748;
+      }
+
+      .ride-details {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+      }
+
+      .ride-point {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+      }
+
+      .time {
+          font-weight: 600;
+          color: #2d3748;
+          min-width: 60px;
+      }
+
+      .location {
+          display: flex;
+          flex-direction: column;
+      }
+
+      .location-name {
+          font-weight: 600;
+          color: #2d3748;
+      }
+
+      .location-address {
+          font-size: 14px;
+          color: #718096;
+      }
+
+      .passenger-status {
+          padding: 15px;
+          background-color: #f0f9ff;
+          border-radius: 8px;
+          text-align: center;
+          color: #0369a1;
+          font-weight: 500;
+          margin: 20px 0;
+      }
+
+      .publication-status {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          padding: 15px;
+          background-color: #f8fafc;
+          border-radius: 8px;
+          text-align: center;
+      }
+
+      .publication-title {
+          font-weight: 600;
+          color: #2d3748;
+      }
+
+      .publication-views {
+          color: #718096;
+          font-size: 14px;
+      }
+
+      .divider {
+          height: 1px;
+          background-color: #e2e8f0;
+          margin: 25px 0;
+      }
+
+      .action-buttons {
+          display: flex;
+          gap: 15px;
+          margin-top: 20px;
+      }
+
+      .status-badge {
+          padding: 5px 12px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 600;
+      }
+
+      .status-pending {
+          background-color: #fef3c7;
+          color: #d97706;
+      }
+
+      .status-active {
+          background-color: #d1fae5;
+          color: #065f46;
+      }
+
+      @media (max-width: 768px) {
+          .nav-links {
+              display: none;
+          }
+          
+          .action-buttons {
+              flex-direction: column;
+          }
+          
+          .card-header {
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 10px;
+          }
+      }
+  </style>
+
+<main class="main">
+    <div class="wrap">
+        <div class="row">
+            <div class="full-width">
+                    <article class="static-content post">
+                         <div class="">
+					        
+					        <h1 class="dashboard-title" align="center">Ride Plan</h1>
+					
+					        <div class="card">
+					            <div class="card-header">
+					                <h2 class="card-title">Complete Your Profile</h2>
+					                <div class="status-badge status-pending">Incomplete</div>
+					            </div>
+					            <div class="verification-section">
+					                <div class="verification-item">
+					                    <div class="verification-icon">
+					                        <i class="fas fa-id-card"></i>
+					                    </div>
+					                    <div class="verification-text">
+					                        <h3>Verify your Govt. ID</h3>
+					                        <p>It's quick to do and inspires trust in your fellow travellers.</p>
+					                    </div>
+					                    <div class="verification-action">
+					                        <button class="btn btn-primary">Verify Now</button>
+					                    </div>
+					                </div>
+					                <div class="verification-item">
+					                    <div class="verification-icon">
+					                        <i class="fas fa-user-circle"></i>
+					                    </div>
+					                    <div class="verification-text">
+					                        <h3>Add your profile picture</h3>
+					                        <p>Passengers like to see who they're going to travel with, so they can recognise you at the meeting point.</p>
+					                    </div>
+					                    <div class="verification-action">
+					                        <button class="btn btn-outline">Add Photo</button>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+					
+					        <div class="card">
+					            <div class="card-header">
+					                <h2 class="card-title">Upcoming Ride</h2>
+					                <div class="status-badge status-active">Active</div>
+					            </div>
+					            
+					            <div class="ride-date">Fri 24 October</div>
+					            
+					            <div class="ride-details">
+					                <div class="ride-point">
+					                    <div class="time">12:50</div>
+					                    <div class="location">
+					                        <div class="location-name">Chowdepalle</div>
+					                        <div class="location-address">Gandipalem Dam, Andhra Pradesh</div>
+					                    </div>
+					                </div>
+					                
+					                <div class="ride-point">
+					                    <div class="time">20:30</div>
+					                    <div class="location">
+					                        <div class="location-name">Bengaluru</div>
+					                        <div class="location-address">Bengaluru, Karnataka</div>
+					                    </div>
+					                </div>
+					            </div>
+					            
+					            <div class="passenger-status">
+					                No passengers for this ride
+					            </div>
+					            
+					            <div class="divider"></div>
+					            
+					            <div class="publication-status">
+					                <div class="publication-title">See your publication online</div>
+					                <div class="publication-views">No views yet</div>
+					            </div>
+					            
+					            <div class="action-buttons">
+					                <button class="btn btn-primary">
+					                    <i class="fas fa-edit"></i> Edit Ride
+					                </button>
+					                <button class="btn btn-outline">
+					                    <i class="fas fa-share-alt"></i> Share Ride
+					                </button>
+					                <button class="btn btn-outline">
+					                    <i class="fas fa-times"></i> Cancel Ride
+					                </button>
+					            </div>
+					        </div>
+					        <div class="card">
+					            <div class="card-header">
+					                <h2 class="card-title">Support Options</h2>
+					            </div>
+					            <div class="support-section">
+					                <div class="support-card">
+					                    <div class="support-icon">
+					                        <i class="fas fa-question-circle"></i>
+					                    </div>
+					                    <h3 class="support-title">Help Center</h3>
+					                    <p class="support-description">Find answers to common questions and learn how to use our platform.</p>
+					                    <div class="support-action">
+					                        <a href="#" class="support-link">Browse Help Center <i class="fas fa-arrow-right"></i></a>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+					        <div class="card">
+					            <div class="card-header">
+					                <h2 class="card-title">Ride Statistics</h2>
+					            </div>
+					            <div style="display: flex; justify-content: space-around; text-align: center; padding: 20px 0;">
+					                <div>
+					                    <div style="font-size: 24px; font-weight: bold; color: #3a86ff;">12</div>
+					                    <div style="color: #718096;">Total Rides</div>
+					                </div>
+					                <div>
+					                    <div style="font-size: 24px; font-weight: bold; color: #10b981;">8.7</div>
+					                    <div style="color: #718096;">Avg. Rating</div>
+					                </div>
+					                <div>
+					                    <div style="font-size: 24px; font-weight: bold; color: #f59e0b;">24</div>
+					                    <div style="color: #718096;">Passengers</div>
+					                </div>
+					            </div>
+					        </div>
+					       </div> 
+                    </article>
+            </div>
+        </div>
+    </div>
+</main>
+
+ <script>
+    // Simple script for button interactions
+    document.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const buttonText = this.textContent.trim();
+            if (buttonText.includes('Verify Now')) {
+                alert('Redirecting to ID verification process...');
+            } else if (buttonText.includes('Add Photo')) {
+                alert('Opening photo upload dialog...');
+            } else if (buttonText.includes('Edit Ride')) {
+                alert('Opening ride editor...');
+            } else if (buttonText.includes('Share Ride')) {
+                alert('Opening share options...');
+            } else if (buttonText.includes('Cancel Ride')) {
+                if (confirm('Are you sure you want to cancel this ride?')) {
+                    alert('Ride cancellation process initiated.');
+                }
+            }
+        });
+    });
+ 
+ </script>
+
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+</body>
+</html>

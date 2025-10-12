@@ -57,7 +57,7 @@
                     <div class="price-section">
                         <div class="price-display">
                             <span class="currency">₹</span>
-                            <input type="number" th:field="*{price}" class="price-input" id="priceInput" min="50" max="500" step="5" />
+                            <input type="number" th:field="*{price}" class="price-input" id="priceInput" step="5" />
                         </div>
                         <div class="price-controls">
                             <button type="button" class="control-btn" id="decreaseBtn" onclick="changePrice(-5)">-</button>
@@ -103,15 +103,18 @@
     </div>
 </main>
 
-<script>
+<script th:inline="javascript">
     const minPrice = 50;
     const maxPrice = 500;
     const step = 5;
-    const recommendedMin = 100;
-    const recommendedMax = 210;
 
-    // Initialize price from input value
-    let currentPrice = parseInt(document.getElementById('priceInput').value) || 200;
+    // ✅ Dynamic values from backend
+    const basePrice = '[[${basePrice}]]';
+    const recommendedMin = '[[${recommendedMin}]]';
+    const recommendedMax = '[[${recommendedMax}]]';
+
+    // Initialize with backend base price
+    let currentPrice = basePrice;
 
     function updateDisplay() {
         const priceInput = document.getElementById('priceInput');
@@ -135,19 +138,28 @@
         const rangePercentage = ((currentPrice - minPrice) / (maxPrice - minPrice)) * 100;
         priceRangeFill.style.width = `${Math.min(rangePercentage, 100)}%`;
 
-        // Update feedback
+        // ✅ Update feedback based on backend recommendation
         if (currentPrice >= recommendedMin && currentPrice <= recommendedMax) {
             priceFeedback.textContent = "Perfect price for this ride! You'll get passengers in no time.";
             priceFeedback.className = "feedback";
         } else if (currentPrice < recommendedMin) {
-            priceFeedback.textContent = "Price is below recommended range. You might attract more passengers but earn less.";
+            priceFeedback.textContent = `Price is below recommended range (₹${recommendedMin} - ₹${recommendedMax}). You might attract more passengers but earn less.`;
             priceFeedback.className = "feedback warning";
         } else {
-            priceFeedback.textContent = "Price is above recommended range. You might earn more but attract fewer passengers.";
+            priceFeedback.textContent = `Price is above recommended range (₹${recommendedMin} - ₹${recommendedMax}). You might earn more but attract fewer passengers.`;
             priceFeedback.className = "feedback low";
         }
 
-        // Quick buttons
+        // Update quick buttons dynamically
+        const quickButtons = document.querySelector(".quick-buttons");
+        quickButtons.innerHTML = `
+            <button type="button" class="quick-btn" onclick="setQuickPrice(${recommendedMin})">₹${recommendedMin}</button>
+            <button type="button" class="quick-btn" onclick="setQuickPrice(${basePrice - 10})">₹${basePrice - 10}</button>
+            <button type="button" class="quick-btn active" onclick="setQuickPrice(${basePrice})">₹${basePrice}</button>
+            <button type="button" class="quick-btn" onclick="setQuickPrice(${recommendedMax})">₹${recommendedMax}</button>
+        `;
+
+        // Highlight active button
         document.querySelectorAll('.quick-btn').forEach(btn => {
             const price = parseInt(btn.textContent.replace('₹', ''));
             btn.classList.toggle('active', price === currentPrice);
@@ -177,15 +189,15 @@
         updateDisplay();
     });
 
-    // Keyboard support
     document.addEventListener('keydown', function(event) {
-        if(event.key === 'ArrowUp'){ changePrice(step); event.preventDefault(); }
-        else if(event.key === 'ArrowDown'){ changePrice(-step); event.preventDefault(); }
+        if (event.key === 'ArrowUp') { changePrice(step); event.preventDefault(); }
+        else if (event.key === 'ArrowDown') { changePrice(-step); event.preventDefault(); }
     });
 
-    // Initialize display
+    // ✅ Initialize with backend base price
     updateDisplay();
 </script>
+
 
 <div th:replace="common/footer :: footerbar"></div>
 <div th:replace="common/header :: body-bottom-scripts"></div>

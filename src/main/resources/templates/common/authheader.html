@@ -64,12 +64,12 @@
 					</div> -->
 					<ul class="slimmenu" id="nav">
 						
-						<li class="current"><a href="#" title="Contact" >Dashboard</a></li>
-						<li class=""><a href="#" title="Contact" >My rides</a></li>
-						<li class=""><a href="#" title="Contact" >Profile</a></li>
-						<li class=""><a href="#" title="Contact" >Transfers</a></li>
-						<li class=""><a href="#" title="Contact" >Payments & refunds</a></li>
-						<li class=""><a href="#" title="Contact" >Inbox</a></li>
+						<li th:class="${activePage == 'dashboard'} ? 'current'"><a th:href="@{/user/dashboard}" title="Dashboard" >Dashboard</a></li>
+						<li th:class="${activePage == 'ridelist'} ? 'current'"><a th:href="@{/user/ride/list}" title="Rides" >My rides</a></li>
+						<li th:class="${activePage == 'profile'} ? 'current'"><a th:href="@{/user/profile}" title="Profile" >Profile</a></li>
+						<li class=""><a href="#" title="Transfers" >Transfers</a></li>
+						<li class=""><a href="#" title="Payments & refunds" >Payments & refunds</a></li>
+						<li class=""><a href="#" title="Inbox" >Inbox</a></li>
 						<li><a th:href="@{/logout}">Logout</a></li>
 					</ul>
 				</div>
@@ -85,7 +85,7 @@
             <li class="active">
             	<a th:href="@{/my-bookings}" title="My Bookings">My Bookings</a>
             </li>
-            <li><a th:href="@{/my-reviews}" title="My Reviews">My Reviews</a></li>
+            <li><a th:href="@{/my-reviews}" title="My Reviews">Ride Statistics</a></li>
             <li><a th:href="@{/settings}" title="Settings">Settings</a></li>
             
         </ul>

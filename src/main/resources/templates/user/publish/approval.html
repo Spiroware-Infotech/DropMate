@@ -152,20 +152,21 @@
                             <div class="header">
                                 <h1>Enable Instant Booking for your passengers</h1>
                             </div>
-
+							<input type="hidden" id="bookingType" name="bookingType" value="instant">
                             <div class="toggle-section">
-                                <div class="toggle-container">
-                                    <button type="button" class="toggle-option active" id="instantBtn"
-                                            onclick="toggleSetting(event, 'instant')">Enable Instant Booking</button> &nbsp;&nbsp;&nbsp;
-                                    <button type="button" class="toggle-option" id="reviewBtn"
-                                            onclick="toggleSetting(event, 'review')">Review every request</button>
-                                </div>
-
-                                <div class="current-setting" id="currentSetting">
-                                    <h3>Instant Booking Enabled</h3>
-                                    <p>Passengers can book instantly without waiting for approval.</p>
-                                </div>
-                            </div>
+					            <div class="toggle-container">
+					                <button type="button" class="toggle-option active" id="instantBtn"
+					                        onclick="toggleSetting(event, 'instant')">Enable Instant Booking</button>
+					                &nbsp;&nbsp;&nbsp;
+					                <button type="button" class="toggle-option" id="reviewBtn"
+					                        onclick="toggleSetting(event, 'review')">Review every request</button>
+					            </div>
+					
+					            <div class="current-setting" id="currentSetting">
+					                <h3>Instant Booking Enabled</h3>
+					                <p>Passengers can book instantly without waiting for approval.</p>
+					            </div>
+					        </div>
 
 
                             <div class="row" align="right">
@@ -182,42 +183,39 @@
 </main>
 
 <script>
-    let currentSetting = 'instant';
+  let currentSetting = 'instant';
 
-    function toggleSetting(event, setting) {
-        event.preventDefault();
-        currentSetting = setting;
-        document.getElementById('instantBookingInput').value = (setting === 'instant');
+  function toggleSetting(event, setting) {
+    event.preventDefault();
+    currentSetting = setting;
 
-        document.getElementById('instantBtn').classList.toggle('active', setting === 'instant');
-        document.getElementById('reviewBtn').classList.toggle('active', setting === 'review');
+    // ✅ Update hidden input value
+    document.getElementById('bookingType').value = setting;
 
-        document.getElementById('checkbox1').classList.toggle('checked', setting === 'instant');
-        document.getElementById('checkbox2').classList.toggle('checked', setting === 'instant');
+    // Toggle active button styles
+    document.getElementById('instantBtn').classList.toggle('active', setting === 'instant');
+    document.getElementById('reviewBtn').classList.toggle('active', setting === 'review');
 
-        const current = document.getElementById('currentSetting');
-        if (setting === 'instant') {
-            current.innerHTML = `
-                <h3>Instant Booking Enabled</h3>
-                <p>Passengers can book instantly without waiting for approval.</p>
-            `;
-            current.style.background = '#e6f7ff';
-            current.style.borderColor = '#91d5ff';
-        } else {
-            current.innerHTML = `
-                <h3>Review every request before it expires</h3>
-                <p>You'll manually approve or decline each booking request.</p>
-            `;
-            current.style.background = '#fff9e6';
-            current.style.borderColor = '#ffe58f';
-        }
+    // Update the info box
+    const current = document.getElementById('currentSetting');
+    if (setting === 'instant') {
+      current.innerHTML = `
+          <h3>Instant Booking Enabled</h3>
+          <p>Passengers can book instantly without waiting for approval.</p>
+      `;
+      current.style.background = '#e6f7ff';
+      current.style.borderColor = '#91d5ff';
+    } else {
+      current.innerHTML = `
+          <h3>Review every request before it expires</h3>
+          <p>You'll manually approve or decline each booking request.</p>
+      `;
+      current.style.background = '#fff9e6';
+      current.style.borderColor = '#ffe58f';
     }
-
-    function validateForm() {
-        // You can validate or log form data here before submission if needed
-        return true;
-    }
+  }
 </script>
+
 
 <div th:replace="common/footer :: footerbar"></div>
 <div th:replace="common/header :: body-bottom-scripts"></div>

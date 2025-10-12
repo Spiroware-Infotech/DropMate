@@ -229,7 +229,7 @@
             <div class="full-width">
                     <article class="">
                          <div class="">
-						    <div class="page-title">Friday, 24 October</div>
+						    <div class="page-title" th:text="${#temporals.format(trip.startDate, 'EEEE, d MMMM')}"></div>
 
 						  <div class="main-container">
 						    <!-- LEFT SIDE -->
@@ -237,16 +237,25 @@
 						      <div class="ride-box">
 						        <div class="ride-row">
 						          <div>
-						            <div class="ride-time">12:50</div>
-						            <div class="ride-location"><strong>Chowdepalle</strong></div>
-						            <div class="ride-location">Gandipalem Dam, Andhra Pradesh</div>
+						            <div class="ride-time"><span th:text="${trip.startTime}"></span></div>
+						            <div class="ride-location"><strong><span th:text="${#strings.arraySplit(trip.originName, ',')[0]}"></span></strong></div>
+						            <div class="ride-location">[[${trip.originName}]]</div>
 						            <div class="ride-connector"></div>
-						            <div class="ride-time">20:30</div>
-						            <div class="ride-location"><strong>Bengaluru</strong></div>
-						            <div class="ride-location">Bengaluru, Karnataka</div>
+						            <div class="ride-time">
+						            	<span th:text="
+										  ${((trip.startTime.hour + ((trip.startTime.minute + (trip.duration/60000))/60)) % 24) + ':' +
+										    ((trip.startTime.minute + (trip.duration/60000)) % 60 < 10 ? '0' : '') +
+										    ((trip.startTime.minute + (trip.duration/60000)) % 60)
+										  }"></span>
+																            	
+						            </div>
+						            <div class="ride-location"><strong><span th:text="${#strings.arraySplit(trip.destinationName, ',')[0]}"></span></strong></div>
+						            <div class="ride-location">[[${trip.destinationName}]]</div>
 						          </div>
 						          <div>
-						            <div style="font-size:13px; color:#666;">7h 40</div>
+						            <div style="font-size:13px; color:#666;">
+						            	<span th:text="${(trip.duration / (1000 * 60 * 60)) + 'h ' + ((trip.duration / (1000 * 60)) % 60) + 'm'}"></span>
+									</div>
 						          </div>
 						        </div>
 						      </div>
@@ -255,7 +264,7 @@
 						        <div class="driver-details">
 						          <div class="driver-avatar">👤</div>
 						          <div>
-						            <div class="driver-name">Lakshman</div>
+						            <div class="driver-name">[[${trip.user.firstname}]]</div>
 						            <div class="ride-meta">
 						              <div>⚡ Passenger bookings will be confirmed instantly</div>
 						              <div>👥 Max. 2 in the back</div>
@@ -273,29 +282,36 @@
 						        Only your booked stopovers are shown.
 						      </div>
 						
-						      <div class="summary-date">Friday, 24 October</div>
+						     <div class="summary-date" th:text="${#temporals.format(trip.startDate, 'EEEE, d MMMM')}"></div>
 						
 						      <div class="summary-route">
-						        <div class="summary-time">12:50 — Chowdepalle</div>
-						        <div class="summary-loc">Gandipalem Dam, Andhra Pradesh</div>
-						        <div class="summary-time">20:30 — Bengaluru</div>
-						        <div class="summary-loc">Bengaluru, Karnataka</div>
+						        <div class="summary-time"><span th:text="${trip.startTime}"></span> — <span th:text="${#strings.arraySplit(trip.originName, ',')[0]}"></span></div>
+						        <div class="summary-loc">[[${trip.originName}]]</div>
+						        <div class="summary-time">
+									<span th:text="
+										  ${((trip.startTime.hour + ((trip.startTime.minute + (trip.duration/60000))/60)) % 24) + ':' +
+										    ((trip.startTime.minute + (trip.duration/60000)) % 60 < 10 ? '0' : '') +
+										    ((trip.startTime.minute + (trip.duration/60000)) % 60)
+										  }"></span>
+ 									— <span th:text="${#strings.arraySplit(trip.destinationName, ',')[0]}"></span>
+ 								</div>
+						        <div class="summary-loc">[[${trip.destinationName}]]</div>
 						      </div>
 						
 						      <div class="summary-driver">
 						        <div class="summary-driver-avatar">👤</div>
 						        <div>
-						          <div class="summary-driver-name">Lakshman</div>
+						          <div class="summary-driver-name">[[${trip.user.firstname}]]</div>
 						          <div style="font-size:13px;color:#666;">🚗 Driver</div>
 						        </div>
 						      </div>
 						
 						      <div class="summary-fare">
 						        <span>1 passenger</span>
-						        <strong>₹690.00</strong>
+						        <strong>₹[[${trip.pricePerSeat}]]</strong>
 						      </div>
 						
-						      <button class="manage-btn">Manage ride offer</button>
+						      <a th:href="@{'/user/ride/offer?id=' + ${trip.id}}" class="manage-btn">Manage ride offer</a>
 						    </div>
 						  </div>
 						  </div>

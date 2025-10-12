@@ -46,7 +46,7 @@ public class Trip {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "vehicle_type", nullable = false)
 	private VehicleType vehicleType;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "trip_type", nullable = false)
 	private TripType tripType;
@@ -54,17 +54,14 @@ public class Trip {
 	@Column(name = "origin_name", columnDefinition = "TEXT")
 	private String originName;
 
-	@Column(name = "origin_point", columnDefinition = "POINT")
-	private Point originPoint;
+	@Column(name = "source", columnDefinition = "JSON")
+	private String source;
 
 	@Column(name = "destination_name", columnDefinition = "TEXT")
 	private String destinationName;
 
-	@Column(name = "destination_point", columnDefinition = "POINT")
-	private Point destinationPoint;
-
-	@Column(name = "route_geom", columnDefinition = "LINESTRING")
-	private LineString routeGeom;
+	@Column(name = "destination", columnDefinition = "JSON")
+	private String destination;
 
 	@Column(name = "start_date", nullable = false)
 	private LocalDate startDate;
@@ -109,4 +106,8 @@ public class Trip {
 	@UpdateTimestamp
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
+
+	private String bookingType;
+	private double duration;
+	private double distance;
 }
