@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.dropmate.controller.CommonController;
 import com.dropmate.dto.DeliveryRequest;
 import com.dropmate.entity.DriverProfile;
 import com.dropmate.entity.Trip;
@@ -36,27 +37,27 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/user/delivery")
 @SessionAttributes("deliveryRequest") // store in session across all steps
 @RequiredArgsConstructor
-public class ItemDeliveryController {
+public class ItemDeliveryController extends CommonController{
 
 	private final TripService tripService;
 	private final DeliveryService deliveryService;
 	private final DriverProfileService driverProfileService;
 	
 	@ModelAttribute("deliveryRequest")
-	public DeliveryRequest deliveryRequest() {
+	public DeliveryRequest deliveryRequest(Model model) {
 		return new DeliveryRequest(); // initialize once
 	}
 	
 	// Step 2: Delivery form
 	@GetMapping("/departure")
 	public String showDeliveryForm(@ModelAttribute("deliveryRequest") DeliveryRequest request, Model model) {
-		
+		model.addAttribute("GOOGLE_MAPS_API_KEY", GOOGLE_MAPS_API_KEY);
 		return "user/delivery/delivery-departure"; // delivery creation form
 	}
 	
 	@PostMapping("/arrival")
 	public String arrival(@ModelAttribute("deliveryRequest") DeliveryRequest request, Model model) {
-		
+		model.addAttribute("GOOGLE_MAPS_API_KEY", GOOGLE_MAPS_API_KEY);
 		return "user/delivery/delivery-arrival";
 	}
 
@@ -64,6 +65,7 @@ public class ItemDeliveryController {
 	@PostMapping("/choose-your-route")
 	public String chooseYourRoute(@ModelAttribute("deliveryRequest") DeliveryRequest request, Model model) {
 		model.addAttribute("request", request);
+		model.addAttribute("GOOGLE_MAPS_API_KEY", GOOGLE_MAPS_API_KEY);
 		return "user/delivery/chooseYourRoute";
 	}
 	
@@ -135,6 +137,7 @@ public class ItemDeliveryController {
 	public String success(@PathVariable String tripId, Model model) {
 		
 		 model.addAttribute("tripId", tripId);
+		 model.addAttribute("GOOGLE_MAPS_API_KEY", GOOGLE_MAPS_API_KEY);
 		return "user/delivery/delivery-sucess";
 	}
 }

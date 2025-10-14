@@ -11,13 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-public class HomeController {
+public class HomeController extends CommonController {
 
 	@TrackExecutionTime
 	@GetMapping("/")
 	public String index(Model model, HttpServletRequest request) {
 		log.info("HomeController --> index ----> START");
-
+		model.addAttribute("GOOGLE_MAPS_API_KEY", GOOGLE_MAPS_API_KEY);
 		model.addAttribute("indexAct","current_page_item");
 		return "index";
 	}

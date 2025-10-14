@@ -143,7 +143,7 @@
 	window.initAutocomplete = initAutocomplete;
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwOasTpcrO7ONE6nzs1kdcppDYO2rfZcA&callback=initAutocomplete&libraries=places&v=weekly" defer></script>
+<script th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${GOOGLE_MAPS_API_KEY} + '&callback=initAutocomplete&libraries=places&v=weekly'" defer></script>
    
 <div th:replace="common/footer :: footerbar"></div>
 <div th:replace="common/header :: body-bottom-scripts"></div>

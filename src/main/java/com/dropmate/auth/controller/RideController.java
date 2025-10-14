@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.dropmate.controller.CommonController;
 import com.dropmate.dto.PlaceInfo;
 import com.dropmate.dto.RideRequest;
 import com.dropmate.entity.DriverProfile;
@@ -41,7 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/user/ride")
 @SessionAttributes("tripRequest") // store in session across all steps
-public class RideController {
+public class RideController extends CommonController{
 
 	@Autowired
 	private FareCalculatorService fareCalculatorService;
@@ -68,13 +69,13 @@ public class RideController {
 
 	@GetMapping("/departure")
 	public String departure(@ModelAttribute("tripRequest") RideRequest trip, Model model) {
-		
+		model.addAttribute("GOOGLE_MAPS_API_KEY", GOOGLE_MAPS_API_KEY);
 		return "user/publish/ride-departure";
 	}
 
 	@PostMapping("/arrival")
 	public String arrival(@ModelAttribute("tripRequest") RideRequest trip, Model model) {
-		
+		model.addAttribute("GOOGLE_MAPS_API_KEY", GOOGLE_MAPS_API_KEY);
 		return "user/publish/ride-arrival";
 	}
 
@@ -82,6 +83,7 @@ public class RideController {
 	@PostMapping("/choose-your-route")
 	public String chooseYourRoute(@ModelAttribute("tripRequest") RideRequest ride, Model model) {
 		model.addAttribute("ride", ride);
+		model.addAttribute("GOOGLE_MAPS_API_KEY", GOOGLE_MAPS_API_KEY);
 		return "user/publish/chooseYourRoute";
 	}
 

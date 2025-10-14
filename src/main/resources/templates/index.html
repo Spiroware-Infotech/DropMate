@@ -203,8 +203,9 @@
 	</main>
 	<!--//main-->
 	
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwOasTpcrO7ONE6nzs1kdcppDYO2rfZcA&libraries=places"></script>
-
+<script async defer
+  th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${GOOGLE_MAPS_API_KEY} + '&libraries=places'">
+</script>
  <script type="text/javascript">
     function initAutocomplete() {
       const input = document.getElementById("pickup");
@@ -226,7 +227,7 @@
       });
       
       dropoffAutocomplete.addListener("place_changed", () => {
-          const place = autocomplete.getPlace();
+          const place = dropoffAutocomplete.getPlace();
 
           console.log("Full place object:", place);
           console.log("Name:", place.name);
