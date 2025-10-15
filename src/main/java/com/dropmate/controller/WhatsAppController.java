@@ -38,10 +38,10 @@ public class WhatsAppController {
 		// 1️ Send OTP
 		whatsAppService.sendTemplate("+919876543210", "otp_message", List.of("654321"));
 
-		// 2️⃣ Order confirmation
+		// 2️ Order confirmation
 		whatsAppService.sendTemplate("+919876543210", "order_confirmation", List.of("12345", "Oct 15"));
 
-		// 3️⃣ Promotional offer
+		// 3️ Promotional offer
 		whatsAppService.sendTemplate("+919876543210", "promo_offer", List.of("20"));
 
 		return "OTP sent to " + phone + " : " + otp;

@@ -27,7 +27,7 @@ public class MapController {
     @GetMapping("/map")
     public String home(Model model) {
         model.addAttribute("searchRequest", new SearchRequest());
-        model.addAttribute("googleMapsApiKey", googleMapsApiKey);
+        model.addAttribute("GOOGLE_MAPS_API_KEY", googleMapsApiKey);
         return "mapView";
     }
     
@@ -35,7 +35,7 @@ public class MapController {
     public String searchPlaces(@Valid @ModelAttribute SearchRequest searchRequest, 
                               BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("googleMapsApiKey", googleMapsApiKey);
+            model.addAttribute("GOOGLE_MAPS_API_KEY", googleMapsApiKey);
             return "mapView";
         }
         
@@ -43,7 +43,7 @@ public class MapController {
             var placesResponse = googleMapsService.searchPlaces(searchRequest).block();
             model.addAttribute("places", placesResponse.getResults());
             model.addAttribute("searchRequest", searchRequest);
-            model.addAttribute("googleMapsApiKey", googleMapsApiKey);
+            model.addAttribute("GOOGLE_MAPS_API_KEY", googleMapsApiKey);
         } catch (Exception e) {
             model.addAttribute("error", "Error searching places: " + e.getMessage());
         }

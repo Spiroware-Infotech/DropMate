@@ -9,13 +9,13 @@ import java.util.*;
 @Service
 public class WhatsAppService {
 
-    @Value("${whatsapp.api.url}")
+    @Value("${whatsapp.api.url:null}")
     private String apiUrl;
 
-    @Value("${whatsapp.phone.number.id}")
+    @Value("${whatsapp.phone.number.id:null}")
     private String phoneNumberId;
 
-    @Value("${whatsapp.access.token}")
+    @Value("${whatsapp.access.token:null}")
     private String accessToken;
 
     private final RestTemplate restTemplate = new RestTemplate();

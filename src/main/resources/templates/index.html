@@ -52,14 +52,16 @@
 									</div>
 								</div>
 							</div>
-							<div class="column one-third" style="">
-								<div class="row" style="">
-									<div class="f-item full-width datepicker" style="">
+							<div class="column one-third" >
+								<div class="row" >
+									<div class="f-item full-width datepicker" >
 										<label for="datepicker6">Departing on</label>
-										<div class="row" style="">
+										<div class="row" >
 											<div class="f-item one-half active">
-												<div class="datepicker-wrap"><input type="text" placeholder="" id="datepicker" name="datepicker6" class="hasDatepicker">
-												<img class="ui-datepicker-trigger" src="/images/calendar.png" alt="..." title="..."></div>
+												<div class="datepicker-wrap">
+													<input type="text" id="datepicker1" name="datepicker1" class="hasDatepicker" placeholder="Select date">
+													<img class="ui-datepicker-trigger" src="/images/calendar.png" alt="..." title="...">
+												</div>
 											</div>
 										</div>
 									</div>
@@ -242,6 +244,27 @@
     window.onload = initAutocomplete;
     
   </script>	
+ <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script> 
+<script>
+$(function() {
+  $("#datepicker1").datepicker({
+    dateFormat: "dd-mm-yy",          // format: 15-10-2025
+    changeMonth: true,               // dropdown for months
+    changeYear: true,                // dropdown for years
+    yearRange: "2000:2030",          // limit year selection
+    minDate: 0,                      // disallow past dates (0 = today)
+    maxDate: "+1Y",                  // allow up to 1 year from today
+    showAnim: "slideDown",           // animation when opening
+    showButtonPanel: true,           // show today and done buttons
+    todayHighlight: true,
+    onSelect: function(dateText, inst) {
+      console.log("Selected date:", dateText);
+    }
+  });
+});
+</script>
 
 <div th:replace="common/footer :: footerbar"></div>
 <div th:replace="common/header :: body-bottom-scripts"></div>
