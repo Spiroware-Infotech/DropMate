@@ -55,7 +55,7 @@
 
     .ride-connector {
       border-left: 2px solid #ccc;
-      height: 35px;
+      height: 22px;
       margin-left: 5px;
       margin-top: 5px;
       margin-bottom: 5px;
@@ -221,15 +221,136 @@
         width: 100%;
       }
     }
-  </style>
+    
+    .summary-route {
+    position: relative;
+    border-left: 3px solid #1b72e8;
+    padding-left: 12px;
+    margin-bottom: 15px;
+}
+
+/* Top (start point) circle */
+.summary-route::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -8px;
+    width: 13px;
+    height: 13px;
+    background-color: #1b72e8;
+    border: 2px solid #fff; /* optional white border */
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+
+/* Bottom (end point) circle */
+.summary-route::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: -7px;
+    width: 12px;
+    height: 12px;
+    background-color: #1b72e8;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+
+.passenger-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .passenger-count {
+            background: #eef5ff;
+            color: #1a73e8;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .passenger-text {
+            font-size: 15px;
+            color: #666;
+        }
+        
+        .price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a73e8;
+        }
+        
+        /* Passengers Section */
+        .passengers-section {
+            margin-top: 25px;
+        }
+        
+        .passenger-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .passenger {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .passenger:hover {
+            background: #eef5ff;
+            transform: translateY(-2px);
+        }
+        
+        .passenger-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #1a73e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .passenger-details {
+            flex: 1;
+        }
+        
+        .passenger-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .passenger-route {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+</style>
 
 <main class="main">
     <div class="wrap">
         <div class="row">
             <div class="full-width">
-                    <article class="">
-                         <div class="">
-						    <div class="page-title" th:text="${#temporals.format(trip.startDate, 'EEEE, d MMMM')}"></div>
+                  <article class="">
+                      <div class="">
+				        <div class="page-title" th:text="${#temporals.format(trip.startDate, 'EEEE, d MMMM')}"></div>
 
 						  <div class="main-container">
 						    <!-- LEFT SIDE -->
@@ -239,22 +360,17 @@
 						          <div>
 						            <div class="ride-time"><span th:text="${trip.startTime}"></span></div>
 						            <div class="ride-location"><strong><span th:text="${#strings.arraySplit(trip.originName, ',')[0]}"></span></strong></div>
-						            <div class="ride-location">[[${trip.originName}]]</div>
+						            <div class="ride-location" style="font-size: 12px;">[[${trip.originName}]]</div>
 						            <div class="ride-connector"></div>
 						            <div class="ride-time">
-						            	<span th:text="
-										  ${((trip.startTime.hour + ((trip.startTime.minute + (trip.duration/60000))/60)) % 24) + ':' +
-										    ((trip.startTime.minute + (trip.duration/60000)) % 60 < 10 ? '0' : '') +
-										    ((trip.startTime.minute + (trip.duration/60000)) % 60)
-										  }"></span>
-																            	
+						            	<span th:text="${tripArrivalTime}"></span>
 						            </div>
 						            <div class="ride-location"><strong><span th:text="${#strings.arraySplit(trip.destinationName, ',')[0]}"></span></strong></div>
-						            <div class="ride-location">[[${trip.destinationName}]]</div>
+						            <div class="ride-location" style="font-size: 12px;">[[${trip.destinationName}]]</div>
 						          </div>
 						          <div>
 						            <div style="font-size:13px; color:#666;">
-						            	<span th:text="${(trip.duration / (1000 * 60 * 60)) + 'h ' + ((trip.duration / (1000 * 60)) % 60) + 'm'}"></span>
+						            	<span th:text="${tripDuration}"></span>
 									</div>
 						          </div>
 						        </div>
@@ -264,15 +380,58 @@
 						        <div class="driver-details">
 						          <div class="driver-avatar">👤</div>
 						          <div>
-						            <div class="driver-name">[[${trip.user.firstname}]]</div>
+						            <div class="driver-name">Lucky</div>
 						            <div class="ride-meta">
 						              <div>⚡ Passenger bookings will be confirmed instantly</div>
-						              <div>👥 Max. 2 in the back</div>
+						              <div>👥 Max. [[${trip.seatsTotal}]] in the back</div>
 						            </div>
 						          </div>
 						        </div>
 						        <div class="arrow">›</div>
 						      </div>
+						      <article class="">
+						      <div class="passengers-section">
+					                <h2 class="section-title"><i class="fas fa-users"></i> Passengers</h2>
+					                
+					                <div class="passenger-list">
+					                    <div class="passenger">
+					                        <div class="passenger-avatar">A</div>
+					                        <div class="passenger-details">
+					                            <div class="passenger-name">Amanath</div>
+					                            <div class="passenger-route">
+					                                <span>Bengaluru</span>
+					                                <i class="fas fa-arrow-right"></i>
+					                                <span>Goduguchinta</span>
+					                            </div>
+					                        </div>
+					                    </div>
+					                    
+					                    <div class="passenger">
+					                        <div class="passenger-avatar">A</div>
+					                        <div class="passenger-details">
+					                            <div class="passenger-name">Adhi</div>
+					                            <div class="passenger-route">
+					                                <span>Bengaluru</span>
+					                                <i class="fas fa-arrow-right"></i>
+					                                <span>Goduguchinta</span>
+					                            </div>
+					                        </div>
+					                    </div>
+					                    
+					                    <div class="passenger">
+					                        <div class="passenger-avatar">D</div>
+					                        <div class="passenger-details">
+					                            <div class="passenger-name">Deepa</div>
+					                            <div class="passenger-route">
+					                                <span>Bengaluru</span>
+					                                <i class="fas fa-arrow-right"></i>
+					                                <span>Goduguchinta</span>
+					                            </div>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					           </article> 
 						    </div>
 						
 						    <!-- RIGHT SIDE -->
@@ -286,23 +445,31 @@
 						
 						      <div class="summary-route">
 						        <div class="summary-time"><span th:text="${trip.startTime}"></span> — <span th:text="${#strings.arraySplit(trip.originName, ',')[0]}"></span></div>
-						        <div class="summary-loc">[[${trip.originName}]]</div>
+						        <div class="summary-loc" style="font-size: 12px;">[[${trip.originName}]]</div>
+						        <div class="ride-connector"></div>
 						        <div class="summary-time">
-									<span th:text="
-										  ${((trip.startTime.hour + ((trip.startTime.minute + (trip.duration/60000))/60)) % 24) + ':' +
-										    ((trip.startTime.minute + (trip.duration/60000)) % 60 < 10 ? '0' : '') +
-										    ((trip.startTime.minute + (trip.duration/60000)) % 60)
-										  }"></span>
+									<span th:text="${tripArrivalTime}"></span>
  									— <span th:text="${#strings.arraySplit(trip.destinationName, ',')[0]}"></span>
  								</div>
-						        <div class="summary-loc">[[${trip.destinationName}]]</div>
+						        <div class="summary-loc" style="font-size: 12px;">[[${trip.destinationName}]]</div>
 						      </div>
 						
 						      <div class="summary-driver">
 						        <div class="summary-driver-avatar">👤</div>
 						        <div>
-						          <div class="summary-driver-name">[[${trip.user.firstname}]]</div>
-						          <div style="font-size:13px;color:#666;">🚗 Driver</div>
+						          <div class="summary-driver-name">Lucky</div>
+						          <div style="font-size:13px;color:#666;">
+						          	<span th:switch="${trip.vehicleType?.name()}">
+									    <span th:case="'CAR'">🚗 Car</span>
+									    <span th:case="'BIKE'">🛵 Bike</span>
+									    <span th:case="'VAN'">🚐 Van</span>
+									    <span th:case="'TRUCK'">🚚 Truck</span>
+									    <span th:case="'TRACTOR'">🚜 Tractor</span>
+									    <span th:case="'TEMPO'">🚛 Tempo</span>
+									    <span th:case="'AUTO'">🚙 Auto</span>
+									    <span th:case="*">🚘 Vehicle</span>
+									</span>
+						            - Driver</div>
 						        </div>
 						      </div>
 						
@@ -310,14 +477,22 @@
 						        <span>1 passenger</span>
 						        <strong>₹[[${trip.pricePerSeat}]]</strong>
 						      </div>
-						
-						      <a th:href="@{'/user/ride/offer?id=' + ${trip.id}}" class="manage-btn">Manage ride offer</a>
+								
+						     <a th:if="${!isKycVerified}"
+								   th:href="@{'/user/ride/offer?id=' + ${trip.id}}"
+								   class="manage-btn">Manage ride offer</a>
+								   
+							 <a th:if="${isKycVerified}"
+								   th:href="@{'/user/ride/offer?id=' + ${trip.id}}"
+								   class="manage-btn">Request to book</a>
 						    </div>
 						  </div>
-						  </div>
-                    </article>
-            </div>
-        </div>
+					  </div>
+					  
+					  
+                 </article>
+                </div>
+          </div>      
     </div>
 </main>
 

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+      data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+
+ <div id="tripContainer" th:fragment="tripListFragment">
+
+	<div th:each="entry : ${tripsByCategory}" 
+	     th:if="${entry.value != null 
+	             and ((entry.key != 'Upcoming') or (entry.key == 'Upcoming' and !#maps.isEmpty(entry.value)))}">
+	
+	    <div class="date-section">
+	        <!-- Group header -->
+	        <h3 class="date-title" th:text="${entry.key}"></h3>
+	
+	        <!-- Upcoming group has nested map -->
+	        <div th:if="${entry.key == 'Upcoming'}">
+	        	 <div th:if="${#maps.isEmpty(entry.value)}">
+			        <p class="no-trips-message">No upcoming trips available.</p>
+			    </div>
+	            <div th:each="dateEntry : ${entry.value}">
+	                <!-- dateEntry.key = LocalDate, dateEntry.value = List<TripResponse> -->
+	                <div class="ride-date">
+	                    <h4 class="date-title" style="font-size: 12px; padding-left: 12px; margin-top: 13px;"> 
+	                   	  <span th:text="${#temporals.format(dateEntry.key, 'MMM dd, yyyy')}"></span>
+	                   </h4>
+	                </div>
+	
+	                <div th:each="trip : ${dateEntry.value}" class="ride-card">
+	                    <div class="ride-time">
+	                        <div class="start-time" th:text="${trip.startTime}"></div>
+	                        <div class="duration" th:text="${trip.duration}"></div>
+	                        <div class="end-time" th:text="${trip.endTime}"></div>
+	                    </div>
+	                    <div class="ride-locations">
+	                        <div class="location">
+	                            <div class="location-dot start-dot"></div>
+	                            <div class="location-name" th:text="${trip.startLocation}"></div>
+	                        </div>
+	                        <div class="location">
+	                            <div class="location-dot end-dot"></div>
+	                            <div class="location-name" th:text="${trip.endLocation}"></div>
+	                        </div>
+	                    </div>
+	                    <div class="ride-actions">
+	                        <a th:href="@{'/user/ride/details/' + ${trip.id}}" class="btn btn-primary">View Details</a>
+	                        <a th:href="@{'/user/ride/repeat/' + ${trip.id}}" class="btn btn-outline">Repeat Ride</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	
+	        <!-- Other groups: just show trips without date -->
+	        <div th:if="${entry.key != 'Upcoming'}">
+	        	
+	            <div th:each="trip : ${entry.value}" 
+	                 th:class="'ride-card ' + (${entry.key == 'Older'} ? 'disabled-ride' : '')">
+	                 
+	                <div class="ride-time">
+	                    <div class="start-time" th:text="${trip.startTime}"></div>
+	                    <div class="duration" th:text="${trip.duration}"></div>
+	                    <div class="end-time" th:text="${trip.endTime}"></div>
+	                </div>
+	
+	                <div class="ride-locations">
+	                    <div class="location">
+	                        <div class="location-dot start-dot"></div>
+	                        <div class="location-name" th:text="${trip.startLocation}"></div>
+	                    </div>
+	                    <div class="location">
+	                        <div class="location-dot end-dot"></div>
+	                        <div class="location-name" th:text="${trip.endLocation}"></div>
+	                    </div>
+	                </div>
+	                <div class="ride-actions">
+	                    <!-- Disable buttons for Older trips -->
+	                    <a th:href="@{'/user/ride/details/' + ${trip.id}}"
+						   class="btn btn-primary"
+						   th:classappend="${entry.key == 'Older'} ? ' disabled-link' : ''"
+						   th:attr="tabindex=${entry.key == 'Older'} ? -1 : null,
+						            aria-disabled=${entry.key == 'Older'} ? true : false">
+						   View Details
+						</a>
+						<a th:href="@{'/user/ride/repeat/' + ${trip.id}}"
+						   class="btn btn-outline"
+						   th:classappend="${entry.key == 'Older'} ? ' disabled-link' : ''"
+						   th:attr="tabindex=${entry.key == 'Older'} ? -1 : null,
+						            aria-disabled=${entry.key == 'Older'} ? true : false">
+						   Repeat Ride
+						</a>
+	                </div>
+	            </div>
+	
+	    </div>
+	</div>
+	
+	<!-- Show message if no trips exist at all -->
+	    <div th:if="${tripsByCategory == null or #lists.isEmpty(tripsByCategory)}">
+	        <p class="no-trips-message">No trips available.</p>
+	    </div>
+	</div>
+	
+</div>
+
+
+
+</body>
+</html>

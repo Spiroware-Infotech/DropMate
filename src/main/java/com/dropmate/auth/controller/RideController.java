@@ -179,7 +179,7 @@ public class RideController extends CommonController{
 	    	User user = driverProfileService.findByUsername(username).orElse(null);
 	    	
 	    	DriverProfile driverProfile = DriverProfile.builder()
-	    			.userId(user.getUserId())
+	    			.user(user)
 	    			.kycStatus(KycStatus.PENDING)
 	    			//.vehicleType(VehicleType.valueOf(request.getVehicleType()))
 	    			.vehicleType(VehicleType.CAR)
@@ -190,9 +190,9 @@ public class RideController extends CommonController{
 	    	TripStatus rideStatus= null;
 	    	if(request.getReturnRideOption()!=null) {
 	    		if(request.getReturnRideOption().equalsIgnoreCase("yes"))
-	    			rideStatus = TripStatus.COMPLETED;
-	    		else if(request.getReturnRideOption().equalsIgnoreCase("later"))
 	    			rideStatus = TripStatus.SCHEDULED;
+	    		else if(request.getReturnRideOption().equalsIgnoreCase("later"))
+	    			rideStatus = TripStatus.PENDING;
 	    	}
 	    	ObjectMapper mapper = new ObjectMapper();
 	    	 // Save to DB here

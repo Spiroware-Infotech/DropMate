@@ -1,5 +1,5 @@
 package com.dropmate.enums;
 
 public enum TripStatus {
-	SCHEDULED, ONGOING, COMPLETED, CANCELLED
+	PENDING, SCHEDULED, ONGOING, COMPLETED, CANCELLED, ARCHIVED
 }

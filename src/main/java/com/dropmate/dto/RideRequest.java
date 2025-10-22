@@ -20,7 +20,7 @@ public class RideRequest {
 	private String destinationJson; // store JSON as text
 	
 	private double distance;
-	private double duration;
+	private long duration;
 	private String summary;
 	private String vehicleType; // e.g., "CAR"
 	private String bookingType; // INSTANT OR REVIEW

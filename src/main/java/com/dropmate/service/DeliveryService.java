@@ -64,7 +64,7 @@ public class DeliveryService {
 	}
 
 	public List<TripResponse> getDeliveriesByDriver(Long driverId) {
-		return tripRepository.findByUser_UserId(driverId).stream().filter(t -> t.getCargoSlotsTotal() > 0)
+		return tripRepository.findByDriverId(driverId).stream().filter(t -> t.getCargoSlotsTotal() > 0)
 				.map(this::mapToResponse).collect(Collectors.toList());
 	}
 
@@ -108,18 +108,18 @@ public class DeliveryService {
 	private TripResponse mapToResponse(Trip trip) {
 		TripResponse resp = new TripResponse();
 		resp.setId(trip.getId());
-		resp.setDriverId(trip.getUser().getUserId());
-		resp.setVehicleType(trip.getVehicleType().name());
-		resp.setOriginName(trip.getOriginName());
-		resp.setDestinationName(trip.getDestinationName());
-		resp.setStartTime(trip.getStartTime() != null ? trip.getStartTime().toString() : null);
-		//resp.setEndTime(trip.getEndTime() != null ? trip.getEndTime().toString() : null);
-		resp.setSeatsTotal(trip.getSeatsTotal());
-		resp.setSeatsAvailable(trip.getSeatsAvailable());
-		resp.setCargoSlotsTotal(trip.getCargoSlotsTotal());
-		resp.setCargoSlotsAvailable(trip.getCargoSlotsAvailable());
-		resp.setPricePerKg(trip.getPricePerKg());
-		resp.setStatus(trip.getStatus().name());
+//		resp.setDriverId(trip.getUser().getUserId());
+//		resp.setVehicleType(trip.getVehicleType().name());
+//		resp.setOriginName(trip.getOriginName());
+//		resp.setDestinationName(trip.getDestinationName());
+//		resp.setStartTime(trip.getStartTime() != null ? trip.getStartTime().toString() : null);
+//		//resp.setEndTime(trip.getEndTime() != null ? trip.getEndTime().toString() : null);
+//		resp.setSeatsTotal(trip.getSeatsTotal());
+//		resp.setSeatsAvailable(trip.getSeatsAvailable());
+//		resp.setCargoSlotsTotal(trip.getCargoSlotsTotal());
+//		resp.setCargoSlotsAvailable(trip.getCargoSlotsAvailable());
+//		resp.setPricePerKg(trip.getPricePerKg());
+//		resp.setStatus(trip.getStatus().name());
 		return resp;
 	}
 

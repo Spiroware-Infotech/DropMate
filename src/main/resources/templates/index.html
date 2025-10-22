@@ -37,7 +37,7 @@
 						<div class="row">
 							<div class="f-item full-width">
 								<label for="destination3">Pick Up</label>
-								<input type="text" placeholder="City, region, district or specific airport" id="pickup" name="destination" >
+								<input type="text" placeholder="City, region, district or specific" id="pickup" name="pickuploc" >
 							</div>
 						</div>
 					</div>
@@ -48,7 +48,7 @@
 								<div class="row">
 									<div class="f-item full-width">
 										<label for="destination4">Drop Off</label>
-										<input type="text" placeholder="City, region, district or specific airport" id="dropoff" name="destination">
+										<input type="text" placeholder="City, region, district or specific" id="dropoff" name="dropoffloc">
 									</div>
 								</div>
 							</div>
@@ -204,7 +204,8 @@
 		</div>
 	</main>
 	<!--//main-->
-	
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>	
 <script async defer
   th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${GOOGLE_MAPS_API_KEY} + '&libraries=places'">
 </script>
@@ -244,27 +245,31 @@
     window.onload = initAutocomplete;
     
   </script>	
- <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script> 
+
 <script>
-$(function() {
-  $("#datepicker1").datepicker({
-    dateFormat: "dd-mm-yy",          // format: 15-10-2025
-    changeMonth: true,               // dropdown for months
-    changeYear: true,                // dropdown for years
-    yearRange: "2000:2030",          // limit year selection
-    minDate: 0,                      // disallow past dates (0 = today)
-    maxDate: "+1Y",                  // allow up to 1 year from today
-    showAnim: "slideDown",           // animation when opening
-    showButtonPanel: true,           // show today and done buttons
-    todayHighlight: true,
-    onSelect: function(dateText, inst) {
-      console.log("Selected date:", dateText);
-    }
+  document.addEventListener("DOMContentLoaded", function() {
+    const today = new Date();
+
+    const picker = new Litepicker({
+      element: document.getElementById('datepicker1'), // attach to input
+      singleMode: true,
+      numberOfMonths: 1,
+      numberOfColumns: 1,
+      minDate: today,
+      format: 'YYYY-MM-DD',
+
+      // Default selected date
+      startDate: today,
+
+      setup: (picker) => {
+        picker.on('selected', (date1) => {
+          console.log('Selected:', date1.format('YYYY-MM-DD'));
+        });
+      }
+    });
   });
-});
 </script>
+
 
 <div th:replace="common/footer :: footerbar"></div>
 <div th:replace="common/header :: body-bottom-scripts"></div>

@@ -309,22 +309,22 @@
 					                <div class="status-badge status-active">Active</div>
 					            </div>
 					            
-					            <div class="ride-date">Fri 24 October</div>
+					            <div class="ride-date" th:text="${#temporals.format(trip.startDate, 'EEEE, d MMMM')}">Fri 24 October</div>
 					            
 					            <div class="ride-details">
 					                <div class="ride-point">
-					                    <div class="time">12:50</div>
+					                    <div class="time"><span th:text="${trip.startTime}"></span></div>
 					                    <div class="location">
-					                        <div class="location-name">Chowdepalle</div>
-					                        <div class="location-address">Gandipalem Dam, Andhra Pradesh</div>
+					                        <div class="location-name"><span th:text="${#strings.arraySplit(trip.originName, ',')[0]}"></span></div>
+					                        <div class="location-address">[[${trip.originName}]]</div>
 					                    </div>
 					                </div>
 					                
 					                <div class="ride-point">
-					                    <div class="time">20:30</div>
+					                    <div class="time"><span th:text="${tripArrivalTime}"></span></div>
 					                    <div class="location">
-					                        <div class="location-name">Bengaluru</div>
-					                        <div class="location-address">Bengaluru, Karnataka</div>
+					                        <div class="location-name"><span th:text="${#strings.arraySplit(trip.destinationName, ',')[0]}"></span></div>
+					                        <div class="location-address">[[${trip.destinationName}]]</div>
 					                    </div>
 					                </div>
 					            </div>

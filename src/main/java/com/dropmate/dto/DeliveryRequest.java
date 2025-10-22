@@ -22,7 +22,7 @@ public class DeliveryRequest {
 	private String notes;
 	
 	private double distance;
-	private double duration;
+	private long duration;
 	private String summary;
 	private String vehicleType; // e.g., "CAR"
 	private String bookingType; // INSTANT OR REVIEW

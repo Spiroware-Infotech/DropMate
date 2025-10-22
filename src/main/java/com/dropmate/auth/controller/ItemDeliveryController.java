@@ -91,7 +91,7 @@ public class ItemDeliveryController extends CommonController{
     	User user = driverProfileService.findByUsername(username).orElse(null);
     	
     	DriverProfile driverProfile = DriverProfile.builder()
-    			.userId(user.getUserId())
+    			.id(user.getUserId())
     			.kycStatus(KycStatus.PENDING)
     			.vehicleType(VehicleType.valueOf(request.getVehicleType().toUpperCase()))
     			.build();

@@ -106,7 +106,7 @@
    }
 
    .date-section {
-       margin-bottom: 25px; /* Increased margin between date sections */
+       margin-bottom: 20px; /* Increased margin between date sections */
    }
 
    .date-title {
@@ -154,7 +154,7 @@
    }
 
    .duration {
-       font-size: 14px;
+       font-size: 12px;
        color: #718096;
        margin: 5px 0;
    }
@@ -184,8 +184,8 @@
    }
 
    .location-dot {
-       width: 10px;
-       height: 10px;
+       width: 16px;
+       height: 16px;
        border-radius: 50%;
        margin-right: 10px;
    }
@@ -349,8 +349,61 @@
            gap: 10px;
        }
    }
-</style>
 
+.date-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #333;
+}
+.trip-date {
+    font-size: 0.95em;
+    color: #666;
+    margin-bottom: 10px;
+}
+.ride-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.ride-time, .ride-locations, .ride-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.ride-locations { flex: 1; margin: 0 25px; }
+.location { display: flex; align-items: center; gap: 6px; }
+.btn { padding: 6px 12px; border-radius: 5px; border: none; cursor: pointer; }
+.btn-primary { background: #007bff; color: white; }
+.btn-outline { background: white; border: 1px solid #007bff; color: #007bff; }
+
+.ride-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.disabled-ride {
+    opacity: 0.6;
+    pointer-events: none;
+    background: #f5f5f5;
+}
+
+.disabled-link {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+</style>
 <main class="main">
     <div class="wrap">
         <div class="row">
@@ -362,229 +415,144 @@
 					        <div class="card">
 					            <div class="card-header">
 					                <h2 class="card-title">Ride History</h2>
-					                <div class="filter-options">
-					                    <button class="filter-btn active">All Rides</button>
-					                    <button class="filter-btn">Completed</button>
-					                    <button class="filter-btn">Upcoming</button>
-					                    <button class="filter-btn">Cancelled</button>
-					                </div>
+					                <div class="ride-filters">
+									    <button class="filter-btn active" data-filter="all">ALL RIDES</button>
+									    <button class="filter-btn" data-filter="pending">PENDING</button>
+									    <button class="filter-btn" data-filter="scheduled">SCHEDULED</button>
+									    <button class="filter-btn" data-filter="ongoing">ONGOING</button>
+									    <button class="filter-btn" data-filter="completed">COMPLETED</button>
+									    <button class="filter-btn" data-filter="cancelled">CANCELLED</button>
+									</div>
 					            </div>
-					
-					            <div class="rides-container">
-					                <div class="date-section">
-					                    <h3 class="date-title">Today</h3>
-					                    
-					                    <div class="ride-card">
-					                        <div class="ride-time">
-					                            <div class="start-time">08:00</div>
-					                            <div class="duration">2h 20m</div>
-					                            <div class="end-time">10:20</div>
-					                        </div>
-					                        <div class="ride-locations">
-					                            <div class="location">
-					                                <div class="location-dot start-dot"></div>
-					                                <div class="location-name">Chowdepalle</div>
-					                            </div>
-					                            <div class="location">
-					                                <div class="location-dot end-dot"></div>
-					                                <div class="location-name">Ulavapalla</div>
-					                            </div>
-					                        </div>
-					                        <div class="ride-actions">
-					                            <button class="btn btn-primary">View Details</button>
-					                            <button class="btn btn-outline">Repeat Ride</button>
-					                        </div>
-					                    </div>
-					                    
-					                    <div class="ride-card">
-					                        <div class="ride-time">
-					                            <div class="start-time">12:50</div>
-					                            <div class="duration">2h 20m</div>
-					                            <div class="end-time">15:10</div>
-					                        </div>
-					                        <div class="ride-locations">
-					                            <div class="location">
-					                                <div class="location-dot start-dot"></div>
-					                                <div class="location-name">Ulavapalla</div>
-					                            </div>
-					                            <div class="location">
-					                                <div class="location-dot end-dot"></div>
-					                                <div class="location-name">Chowdepalle</div>
-					                            </div>
-					                        </div>
-					                        <div class="ride-actions">
-					                            <button class="btn btn-primary">View Details</button>
-					                            <button class="btn btn-outline">Repeat Ride</button>
-					                        </div>
-					                    </div>
-					                    
-					                    <div class="ride-card">
-					                        <div class="ride-time">
-					                            <div class="start-time">16:30</div>
-					                            <div class="duration">1h 10m</div>
-					                            <div class="end-time">17:40</div>
-					                        </div>
-					                        <div class="ride-locations">
-					                            <div class="location">
-					                                <div class="location-dot start-dot"></div>
-					                                <div class="location-name">Nellore</div>
-					                            </div>
-					                            <div class="location">
-					                                <div class="location-dot end-dot"></div>
-					                                <div class="location-name">Kanigiri</div>
-					                            </div>
-					                        </div>
-					                        <div class="ride-actions">
-					                            <button class="btn btn-primary">View Details</button>
-					                            <button class="btn btn-outline">Repeat Ride</button>
-					                        </div>
-					                    </div>
-					                </div>
-					                
-					                <!-- <div class="date-section">
-					                    <h3 class="date-title">Tomorrow</h3>
-					                    <div class="empty-state">
-					                        <div class="empty-icon">
-					                            <i class="fas fa-car-side"></i>
-					                        </div>
-					                        <p>No rides scheduled for tomorrow</p>
-					                        <button class="btn btn-primary" style="margin-top: 15px;">Plan a Ride</button>
-					                    </div>
-					                </div> -->
-					                
-					                <div class="date-section">
-					                    <h3 class="date-title">This Week</h3>
-					                    
-					                    <div class="ride-card">
-					                        <div class="ride-time">
-					                            <div class="start-time">09:15</div>
-					                            <div class="duration">1h 45m</div>
-					                            <div class="end-time">11:00</div>
-					                        </div>
-					                        <div class="ride-locations">
-					                            <div class="location">
-					                                <div class="location-dot start-dot"></div>
-					                                <div class="location-name">Chowdepalle</div>
-					                            </div>
-					                            <div class="location">
-					                                <div class="location-dot end-dot"></div>
-					                                <div class="location-name">Nellore</div>
-					                            </div>
-					                        </div>
-					                        <div class="ride-actions">
-					                            <button class="btn btn-primary">View Details</button>
-					                            <button class="btn btn-outline">Repeat Ride</button>
-					                        </div>
-					                    </div>
-					                    
-					                    <div class="ride-card">
-					                        <div class="ride-time">
-					                            <div class="start-time">14:20</div>
-					                            <div class="duration">2h 30m</div>
-					                            <div class="end-time">16:50</div>
-					                        </div>
-					                        <div class="ride-locations">
-					                            <div class="location">
-					                                <div class="location-dot start-dot"></div>
-					                                <div class="location-name">Kanigiri</div>
-					                            </div>
-					                            <div class="location">
-					                                <div class="location-dot end-dot"></div>
-					                                <div class="location-name">Ulavapalla</div>
-					                            </div>
-					                        </div>
-					                        <div class="ride-actions">
-					                            <button class="btn btn-primary">View Details</button>
-					                            <button class="btn btn-outline">Repeat Ride</button>
-					                        </div>
-					                    </div>
-					                </div>
-					            </div>
-					        </div>
+					            
+							<div id="tripContainer" th:fragment="tripListFragment">
+
+							    <div th:each="entry : ${tripsByCategory}" 
+							         th:if="${entry.value != null 
+							                 and ((entry.key != 'Upcoming') or (entry.key == 'Upcoming' and !#maps.isEmpty(entry.value)))}">
+							
+							        <div class="date-section">
+							            <!-- Group header -->
+							            <h3 class="date-title" th:text="${entry.key}"></h3>
+							
+							            <!-- Upcoming group has nested map -->
+							            <div th:if="${entry.key == 'Upcoming'}">
+							                <div th:each="dateEntry : ${entry.value}">
+							                    <!-- dateEntry.key = LocalDate, dateEntry.value = List<TripResponse> -->
+							                    <div class="ride-date">
+							                        <h4 class="date-title" style="font-size: 12px; padding-left: 12px; margin-top: 13px;"> 
+							                       	  <span th:text="${#temporals.format(dateEntry.key, 'MMM dd, yyyy')}"></span>
+							                       </h4>
+							                    </div>
+							
+							                    <div th:each="trip : ${dateEntry.value}" class="ride-card">
+							                        <div class="ride-time">
+							                            <div class="start-time" th:text="${trip.startTime}"></div>
+							                            <div class="duration" th:text="${trip.duration}"></div>
+							                            <div class="end-time" th:text="${trip.endTime}"></div>
+							                        </div>
+							                        <div class="ride-locations">
+							                            <div class="location">
+							                                <div class="location-dot start-dot"></div>
+							                                <div class="location-name" th:text="${trip.startLocation}"></div>
+							                            </div>
+							                            <div class="location">
+							                                <div class="location-dot end-dot"></div>
+							                                <div class="location-name" th:text="${trip.endLocation}"></div>
+							                            </div>
+							                        </div>
+							                        <div class="ride-actions">
+							                            <a th:href="@{'/user/ride/details/' + ${trip.id}}" class="btn btn-primary">View Details</a>
+							                            <a th:href="@{'/user/ride/repeat/' + ${trip.id}}" class="btn btn-outline">Repeat Ride</a>
+							                        </div>
+							                    </div>
+							                </div>
+							            </div>
+							
+							            <!-- Other groups: just show trips without date -->
+							            <div th:if="${entry.key != 'Upcoming'}">
+							                <div th:each="trip : ${entry.value}" 
+							                     th:class="'ride-card ' + (${entry.key == 'Older'} ? 'disabled-ride' : '')">
+							                     
+							                    <div class="ride-time">
+							                        <div class="start-time" th:text="${trip.startTime}"></div>
+							                        <div class="duration" th:text="${trip.duration}"></div>
+							                        <div class="end-time" th:text="${trip.endTime}"></div>
+							                    </div>
+							
+							                    <div class="ride-locations">
+							                        <div class="location">
+							                            <div class="location-dot start-dot"></div>
+							                            <div class="location-name" th:text="${trip.startLocation}"></div>
+							                        </div>
+							                        <div class="location">
+							                            <div class="location-dot end-dot"></div>
+							                            <div class="location-name" th:text="${trip.endLocation}"></div>
+							                        </div>
+							                    </div>
+							
+							                    <div class="ride-actions">
+							                        <!-- Disable buttons for Older trips -->
+							                        <a th:href="@{'/user/ride/details/' + ${trip.id}}"
+													   class="btn btn-primary"
+													   th:classappend="${entry.key == 'Older'} ? ' disabled-link' : ''"
+													   th:attr="tabindex=${entry.key == 'Older'} ? -1 : null,
+													            aria-disabled=${entry.key == 'Older'} ? true : false">
+													   View Details
+													</a>
+													
+													<a th:href="@{'/user/ride/repeat/' + ${trip.id}}"
+													   class="btn btn-outline"
+													   th:classappend="${entry.key == 'Older'} ? ' disabled-link' : ''"
+													   th:attr="tabindex=${entry.key == 'Older'} ? -1 : null,
+													            aria-disabled=${entry.key == 'Older'} ? true : false">
+													   Repeat Ride
+													</a>
+							                    </div>
+							                </div>
+							
+							        </div>
+							    </div>
+							    <!-- Show message if no trips exist at all -->
+							    <div th:if="${tripsByCategory == null or #lists.isEmpty(tripsByCategory)}">
+							        <p class="no-trips-message">No trips available.</p>
+							    </div>
+							</div>
+					      </div>
 					        
-					        <!-- <div class="card">
-					            <div class="card-header">
-					                <h2 class="card-title">Ride Statistics</h2>
-					            </div>
-					            <div class="stats-container">
-					                <div class="stat-card">
-					                    <div class="stat-value">24</div>
-					                    <div class="stat-label">Total Rides</div>
-					                </div>
-					                <div class="stat-card">
-					                    <div class="stat-value">1,240 km</div>
-					                    <div class="stat-label">Distance Traveled</div>
-					                </div>
-					                <div class="stat-card">
-					                    <div class="stat-value">38h 20m</div>
-					                    <div class="stat-label">Time on Road</div>
-					                </div>
-					                <div class="stat-card">
-					                    <div class="stat-value">4.8</div>
-					                    <div class="stat-label">Average Rating</div>
-					                </div>
-					            </div>
-					        </div> -->
-					        
-					        <div class="card">
-					            <div class="card-header">
-					                <h2 class="card-title">Upcoming Rides</h2>
-					            </div>
-					            <div class="upcoming-rides">
-					                <div class="upcoming-ride">
-					                    <div class="upcoming-ride-info">
-					                        <div class="upcoming-date">Oct 28, 10:00 AM</div>
-					                        <div class="upcoming-locations">Chowdepalle → Ulavapalla</div>
-					                    </div>
-					                    <button class="btn btn-outline">View Details</button>
-					                </div>
-					                <div class="upcoming-ride">
-					                    <div class="upcoming-ride-info">
-					                        <div class="upcoming-date">Oct 29, 02:30 PM</div>
-					                        <div class="upcoming-locations">Nellore → Kanigiri</div>
-					                    </div>
-					                    <button class="btn btn-outline">View Details</button>
-					                </div>
-					            </div>
-					        </div>
-					    </div>
-                    </article>
+				       </div>
+				     </div>
+                   </article>
             </div>
         </div>
     </div>
 </main>
 
  <script>
-  // Filter functionality
-  document.querySelectorAll('.filter-btn').forEach(button => {
-      button.addEventListener('click', function() {
-          document.querySelectorAll('.filter-btn').forEach(btn => {
-              btn.classList.remove('active');
-          });
-          this.classList.add('active');
-          
-          // In a real app, this would filter the rides
-          alert(`Filtering by: ${this.textContent}`);
-      });
-  });
-  
-  // Ride card interactions
-  document.querySelectorAll('.ride-actions .btn-primary').forEach(button => {
-      button.addEventListener('click', function() {
-          const rideCard = this.closest('.ride-card');
-          const startLocation = rideCard.querySelector('.location-name').textContent;
-          alert(`Showing details for ride from ${startLocation}`);
-      });
-  });
-  
-  document.querySelectorAll('.ride-actions .btn-outline').forEach(button => {
-      button.addEventListener('click', function() {
-          const rideCard = this.closest('.ride-card');
-          const startLocation = rideCard.querySelector('.location-name').textContent;
-          alert(`Creating a new ride based on your trip from ${startLocation}`);
-      });
-  });
+document.addEventListener("DOMContentLoaded", function() {
+    const filterButtons = document.querySelectorAll(".filter-btn");
+
+    filterButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const filterValue = this.getAttribute("data-filter");
+
+            // Toggle active class
+            filterButtons.forEach(btn => btn.classList.remove("active"));
+            this.classList.add("active");
+
+            // Load filtered trips via AJAX
+            fetch('/user/ride/filter?filter='+ encodeURIComponent(filterValue))
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById("tripContainer").innerHTML = html;
+                })
+                .catch(err => console.error("Error loading trips:", err));
+        });
+    });
+});
 </script>
+
+
 
 <div th:replace="common/footer :: footerbar"></div>
 <div th:replace="common/header :: body-bottom-scripts"></div>

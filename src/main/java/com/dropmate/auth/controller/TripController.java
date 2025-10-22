@@ -1,6 +1,7 @@
 package com.dropmate.auth.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,8 @@ import com.dropmate.dto.TripRequest;
 import com.dropmate.dto.TripResponse;
 import com.dropmate.entity.Trip;
 import com.dropmate.service.TripService;
+import com.dropmate.utils.RouteUtils;
+import com.dropmate.utils.TimeUtils;
 
 @Controller
 @RequestMapping("/user/ride")
@@ -29,12 +32,48 @@ public class TripController {
 	// 1. Show all trips
 	@GetMapping("/list")
 	public String listTrips(Model model) {
+		//List<Trip> trips = tripService.getAllTrips();
+		//model.addAttribute("trips", trips);
 		List<TripResponse> trips = tripService.getAllTrips();
-		model.addAttribute("trips", trips);
+	    Map<String, Object> groupedTrips = tripService.groupTripsByDate(trips);
+	    model.addAttribute("tripsByCategory", groupedTrips);
 		model.addAttribute("activePage","ridelist");
 		return "/user/trip/mytrips-list";
 	}
 
+	@GetMapping("/filter")
+	public String filterTrips(@RequestParam String filter, Model model) {
+	    List<TripResponse> trips;
+
+	    switch (filter.toLowerCase()) {
+		    case "pending":
+	            trips = tripService.getTripsByStatus("PENDING");
+	            break;
+		    case "scheduled":
+	            trips = tripService.getTripsByStatus("SCHEDULED");
+	            break;
+	        case "completed":
+	            trips = tripService.getTripsByStatus("COMPLETED");
+	            break;
+	        case "ongoing":
+	            trips = tripService.getTripsByStatus("ONGOING");
+	            break;
+	        case "cancelled":
+	            trips = tripService.getTripsByStatus("CANCELLED");
+	            break;
+	        default:
+	            trips = tripService.getAllTrips();
+	            break;
+	    }
+
+	    // Group by date (Today, Tomorrow, Older, etc.)
+	    Map<String, Object> groupedTrips = tripService.groupTripsByDate(trips);
+
+	    model.addAttribute("tripsByCategory", groupedTrips);
+	    return "/user/trip/trip-list :: tripListFragment";
+	}
+
+	
 	// 2. Show create trip form
 	@GetMapping("/create")
 	public String showCreateForm(Model model) {
@@ -72,10 +111,14 @@ public class TripController {
 	}
 
 	// 7. Trip details page
-	@GetMapping("/{tripId}")
+	@GetMapping("/details/{tripId}")
 	public String getTrip(@PathVariable String tripId, Model model) {
 		Trip trip = tripService.getTripById(tripId);
 		model.addAttribute("trip", trip);
+		model.addAttribute("tripDuration", RouteUtils.formatHoursAndMinutes(trip.getDuration()));
+		model.addAttribute("tripArrivalTime", TimeUtils.calculateArrivalTime(String.valueOf(trip.getStartTime()),trip.getDuration()));
+		model.addAttribute("isKycVerified", 
+			    trip != null && trip.getDriver() != null && "VERIFIED".equals(trip.getDriver().getKycStatus()));
 		return "user/trip/ride-details"; // trip/detail.html
 	}
 	
@@ -83,6 +126,10 @@ public class TripController {
 	public String getTripOffer(@RequestParam String id, Model model) {
 		Trip trip = tripService.getTripById(id);
 		model.addAttribute("trip", trip);
+		model.addAttribute("tripDuration", RouteUtils.formatHoursAndMinutes(trip.getDuration()));
+		model.addAttribute("tripArrivalTime", TimeUtils.calculateArrivalTime(String.valueOf(trip.getStartTime()),trip.getDuration()));
+		model.addAttribute("isKycVerified", 
+			    trip != null && trip.getDriver() != null && "VERIFIED".equals(trip.getDriver().getKycStatus()));
 		return "user/trip/ride-plan"; // trip/detail.html
 	}
 

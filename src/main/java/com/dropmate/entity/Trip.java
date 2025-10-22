@@ -7,17 +7,16 @@ import java.time.LocalTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.Point;
 
-import com.dropmate.enums.TripType;
 import com.dropmate.enums.TripStatus;
+import com.dropmate.enums.TripType;
 import com.dropmate.enums.VehicleType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -38,10 +37,6 @@ public class Trip {
 	@Id
 	@Column(length = 36)
 	private String id;
-
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "vehicle_type", nullable = false)
@@ -108,6 +103,11 @@ public class Trip {
 	private LocalDateTime updatedAt;
 
 	private String bookingType;
-	private double duration;
+	private long duration;
 	private double distance;
+	
+	// Each trip is created by one driver
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "driver_id")
+    private DriverProfile driver;
 }
