@@ -1,8 +1,14 @@
 // GoogleMapsService.java
 package com.dropmate.map;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -11,7 +17,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class GoogleMapsService {
     
-    @Value("${google.maps.api.key}")
+    @Value("${serverkey.google.maps.api.key}")
     private String apiKey;
     
     @Value("${google.maps.api.url}")
@@ -59,4 +65,7 @@ public class GoogleMapsService {
                 .retrieve()
                 .bodyToMono(PlacesResponse.class);
     }
+    
+   
+
 }

@@ -40,8 +40,8 @@ public class DeliveryService {
 			//trip.setEndTime(LocalDateTime.parse(request.getEndTime(), formatter));
 		}
 
-		trip.setSeatsTotal(0);
-		trip.setSeatsAvailable(0);
+		trip.setTotalSeats(0);
+		trip.setAvailableSeats(0);
 		trip.setCargoSlotsTotal(request.getCargoSlots());
 		trip.setCargoSlotsAvailable(request.getCargoSlots());
 		trip.setPricePerKg(request.getPricePerKg());

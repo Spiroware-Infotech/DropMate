@@ -30,14 +30,18 @@
 <!--search-->
 	<div class="main-search">
 		<div class="wrap">
-			<form id="main-search" th:action="@{/search}">
+			<form th:action="@{/rides/search}" method="get" id="tripSearchForm">
 				<div class="row">
 					<!--column-->
 					<div class="column radios one-fourth">
 						<div class="row">
 							<div class="f-item full-width">
 								<label for="destination3">Pick Up</label>
-								<input type="text" placeholder="City, region, district or specific" id="pickup" name="pickuploc" >
+								<input id="source" type="text"  placeholder="Enter source location" required>
+								<input type="hidden" name="source" id="sourceID">
+								<input id="sourcePlaceId" name="sourcePlaceId" type="hidden">
+						        <!-- <input type="hidden" name="sourceLat" id="sourceLat">
+						        <input type="hidden" name="sourceLng" id="sourceLng"> -->
 							</div>
 						</div>
 					</div>
@@ -48,7 +52,10 @@
 								<div class="row">
 									<div class="f-item full-width">
 										<label for="destination4">Drop Off</label>
-										<input type="text" placeholder="City, region, district or specific" id="dropoff" name="dropoffloc">
+										<input id="destination" type="text" name="destination" placeholder="Enter destination" required>
+										<input id="destinationPlaceId" name="destinationPlaceId" type="hidden">
+								        <!-- <input type="hidden" name="destLat" id="destLat">
+								        <input type="hidden" name="destLng" id="destLng"> -->
 									</div>
 								</div>
 							</div>
@@ -59,7 +66,7 @@
 										<div class="row" >
 											<div class="f-item one-half active">
 												<div class="datepicker-wrap">
-													<input type="text" id="datepicker1" name="datepicker1" class="hasDatepicker" placeholder="Select date">
+													<input type="text" id="datepicker1" name="date" class="hasDatepicker" placeholder="Select date">
 													<img class="ui-datepicker-trigger" src="/images/calendar.png" alt="..." title="...">
 												</div>
 											</div>
@@ -73,7 +80,7 @@
 							    <div class="f-item one-half espinner">
 							      <label for="passenger-label">Passenger</label>
 							      <div class="dropdown">
-							        <input type="text" id="passenger-label" name="passengers_display" value="1 Passenger" readonly>
+							        <input type="text" id="passenger-label" value="1 Passenger" readonly>
 							        <br/>
 							        <div class="dropdown-menu">
 							          <div class="counter" style="margin-left: 11px;">
@@ -89,7 +96,7 @@
 							  </div>
 							
 							  <!-- Hidden input that will be submitted in the form -->
-							  <input type="hidden" id="passenger-count" name="passengers" value="1">
+							  <input type="hidden" id="passenger-count" name="seats" value="1">
 							</div>
 
 						</div>	
@@ -209,7 +216,7 @@
 <script async defer
   th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${GOOGLE_MAPS_API_KEY} + '&libraries=places'">
 </script>
- <script type="text/javascript">
+ <!-- <script type="text/javascript">
     function initAutocomplete() {
       const input = document.getElementById("pickup");
       const dropoff = document.getElementById("dropoff");
@@ -244,7 +251,87 @@
   
     window.onload = initAutocomplete;
     
-  </script>	
+  </script>	 -->
+  
+  <!-- <script>
+    function initAutocomplete() {
+        const sourceInput = document.getElementById('source');
+        const destinationInput = document.getElementById('destination');
+
+        const sourceAutocomplete = new google.maps.places.Autocomplete(sourceInput);
+        sourceAutocomplete.addListener('place_changed', () => {
+            const place = sourceAutocomplete.getPlace();
+            if (place.geometry) {
+                document.getElementById('sourceLat').value = place.geometry.location.lat();
+                document.getElementById('sourceLng').value = place.geometry.location.lng();
+            }
+        });
+
+        const destinationAutocomplete = new google.maps.places.Autocomplete(destinationInput);
+        destinationAutocomplete.addListener('place_changed', () => {
+            const place = destinationAutocomplete.getPlace();
+            if (place.geometry) {
+                document.getElementById('destLat').value = place.geometry.location.lat();
+                document.getElementById('destLng').value = place.geometry.location.lng();
+            }
+        });
+
+        // Ensure user can't submit until lat/lng are captured
+        const form = document.getElementById('tripSearchForm');
+        form.addEventListener('submit', (event) => {
+            const srcLat = document.getElementById('sourceLat').value;
+            const destLat = document.getElementById('destLat').value;
+            if (!srcLat || !destLat) {
+                event.preventDefault();
+                alert("Please select valid Source and Destination from suggestions.");
+            }
+        });
+    }
+
+    window.onload = initAutocomplete;
+</script> -->
+
+<script>
+  let sourceAutocomplete, destinationAutocomplete;
+
+  function initAutocomplete() {
+    const sourceInput = document.getElementById("source");
+    const destinationInput = document.getElementById("destination");
+
+    // Initialize autocomplete objects
+    sourceAutocomplete = new google.maps.places.Autocomplete(sourceInput, { types: ['(cities)'] });
+    destinationAutocomplete = new google.maps.places.Autocomplete(destinationInput, { types: ['(cities)'] });
+
+    // When user selects a source place
+    sourceAutocomplete.addListener('place_changed', () => {
+      const place = sourceAutocomplete.getPlace();
+      if (!place.place_id) return;
+
+      console.log("Source placeId:", place.place_id);
+      console.log("Source name:", place.name);
+      console.log("Source formatted address:", place.formatted_address);
+
+      // Store placeId in a hidden field
+      document.getElementById("sourcePlaceId").value = place.place_id;
+    });
+
+    // When user selects a destination place
+    destinationAutocomplete.addListener('place_changed', () => {
+      const place = destinationAutocomplete.getPlace();
+      if (!place.place_id) return;
+
+      console.log("Destination placeId:", place.place_id);
+      console.log("Destination name:", place.name);
+      console.log("Destination formatted address:", place.formatted_address);
+
+      // Store placeId in a hidden field
+      document.getElementById("destinationPlaceId").value = place.place_id;
+    });
+  }
+
+  window.onload = initAutocomplete;
+</script>
+
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {

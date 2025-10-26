@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RideRequest {
 	private String departure;
+	private String sourcePlaceId;
 	private String arrival;
+	private String destinationPlaceId;
 	private String route;
 	private String departureDate;
 	private String departureTime;

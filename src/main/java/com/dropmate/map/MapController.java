@@ -17,7 +17,7 @@ public class MapController {
     
     private final GoogleMapsService googleMapsService;
     
-    @Value("${google.maps.api.key}")
+    @Value("${serverkey.google.maps.api.key}")
     private String googleMapsApiKey;
     
     public MapController(GoogleMapsService googleMapsService) {

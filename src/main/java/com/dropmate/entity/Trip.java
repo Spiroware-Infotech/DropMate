@@ -48,15 +48,21 @@ public class Trip {
 
 	@Column(name = "origin_name", columnDefinition = "TEXT")
 	private String originName;
+	
+	@Column(name = "src_placeId", columnDefinition = "TEXT")
+	private String sourcePlaceId;
+	
+	@Column(name = "sourceJson", columnDefinition = "JSON")
+	private String sourceJson;
 
-	@Column(name = "source", columnDefinition = "JSON")
-	private String source;
-
+	@Column(name = "dest_placeId", columnDefinition = "TEXT")
+	private String destinationPlaceId;
+	 
 	@Column(name = "destination_name", columnDefinition = "TEXT")
 	private String destinationName;
 
-	@Column(name = "destination", columnDefinition = "JSON")
-	private String destination;
+	@Column(name = "destinationJson", columnDefinition = "JSON")
+	private String destinationJson;
 
 	@Column(name = "start_date", nullable = false)
 	private LocalDate startDate;
@@ -64,11 +70,11 @@ public class Trip {
 	@Column(name = "start_time")
 	private LocalTime startTime;
 
-	@Column(name = "seats_total")
-	private Integer seatsTotal = 0;
+	@Column(name = "total_seats")
+	private Integer totalSeats = 0;
 
-	@Column(name = "seats_available")
-	private Integer seatsAvailable = 0;
+	@Column(name = "available_seats")
+	private Integer availableSeats = 0;
 
 	@Column(name = "cargo_slots_total")
 	private Integer cargoSlotsTotal = 0;
@@ -105,7 +111,10 @@ public class Trip {
 	private String bookingType;
 	private long duration;
 	private double distance;
+	private String comment;
 	
+	private Boolean isActive = true;      // For soft delete or cancel
+	 
 	// Each trip is created by one driver
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id")

@@ -29,7 +29,9 @@
 							<h1>Pick-up</h1>
 							<div class="row">
 								<div class="f-item one-half active">
-								<input id="pac-input" type="text" name="departure" placeholder="Enter a place or address" />
+								<input id="pac-input" type="text" placeholder="Enter a place or address" />
+								<input id="departureId" type="hidden" name="departure" />
+								<input id="sourcePlaceId" name="sourcePlaceId" type="hidden">
 							</div>
 							</div>
 						</header>
@@ -131,12 +133,19 @@
 
  function setPlaceData(place) {
 	  const placeData = {
+		placeId: place.place_id,
 	    name: place.name,
 	    address: place.formatted_address,
 	    latitude: place.geometry?.location.lat(),
 	    longitude: place.geometry?.location.lng()
 	  };
+	  
+	  if (!place.place_id) return;
+
+      document.getElementById("sourcePlaceId").value = place.place_id;
+	  //console.log("Place:", place);
 	  console.log("Place Data:", placeData);
+	  document.getElementById("departureId").value = place.formatted_address;
 	  document.getElementById("sourceJson").value = JSON.stringify(placeData);
  } 
  

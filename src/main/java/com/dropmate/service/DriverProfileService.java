@@ -9,8 +9,10 @@ public interface DriverProfileService {
 
 	Optional<User> findByUsername(String username);
 
+	Optional<DriverProfile> findByUser(User user);
+
 	DriverProfile getDriverProfileById(Long userId);
 
-	void saveDriverProfile(DriverProfile driverProfile);
+	DriverProfile saveDriverProfile(DriverProfile driverProfile);
 
 }

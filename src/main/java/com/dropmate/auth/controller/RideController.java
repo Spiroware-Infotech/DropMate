@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -178,14 +179,18 @@ public class RideController extends CommonController{
 	    	String username = principal.getName();
 	    	User user = driverProfileService.findByUsername(username).orElse(null);
 	    	
-	    	DriverProfile driverProfile = DriverProfile.builder()
-	    			.user(user)
-	    			.kycStatus(KycStatus.PENDING)
-	    			//.vehicleType(VehicleType.valueOf(request.getVehicleType()))
-	    			.vehicleType(VehicleType.CAR)
-	    			.build();
-	    	
-	    	driverProfileService.saveDriverProfile(driverProfile);
+	    	Optional<DriverProfile> optionalProfile = driverProfileService.findByUser(user);
+
+	    	DriverProfile driverProfile = optionalProfile.orElseGet(() -> {
+	    	    // Create and return a new DriverProfile if it doesn't exist
+	    	    DriverProfile newProfile = DriverProfile.builder()
+	    	    		.id(user.getUserId())
+	    	            .user(user)
+	    	            .kycStatus(KycStatus.PENDING)
+	    	            .vehicleType(VehicleType.CAR)
+	    	            .build();
+	    	    return driverProfileService.saveDriverProfile(newProfile); // must RETURN the saved object
+	    	});
 	    	
 	    	TripStatus rideStatus= null;
 	    	if(request.getReturnRideOption()!=null) {
@@ -199,10 +204,13 @@ public class RideController extends CommonController{
 	    	Trip trip;
 	
 				trip = Trip.builder()
+						.driver(driverProfile)
 						.originName(request.getDeparture())
+						.sourcePlaceId(request.getSourcePlaceId())
 						.destinationName(request.getArrival())
-						.seatsAvailable(request.getSeats())
-						.seatsTotal(request.getSeats())
+						.destinationPlaceId(request.getDestinationPlaceId())
+						.availableSeats(request.getSeats())
+						.totalSeats(request.getSeats())
 						.tripType(TripType.PASSENGER)
 						.status(rideStatus)
 						.startDate(startDate)
@@ -213,8 +221,9 @@ public class RideController extends CommonController{
 						.bookingType(request.getBookingType().toUpperCase())
 						.duration(request.getDuration())
 						.distance(request.getDistance())
-						.source(mapper.writeValueAsString(request.getSourceJson()))
-						.destination(mapper.writeValueAsString(request.getDestinationJson()))
+						.sourceJson(mapper.writeValueAsString(request.getSourceJson()))
+						.destinationJson(mapper.writeValueAsString(request.getDestinationJson()))
+						.comment(request.getComment())
 						.build();
 			
 	    	

@@ -2,12 +2,15 @@ package com.dropmate.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +20,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.client.RestTemplate;
 
 import com.dropmate.dto.UsersDto;
 import com.dropmate.entity.User;
@@ -37,8 +41,11 @@ public class CommonController {
 	@Autowired
 	private JavaMailSender mailSender;
 
-	@Value("${google.maps.api.key}")
+	@Value("${browserkey.google.maps.api.key}")
 	protected String GOOGLE_MAPS_API_KEY;
+	
+	@Value("${serverkey.google.maps.api.key}")
+	protected String SERVR_GOOGLE_MAPS_API_KEY;
 	
 //	@ModelAttribute
 //	public void getLoggedUser(HttpSession session, Principal pricipal, Model model) {

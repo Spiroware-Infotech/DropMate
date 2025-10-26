@@ -27,17 +27,22 @@ public class DriverProfileServiceImpl implements DriverProfileService {
 	public Optional<User> findByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}
-
+	
+	@Override
+	public Optional<DriverProfile> findByUser(User user) {
+        return driverProfileRepository.findByUser(user);
+    }
+	
 	@Override
 	public DriverProfile getDriverProfileById(Long userId) {
 		return driverProfileRepository.findById(userId).orElse(null);
 	}
 
 	@Override
-	public void saveDriverProfile(DriverProfile driverProfile) {
+	public DriverProfile saveDriverProfile(DriverProfile driverProfile) {
 		driverProfile.setCreatedAt(LocalDateTime.now());
 		driverProfile.setUpdatedAt(LocalDateTime.now());
-		driverProfileRepository.save(driverProfile);
+		return driverProfileRepository.save(driverProfile);
 	}
 
 }

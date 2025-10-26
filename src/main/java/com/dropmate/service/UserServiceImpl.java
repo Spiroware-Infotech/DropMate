@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 		userRoles.add(role);
 		user.setRoles(userRoles);
 		user.setCreatedAt(LocalDateTime.now());
-		user.setIsVerified(false);
+		user.setIsVerified(true);
 
 		User info = userRepository.save(user);
 

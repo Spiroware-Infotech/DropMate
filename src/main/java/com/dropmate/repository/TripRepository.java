@@ -1,6 +1,7 @@
 package com.dropmate.repository;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.dropmate.entity.DriverProfile;
 import com.dropmate.entity.Trip;
+import com.dropmate.entity.User;
 import com.dropmate.enums.TripStatus;
 import com.dropmate.enums.TripType;
 import com.dropmate.enums.VehicleType;
@@ -17,7 +19,7 @@ import com.dropmate.enums.VehicleType;
 @Repository
 public interface TripRepository extends JpaRepository<Trip, String> {
 
-	// 1️. Get all trips by driver object
+    // 1️. Get all trips by driver object
     List<Trip> findByDriver(DriverProfile driver);
 
     // 2️. Get all trips by driver ID
@@ -59,5 +61,7 @@ public interface TripRepository extends JpaRepository<Trip, String> {
 			""", nativeQuery = true)
 	List<Trip> findUpcomingTripsNear(@Param("from") Timestamp from, @Param("to") Timestamp to,
 			@Param("originWkt") String originWkt, @Param("radius") double radius);
+
+	List<Trip> findByStartDate(LocalDate date);
 
 }

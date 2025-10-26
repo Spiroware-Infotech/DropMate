@@ -44,7 +44,7 @@ public class AuthController {
 		result = registrationDuplicate(user, result);
 		if (result.hasErrors()) {
 			model.addAttribute("user", user);
-			return "auth/register";
+			return "auth/signup";
 		}
 		userService.saveUser(user);
 		return "redirect:/login?success";

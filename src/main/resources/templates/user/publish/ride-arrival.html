@@ -29,7 +29,9 @@
 							<h1>Drop-off</h1>
 							<div class="row">
 								<div class="f-item one-half active">
-								<input id="pac-input" type="text" name="arrival" placeholder="Enter a place or address" />
+								<input id="pac-input" type="text" placeholder="Enter a place or address" />
+								<input id="arrivalId" type="hidden" name="arrival"/>
+								<input id="destinationPlaceId" name="destinationPlaceId" type="hidden">
 							</div>
 							</div>
 						</header>
@@ -131,13 +133,21 @@
 
  function setPlaceData(place) {
 	  const placeData = {
+	    placeId: place.place_id,
 	    name: place.name,
 	    address: place.formatted_address,
 	    latitude: place.geometry?.location.lat(),
 	    longitude: place.geometry?.location.lng()
 	  };
-	console.log("Place Data:", placeData);
-	document.getElementById("destinationJson").value = JSON.stringify(placeData);
+	  
+	  if (!place.place_id) return;
+
+	  document.getElementById("destinationPlaceId").value = place.place_id;
+      
+	  console.log("Place:", place);
+  	  console.log("Place Data:", placeData);
+  	  document.getElementById("arrivalId").value = place.formatted_address;
+	  document.getElementById("destinationJson").value = JSON.stringify(placeData);
 }
  
 	window.initAutocomplete = initAutocomplete;

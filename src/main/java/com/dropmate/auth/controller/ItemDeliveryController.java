@@ -118,8 +118,8 @@ public class ItemDeliveryController extends CommonController{
 			.bookingType("INSTANT")
 			.duration(request.getDuration())
 			.distance(request.getDistance())
-			.source(mapper.writeValueAsString(request.getSourceJson()))
-			.destination(mapper.writeValueAsString(request.getDestinationJson()))
+			.sourceJson(mapper.writeValueAsString(request.getSourceJson()))
+			.destinationJson(mapper.writeValueAsString(request.getDestinationJson()))
 			.build();
 			
     	Trip tripDB = tripService.createTrip(user.getUserId(), trip, new ArrayList());

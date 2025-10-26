@@ -28,11 +28,11 @@ public class BookingService {
 	public Booking createPassengerBooking(String tripId, Long userId, int seats, BigDecimal price) {
 		Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new RuntimeException("Trip not found"));
 
-		if (trip.getSeatsAvailable() < seats) {
+		if (trip.getAvailableSeats() < seats) {
 			throw new RuntimeException("Not enough seats available");
 		}
 
-		trip.setSeatsAvailable(trip.getSeatsAvailable() - seats);
+		trip.setAvailableSeats(trip.getAvailableSeats() - seats);
 
 		Booking booking = new Booking();
 		booking.setTrip(trip);
@@ -75,7 +75,7 @@ public class BookingService {
 
 		Trip trip = booking.getTrip();
 		if (booking.getType() == TripType.PASSENGER) {
-			trip.setSeatsAvailable(trip.getSeatsAvailable() + booking.getSeatsBooked());
+			trip.setAvailableSeats(trip.getAvailableSeats() + booking.getSeatsBooked());
 		} else {
 			trip.setCargoSlotsAvailable(trip.getCargoSlotsAvailable() + 1);
 		}

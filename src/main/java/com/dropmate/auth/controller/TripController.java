@@ -1,5 +1,6 @@
 package com.dropmate.auth.controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -15,26 +16,32 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.dropmate.dto.TripRequest;
 import com.dropmate.dto.TripResponse;
 import com.dropmate.entity.Trip;
+import com.dropmate.entity.User;
+import com.dropmate.service.DriverProfileService;
 import com.dropmate.service.TripService;
+import com.dropmate.service.UserService;
 import com.dropmate.utils.RouteUtils;
 import com.dropmate.utils.TimeUtils;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller
 @RequestMapping("/user/ride")
+@RequiredArgsConstructor
 public class TripController {
 
 	private final TripService tripService;
+	
+	private final DriverProfileService driverProfileService;
 
-	public TripController(TripService tripService) {
-		this.tripService = tripService;
-	}
 
 	// 1. Show all trips
 	@GetMapping("/list")
-	public String listTrips(Model model) {
-		//List<Trip> trips = tripService.getAllTrips();
-		//model.addAttribute("trips", trips);
-		List<TripResponse> trips = tripService.getAllTrips();
+	public String listTrips(Model model , Principal principal) {
+
+		User user = driverProfileService.findByUsername(principal.getName()).orElse(null);
+		
+		List<TripResponse> trips = tripService.findByDriverId(user.getUserId());
 	    Map<String, Object> groupedTrips = tripService.groupTripsByDate(trips);
 	    model.addAttribute("tripsByCategory", groupedTrips);
 		model.addAttribute("activePage","ridelist");

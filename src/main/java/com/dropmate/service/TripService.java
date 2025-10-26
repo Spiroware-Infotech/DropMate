@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.dropmate.dto.PlaceInfo;
 import com.dropmate.dto.TripRequest;
 import com.dropmate.dto.TripResponse;
 import com.dropmate.entity.DriverProfile;
@@ -27,6 +29,8 @@ import com.dropmate.repository.DriverProfileRepository;
 import com.dropmate.repository.TripRepository;
 import com.dropmate.repository.TripStopRepository;
 import com.dropmate.repository.UserRepository;
+import com.dropmate.utils.GeoUtils;
+import com.dropmate.utils.LocationUtils;
 import com.dropmate.utils.RouteUtils;
 import com.dropmate.utils.TimeUtils;
 
@@ -40,11 +44,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TripService {
 
+	private static double radiusKm= 150;
+	
 	private final TripRepository tripRepository;
 	private final UserRepository userRepository;
 	private final TripStopRepository tripStopRepository;
 	private final DriverProfileRepository driverProfileRepository;
-
+	private final GeocodingService geocodingService;
+	 
 	public Trip createTrip(Long driverId, Trip trip, List<TripStop> stops) {
 		User user = userRepository.findById(driverId).orElseThrow(() -> new RuntimeException("Driver not found"));
 
@@ -75,6 +82,141 @@ public class TripService {
 		return tripRepository.findUpcomingTripsNear(from, to, originWkt, radius);
 	}
 
+	public List<Trip> searchRides(double userSrcLat, double userSrcLng, double userDestLat, double userDestLng,
+			LocalDate date) {
+
+		List<Trip> trips = tripRepository.findByStartDate(date);
+
+		return trips.stream().filter(trip -> {
+			double srcLat = LocationUtils.getLatitude(trip.getSourceJson());
+			double srcLng = LocationUtils.getLongitude(trip.getSourceJson());
+			double destLat = LocationUtils.getLatitude(trip.getDestinationJson());
+			double destLng = LocationUtils.getLongitude(trip.getDestinationJson());
+
+			double sourceDistance = GeoUtils.distanceKm(userSrcLat, userSrcLng, srcLat, srcLng);
+			double destinationDistance = GeoUtils.distanceKm(userDestLat, userDestLng, destLat, destLng);
+
+			// both source and destination should be near
+			return sourceDistance <= radiusKm && destinationDistance <= radiusKm;
+		}).collect(Collectors.toList());
+	}
+	
+	
+	public List<TripResponse> searchRides(String source, String destination, LocalDate date, Integer seats) {
+		log.info("Search rides based on selected Date: {}", date);
+		try {
+			
+            double[] srcCoords =  geocodingService.getCoordinates(source);
+            double[] destCoords =  geocodingService.getCoordinates(destination);
+            log.info("Soruce Coords: {}", srcCoords);
+            log.info("Destination Coords: {}", destCoords);
+            
+            double userSrcLat = srcCoords[0];
+            double userSrcLng = srcCoords[1]; 
+            double userDestLat = destCoords[0]; 
+            double userDestLng = destCoords[1];
+            
+            List<Trip> trips = tripRepository.findByStartDate(date);
+            log.info("rides size in DB : {}", trips.size());
+            
+            List<TripResponse> rides = trips.stream().map(this::mapToResponse).collect(Collectors.toList());
+    		return rides.stream().filter(trip -> {
+    			PlaceInfo src = LocationUtils.getPlaceInfo(trip.getSourceJson());
+    			PlaceInfo dest = LocationUtils.getPlaceInfo(trip.getDestinationJson());
+    			trip.setSource(src);
+    			trip.setDestination(dest);
+    			
+    			double sourceDistance = GeoUtils.distanceKm(userSrcLat, userSrcLng, src.getLatitude(), src.getLongitude());
+    			double destinationDistance = GeoUtils.distanceKm(userDestLat, userDestLng, dest.getLatitude(), dest.getLongitude());
+
+    			// both source and destination should be near
+    			return sourceDistance <= radiusKm && destinationDistance <= radiusKm;
+    			
+    		}).collect(Collectors.toList());
+    		
+        } catch (Exception e) {
+           log.error("Error : {}", e.getMessage(), e);
+        }
+		return null;
+	}
+	
+	
+	public List<TripResponse> searchTripsBySourceAndDestination(
+	        String source,
+	        String destination,
+	        LocalDate date,
+	        Integer seats) {
+
+	    log.info("Searching trips date: {}, seats: {}", date, seats);
+
+	    try {
+	        // 1) fetch trips for date
+	        List<Trip> allTrips = tripRepository.findByStartDate(date);
+	        log.info("All rides found for Date: {}, Rides: {}", date, allTrips.size());
+
+	        List<TripResponse> rides = allTrips.stream()
+	                .map(this::mapToResponse)
+	                .collect(Collectors.toList());
+
+	        // 2) geocode search source and destination (we need both coords to measure distance)
+	        double[] srcCoords = geocodingService.getCoordinates(source);
+	        double[] destCoords = geocodingService.getCoordinates(destination);
+	        double userSrcLat = srcCoords[0];
+	        double userSrcLng = srcCoords[1];
+	        double userDestLat = destCoords[0];
+	        double userDestLng = destCoords[1];
+
+	        // 3) filter
+	        List<TripResponse> finalFilterRides = rides.stream()
+	                .filter(trip -> {
+	                    PlaceInfo tripSource = LocationUtils.getPlaceInfo(trip.getSourceJson());
+	                    PlaceInfo tripDestination = LocationUtils.getPlaceInfo(trip.getDestinationJson());
+
+	                    // Defensive null checks
+	                    if (tripSource == null || tripDestination == null) {
+	                        return false;
+	                    }
+
+	                    // SOURCE: allow exact name OR within radius of user's source
+	                    boolean sourceMatchesByName = tripSource.getAddress() != null &&
+	                            (tripSource.getAddress().equalsIgnoreCase(source) || tripSource.getName().equalsIgnoreCase(source));
+
+	                    boolean sourceMatchesByRadius = false;
+	                    if (tripSource.getLatitude() != 0 && tripSource.getLongitude() != 0) {
+	                        sourceMatchesByRadius = GeoUtils.distanceKm(
+	                                tripSource.getLatitude(), tripSource.getLongitude(),
+	                                userSrcLat, userSrcLng) <= radiusKm;
+	                    }
+
+	                    boolean sourceMatches = sourceMatchesByName || sourceMatchesByRadius;
+
+	                    // DESTINATION: strict name match (you said destination must match by name)
+	                    boolean destinationMatches = tripDestination.getName() != null &&
+	                            (tripDestination.getName().equalsIgnoreCase(destination) || tripDestination.getAddress().equalsIgnoreCase(destination));
+
+	                    // SEATS: availableSeats >= requested seats
+	                    boolean seatsAvailable = true; // default true if seats param is null
+	                    if (seats != null) {
+	                        Integer available = trip.getAvailableSeats();
+	                        seatsAvailable = available != null && available >= seats;
+	                    }
+
+	                    return sourceMatches && destinationMatches && seatsAvailable;
+	                })
+	                .collect(Collectors.toList());
+
+	        log.info("Filtered rides count: {}", finalFilterRides.size());
+	        return finalFilterRides;
+
+	    } catch (Exception e) {
+	        log.error("Error searching trips: {}", e.getMessage(), e);
+	        return Collections.emptyList();
+	    }
+	}
+
+
+
+	 
 	public Trip getTripById(String tripId) {
 		return tripRepository.findById(tripId).orElse(null);
 	}
@@ -161,7 +303,11 @@ public class TripService {
 		response.setDuration(RouteUtils.formatHoursAndMinutes(durationSeconds, false));
 		response.setBookingType(trip.getBookingType());
 		response.setDistance(RouteUtils.formatDistance(trip.getDistance()));
-		// you can also add duration formatting here
+		response.setSourceJson(trip.getSourceJson());
+		response.setDestinationJson(trip.getDestinationJson());
+		response.setPricePerSeat(trip.getPricePerSeat());
+		response.setDriverName(trip.getDriver().getUser().getFirstname());
+		response.setAvailableSeats(trip.getAvailableSeats());
 		return response;
 	}
 
@@ -198,6 +344,13 @@ public class TripService {
 	    return grouped;
 	}
 
+	public List<TripResponse> findByDriverId(Long userId) {
+		List<Trip> trips = tripRepository.findByDriverId(userId);
+		log.info("findByDriverId size: {} ",trips.size());
+		return trips.stream().map(this::mapToResponse)
+				.collect(Collectors.toList());
+	}
 
+	
 
 }

@@ -23,6 +23,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -85,18 +86,18 @@ public class User implements UserDetails {
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 
-	 // OTP-related
-    @Column(name="otp_hash")
-    private String otpHash; // store hashed otp (BCrypt) or encrypted
-    
-    @Column(name="otp_requested_at")
-    private Instant otpRequestedAt;
-    
-    @Column(name="otp_attempts")
-    private Integer otpAttempts = 0;
+	// OTP-related
+	@Column(name = "otp_hash")
+	private String otpHash; // store hashed otp (BCrypt) or encrypted
 
-    private boolean twoFactorAuthenticated = false; // optional - session-level better
-    
+	@Column(name = "otp_requested_at")
+	private Instant otpRequestedAt;
+
+	@Column(name = "otp_attempts")
+	private Integer otpAttempts = 0;
+
+	private boolean twoFactorAuthenticated = false; // optional - session-level better
+
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "userid") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_id") })
@@ -128,4 +129,7 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return isVerified;
 	}
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private DriverProfile driverProfile;
 }
