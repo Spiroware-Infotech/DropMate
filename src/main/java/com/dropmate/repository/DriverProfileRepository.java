@@ -13,9 +13,10 @@ import com.dropmate.enums.VehicleType;
 
 @Repository
 public interface DriverProfileRepository extends JpaRepository<DriverProfile, Long> {
-	Optional<DriverProfile> findByUser(User user);
+	//Optional<DriverProfile> findByUser(User user);
     List<DriverProfile> findByVehicleType(VehicleType vehicleType);
     List<DriverProfile> findByKycStatus(KycStatus kycStatus);
     
 	DriverProfile findUserById(Long userId);
+	
 }

@@ -30,7 +30,8 @@ public class DriverProfileServiceImpl implements DriverProfileService {
 	
 	@Override
 	public Optional<DriverProfile> findByUser(User user) {
-        return driverProfileRepository.findByUser(user);
+		return null;
+        //return driverProfileRepository.findByUser(user);
     }
 	
 	@Override
@@ -43,6 +44,11 @@ public class DriverProfileServiceImpl implements DriverProfileService {
 		driverProfile.setCreatedAt(LocalDateTime.now());
 		driverProfile.setUpdatedAt(LocalDateTime.now());
 		return driverProfileRepository.save(driverProfile);
+	}
+
+	@Override
+	public DriverProfile findById(Long userId) {
+		return driverProfileRepository.findById(userId).orElse(null);
 	}
 
 }

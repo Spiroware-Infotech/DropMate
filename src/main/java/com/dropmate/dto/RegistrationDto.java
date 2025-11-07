@@ -1,6 +1,6 @@
 package com.dropmate.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -20,6 +20,6 @@ public class RegistrationDto {
     @NotEmpty
     private String password;
     private String phone;
-    private Date dob;
+    private LocalDate dob;
     private String gender;
 }

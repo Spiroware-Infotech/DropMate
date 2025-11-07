@@ -15,13 +15,13 @@ import jakarta.validation.Valid;
 @Controller
 public class MapController {
     
-    private final GoogleMapsService googleMapsService;
+    private final GoogleMapsService1 googleMapsService1;
     
     @Value("${serverkey.google.maps.api.key}")
     private String googleMapsApiKey;
     
-    public MapController(GoogleMapsService googleMapsService) {
-        this.googleMapsService = googleMapsService;
+    public MapController(GoogleMapsService1 googleMapsService1) {
+        this.googleMapsService1 = googleMapsService1;
     }
     
     @GetMapping("/map")
@@ -40,7 +40,7 @@ public class MapController {
         }
         
         try {
-            var placesResponse = googleMapsService.searchPlaces(searchRequest).block();
+            var placesResponse = googleMapsService1.searchPlaces(searchRequest).block();
             model.addAttribute("places", placesResponse.getResults());
             model.addAttribute("searchRequest", searchRequest);
             model.addAttribute("GOOGLE_MAPS_API_KEY", googleMapsApiKey);
@@ -58,7 +58,7 @@ public class MapController {
                               @RequestParam(required = false) String type,
                               Model model) {
         try {
-            var placesResponse = googleMapsService.searchNearby(lat, lng, radius, type).block();
+            var placesResponse = googleMapsService1.searchNearby(lat, lng, radius, type).block();
             model.addAttribute("places", placesResponse.getResults());
             model.addAttribute("searchRequest", new SearchRequest());
             model.addAttribute("googleMapsApiKey", googleMapsApiKey);

@@ -388,6 +388,100 @@
          width: 100%;
      }
  }
+ 
+  .notification-card {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 100%;
+      padding: 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+  }
+  
+  .notification-icon {
+      width: 80px;
+      height: 80px;
+      background-color: #f0f7ff;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto -17px;
+      color: #2575fc;
+      font-size: 36px;
+  }
+  
+  h1 {
+      color: #2d3748;
+      font-size: 24px;
+      margin-bottom: 16px;
+      font-weight: 600;
+  }
+  
+  .message {
+      color: #718096;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      font-size: 16px;
+  }
+  
+  .alert-button {
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
+      width: 100%;
+      max-width: 220px;
+  }
+  
+  .alert-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(106, 17, 203, 0.4);
+  }
+  
+  .alert-button:active {
+      transform: translateY(0);
+  }
+  
+  .footer-text {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #a0aec0;
+  }
+  
+  .wave-decoration {
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23f0f7ff' fill-opacity='1' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,192C672,181,768,139,864,138.7C960,139,1056,181,1152,181.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+      background-size: cover;
+      z-index: 0;
+  }
+  
+  @media (max-width: 480px) {
+      .notification-card {
+          padding: 25px 20px;
+      }
+      
+      h1 {
+          font-size: 22px;
+      }
+      
+      .message {
+          font-size: 15px;
+      }
+  }
 </style>	
 <main class="main">		
 	<div class="wrap">
@@ -575,11 +669,11 @@
 			        
 			        <div class="search-info">
 			            <div class="route">
-			                <span><span th:text="${#strings.arraySplit(source, ',')[0]}"></span></span>
+			                <span><span th:text="${#strings.arraySplit(req.source, ',')[0]}"></span></span>
 			                <i class="fas fa-arrow-right"></i>
-			                <span><span th:text="${#strings.arraySplit(destination, ',')[0]}"></span></span>
+			                <span><span th:text="${#strings.arraySplit(req.destination, ',')[0]}"></span></span>
 			            </div>
-			            <div class="date" th:text="${#temporals.format(startDate, 'EEEE, d MMMM')}">Saturday, 25 October</div>
+			            <div class="date" th:text="${#temporals.format(req.date, 'EEEE, d MMMM')}">Saturday, 25 October</div>
 			            <!-- <div class="sort-options">
 			                <select>
 			                    <option>Sort by: Recommended</option>
@@ -595,43 +689,77 @@
 			                </select>
 			            </div> -->
 			        </div>
-			        <div class="results-count" align="right">[[${trips.size}]] rides available</div>
 			        
 			        <!-- Ride 1 -->
-			        <div class="ride-card"  th:each="trip : ${trips}" >
-			            <div class="ride-info">
-			                <div class="time-section">
-			                    <div class="departure-time" th:text="${trip.startTime}">04:00</div>
-			                    <div class="duration" th:text="${trip.duration}">4h 30m</div>
-			                    <div class="arrival-time" th:text="${trip.endTime}">08:30</div>
-			                </div>
-			                <div class="route-section">
-			                    <div class="from"><span th:text="${#strings.arraySplit(trip.startLocation, ',')[0]}"></span></div>
-			                    <div class="to"><span th:text="${#strings.arraySplit(trip.endLocation, ',')[0]}"></span></div>
-			                    <div class="features">
-			                        <div class="feature"><i class="fas fa-music"></i> Music</div>
-			                        <div class="feature"><i class="fas fa-snowflake"></i> AC</div>
-			                        <div class="feature"><i class="fas fa-smoking-ban"></i> Non-smoking</div>
-			                    </div>
-			                </div>
-			                <div class="driver-section">
-			                    <div class="driver-avatar">
-			                        <i class="fas fa-user-circle" style="font-size: 40px; color: #6a11cb;padding-left: 13px;"></i>
-			                    </div>
-			                    <div class="driver-info">
-			                        <div class="driver-name">[[${trip.driverName}]] </div>
-			                        <div class="seats-info">Max. 2 in the back</div>
-			                    </div>
-			                </div>
-			            </div>
-			            <div class="price-section">
-			                <div class="price">₹850.00</div>
-			                <div class="per-person">per person</div>
-			                <a th:href="@{'/user/ride/details/' + ${trip.id}}" >
-			                	<button class="book-btn">Book Now</button>
-			                </a>
-			            </div>
-			        </div>
+			        <div th:if="${#lists.isEmpty(trips)}" class="no-records">
+					    <div class="notification-card">
+					        <div class="notification-icon">
+					            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					                <circle cx="12" cy="12" r="10"></circle>
+					                <line x1="12" y1="8" x2="12" y2="12"></line>
+					                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+					            </svg>
+					        </div>
+					        <h1>No rides yet</h1>
+					        <p class="message">
+					            Drivers usually publish their ride<br>
+					            2-3 days before departure.
+					        </p>
+							<a th:href="@{/ride/alerts}" >
+							   <button class="alert-button">Create a ride alert</button>
+							</a>
+					        <p class="footer-text">We'll notify you when a ride becomes available</p>
+					        
+					        <div class="wave-decoration"></div>
+					    </div>
+					</div>
+					
+					<div th:unless="${#lists.isEmpty(trips)}">
+					
+					  <div class="results-count" align="right">[[${trips.size}]] rides available</div>
+					 
+					    <div class="ride-card" th:each="trip : ${trips}">
+					        <div class="ride-info">
+					            <div class="time-section">
+					                <div class="departure-time" th:text="${trip.startTime}">04:00</div>
+					                <div class="duration" th:text="${trip.duration}">4h 30m</div>
+					                <div class="arrival-time" th:text="${trip.estimatedArrivalTime}">08:30</div>
+					            </div>
+					
+					            <div class="route-section">
+					                <div class="from">
+					                    <span th:text="${#strings.arraySplit(trip.source, ',')[0]}"></span>
+					                </div>
+					                <div class="to">
+					                    <span th:text="${#strings.arraySplit(trip.destination, ',')[0]}"></span>
+					                </div>
+					                <div class="features">
+					                    <div class="feature"><i class="fas fa-music"></i> Music</div>
+					                    <div class="feature"><i class="fas fa-snowflake"></i> AC</div>
+					                    <div class="feature"><i class="fas fa-smoking-ban"></i> Non-smoking</div>
+					                </div>
+					            </div>
+					
+					            <div class="driver-section">
+					                <div class="driver-avatar">
+					                    <i class="fas fa-user-circle" style="font-size: 40px; color: #6a11cb;padding-left: 13px;"></i>
+					                </div>
+					                <div class="driver-info">
+					                    <div class="driver-name">[[${trip.driverName}]]</div>
+					                    <div class="seats-info">Max. 2 in the back</div>
+					                </div>
+					            </div>
+					        </div>
+					
+					        <div class="price-section">
+					            <div class="price" th:text="'₹' + ${trip.price}">₹850.00</div>
+					            <div class="per-person">per person</div>
+					            <a th:href="@{'/user/ride/details/' + ${trip.rideId}}">
+					                <button class="book-btn">Book Now</button>
+					            </a>
+					        </div>
+					    </div>
+					</div>
 			        
 			        
 			    </div>

@@ -1,12 +1,6 @@
 package com.dropmate.auth.controller;
 
-import java.math.BigDecimal;
 import java.security.Principal;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,21 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.dropmate.controller.CommonController;
-import com.dropmate.dto.PlaceInfo;
 import com.dropmate.dto.RideRequest;
-import com.dropmate.entity.DriverProfile;
-import com.dropmate.entity.Trip;
+import com.dropmate.entity.Rides;
 import com.dropmate.entity.User;
-import com.dropmate.enums.KycStatus;
-import com.dropmate.enums.TripStatus;
-import com.dropmate.enums.TripType;
 import com.dropmate.enums.VehicleFareType;
-import com.dropmate.enums.VehicleType;
 import com.dropmate.service.DriverProfileService;
 import com.dropmate.service.FareCalculatorService;
+import com.dropmate.service.RidesServices;
 import com.dropmate.service.TripService;
 import com.dropmate.utils.FareCalculator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +42,9 @@ public class RideController extends CommonController{
 	@Autowired
 	TripService tripService;
 
+	@Autowired
+	private RidesServices ridesServices;
+	
 	@Autowired
 	private ObjectMapper mapper;
 	 
@@ -149,19 +140,6 @@ public class RideController extends CommonController{
 		return "user/publish/comment";
 	}
 
-//    @GetMapping("/create-return-ride")
-//    public String createReturnRide(@ModelAttribute("tripRequest") RideRequest trip, Model model, Principal principal) {
-//    	 String username = principal.getName();
-//    	 User user = driverProfileService.findByUsername(username).orElse(null);
-//    	 if(Objects.nonNull(user)) {
-//    		 DriverProfile driverProfile = driverProfileService.getDriverProfileById(user.getUserId());
-//    		 if(Objects.isNull(driverProfile)) {
-//    			 return "redirect:/user/ride/verify-id";
-//    		 }
-//    	 }
-//        return "user/publish/create-return-ride";
-//    }
-
 	@GetMapping("/verify-id")
 	public String verify(@ModelAttribute("tripRequest") RideRequest trip, Model model) {
 		return "user/publish/verify";
@@ -169,73 +147,12 @@ public class RideController extends CommonController{
 
 	@PostMapping("/confirm")
     public String confirmTrip(@ModelAttribute("tripRequest") RideRequest request, Principal principal) {
-    	//log.info("Final trip data: " + request);
-		try {
-	    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	    	LocalDate startDate = LocalDate.parse(request.getDepartureDate(), formatter);
-	    	
-	    	LocalTime time = LocalTime.parse(request.getDepartureTime(), DateTimeFormatter.ofPattern("HH:mm"));
-	    	
-	    	String username = principal.getName();
-	    	User user = driverProfileService.findByUsername(username).orElse(null);
-	    	
-	    	Optional<DriverProfile> optionalProfile = driverProfileService.findByUser(user);
-
-	    	DriverProfile driverProfile = optionalProfile.orElseGet(() -> {
-	    	    // Create and return a new DriverProfile if it doesn't exist
-	    	    DriverProfile newProfile = DriverProfile.builder()
-	    	    		.id(user.getUserId())
-	    	            .user(user)
-	    	            .kycStatus(KycStatus.PENDING)
-	    	            .vehicleType(VehicleType.CAR)
-	    	            .build();
-	    	    return driverProfileService.saveDriverProfile(newProfile); // must RETURN the saved object
-	    	});
-	    	
-	    	TripStatus rideStatus= null;
-	    	if(request.getReturnRideOption()!=null) {
-	    		if(request.getReturnRideOption().equalsIgnoreCase("yes"))
-	    			rideStatus = TripStatus.SCHEDULED;
-	    		else if(request.getReturnRideOption().equalsIgnoreCase("later"))
-	    			rideStatus = TripStatus.PENDING;
-	    	}
-	    	ObjectMapper mapper = new ObjectMapper();
-	    	 // Save to DB here
-	    	Trip trip;
-	
-				trip = Trip.builder()
-						.driver(driverProfile)
-						.originName(request.getDeparture())
-						.sourcePlaceId(request.getSourcePlaceId())
-						.destinationName(request.getArrival())
-						.destinationPlaceId(request.getDestinationPlaceId())
-						.availableSeats(request.getSeats())
-						.totalSeats(request.getSeats())
-						.tripType(TripType.PASSENGER)
-						.status(rideStatus)
-						.startDate(startDate)
-						.startTime(time)
-						.pricePerSeat(new BigDecimal(request.getPrice()))
-						//.vehicleType(VehicleType.valueOf(request.getVehicleType()))
-						.vehicleType(VehicleType.CAR)
-						.bookingType(request.getBookingType().toUpperCase())
-						.duration(request.getDuration())
-						.distance(request.getDistance())
-						.sourceJson(mapper.writeValueAsString(request.getSourceJson()))
-						.destinationJson(mapper.writeValueAsString(request.getDestinationJson()))
-						.comment(request.getComment())
-						.build();
-			
-	    	
-	    	Trip tripDB = tripService.createTrip(user.getUserId(), trip, new ArrayList());
-	    	
-	        return "redirect:/user/ride/success/"+ tripDB.getId();
-	        
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+    	String username = principal.getName();
+		User user = driverProfileService.findByUsername(username).orElse(null);
+		
+		Rides ride = ridesServices.createRide(request, user);
+		
+		return "redirect:/user/ride/success/"+ ride.getId();
     }
 
 	@GetMapping("/success/{tripId}")

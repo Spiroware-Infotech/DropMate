@@ -1,7 +1,7 @@
 package com.dropmate.entity;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,18 +9,21 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.dropmate.enums.BookingStatus;
-import com.dropmate.enums.TripType;
 import com.dropmate.enums.PaymentStatus;
+import com.dropmate.enums.TripType;
+import com.dropmate.generators.GlobalIdGeneratorTimestamp;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,17 +37,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "bookings")
 public class Booking {
+	
     @Id
-    @Column(columnDefinition = "CHAR(36)")
     private String id;
-
-    @ManyToOne
-    @JoinColumn(name = "trip_id")
-    private Trip trip;
-
-    @ManyToOne
-    @JoinColumn(name = "booker_id")
-    private User booker;
 
     @Enumerated(EnumType.STRING)
     private TripType type;
@@ -75,13 +70,28 @@ public class Booking {
     private String metadata;
 
     @CreationTimestamp
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
     
     @UpdateTimestamp
-    private Timestamp updatedAt;
+    private LocalDateTime updatedAt;
 
     // Relations
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeliveryItem> deliveryItems = new ArrayList<>();
+  
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ride_id")
+    private Rides rides;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User passenger;
+    
+    @PrePersist
+    public void prePersist() {
+        if (this.id == null) {
+            this.id = GlobalIdGeneratorTimestamp.generateBookingId();
+        }
+    }
 }
 

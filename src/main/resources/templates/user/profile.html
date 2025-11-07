@@ -399,10 +399,14 @@
 					        <div class="profile-container">
 					            <div class="profile-sidebar">
 					                <div class="card user-info-card">
-					                    <div class="profile-avatar">L</div>
-					                    <h2 class="user-name">Lakshman</h2>
-					                    <div class="user-level">Newcomer</div>
-					                    
+					                    <div class="profile-avatar">
+					                    	[[${user.firstname != null and user.firstname.length() > 0 ? #strings.toUpperCase(user.firstname.substring(0,1)) : ''}]]
+										</div>
+					                    <h2 class="user-name">[[${user.firstname}]] | <span style="font-size: 16px;color: #8338ec">[[${user.age}]] </span></h2>
+					                    <div class="user-level">Experience level: <strong>Newcomer </strong></div>
+					                   <div class="stat-item">
+					                    	[[${driver.details}]]
+					                    </div>
 					                    <div class="stats-grid">
 					                        <div class="stat-item">
 					                            <div class="stat-value">8</div>
@@ -427,7 +431,7 @@
 					                    <div class="account-details">
 					                        <div class="detail-item">
 					                            <div class="detail-label">Email</div>
-					                            <div class="detail-value">lakshman@example.com</div>
+					                            <div class="detail-value">[[${user.email}]]</div>
 					                            <div class="detail-actions">
 					                                <button class="btn btn-outline">Edit</button>
 					                            </div>
@@ -435,7 +439,7 @@
 					                        
 					                        <div class="detail-item">
 					                            <div class="detail-label">Phone</div>
-					                            <div class="detail-value">+91 98765 43210</div>
+					                            <div class="detail-value">[[${user.phone}]]</div>
 					                            <div class="detail-actions">
 					                                <button class="btn btn-outline">Edit</button>
 					                            </div>

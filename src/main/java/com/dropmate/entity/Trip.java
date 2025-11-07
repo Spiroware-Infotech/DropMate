@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.dropmate.enums.TripStatus;
 import com.dropmate.enums.TripType;
 import com.dropmate.enums.VehicleType;
+import com.dropmate.generators.GlobalIdGeneratorULID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,6 +21,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +37,6 @@ import lombok.NoArgsConstructor;
 public class Trip {
 
 	@Id
-	@Column(length = 36)
 	private String id;
 
 	@Enumerated(EnumType.STRING)
@@ -119,4 +120,11 @@ public class Trip {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id")
     private DriverProfile driver;
+    
+    @PrePersist
+    public void prePersist() {
+        if (this.id == null) {
+            this.id = GlobalIdGeneratorULID.generateRideId();
+        }
+    }
 }

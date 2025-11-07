@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en" data-layout="vertical" data-topbar="light"
+      data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+ <body>     
+<head th:replace="common/authheader :: common-header"></head>
+<head th:replace="common/authheader :: navbar"></head>
+<style>
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: #10394a;
+      margin-bottom: 25px;
+    }
+
+    .main-container {
+      display: flex;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+
+    /* Left main card */
+    .ride-info {
+      flex: 1;
+      min-width: 600px;
+    }
+
+    .ride-box {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      padding: 20px 25px;
+      margin-bottom: 20px;
+    }
+
+    .ride-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-left: 3px solid #1b72e8;
+      padding-left: 15px;
+    }
+
+    .ride-time {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .ride-location {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .ride-connector {
+      border-left: 2px solid #ccc;
+      height: 22px;
+      margin-left: 5px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    /* Driver card */
+    .driver-box {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      padding: 20px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .driver-details {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .driver-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #e5eef5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .driver-name {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .ride-meta {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .ride-meta div {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 5px;
+    }
+
+    .arrow {
+      font-size: 20px;
+      color: #666;
+    }
+
+    /* Right Summary Card */
+    .summary {
+      width: 330px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      height: fit-content;
+    }
+
+    .info-box {
+      background: #f0f6ff;
+      border: 1px solid #c5defa;
+      padding: 12px;
+      border-radius: 8px;
+      color: #1b72e8;
+      font-size: 13px;
+      line-height: 1.4;
+      margin-bottom: 20px;
+    }
+
+    .summary-date {
+      font-weight: 600;
+      font-size: 17px;
+      margin-bottom: 10px;
+    }
+
+    .summary-route {
+      border-left: 3px solid #1b72e8;
+      padding-left: 12px;
+      margin-bottom: 15px;
+    }
+
+    .summary-time {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 3px;
+    }
+
+    .summary-loc {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .summary-driver {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .summary-driver-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: #e5eef5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .summary-driver-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .summary-fare {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #eee;
+      margin-top: 15px;
+      padding-top: 10px;
+      font-size: 14px;
+    }
+
+    .summary-fare strong {
+      font-size: 16px;
+    }
+
+    .manage-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: #0074cc;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 0;
+      margin-top: 18px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .manage-btn:hover {
+      background: #005fa3;
+    }
+
+    @media (max-width: 900px) {
+      .main-container {
+        flex-direction: column;
+      }
+      .summary {
+        width: 100%;
+      }
+    }
+    
+    .summary-route {
+    position: relative;
+    border-left: 3px solid #1b72e8;
+    padding-left: 12px;
+    margin-bottom: 15px;
+}
+
+/* Top (start point) circle */
+.summary-route::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -8px;
+    width: 13px;
+    height: 13px;
+    background-color: #1b72e8;
+    border: 2px solid #fff; /* optional white border */
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+
+/* Bottom (end point) circle */
+.summary-route::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: -7px;
+    width: 12px;
+    height: 12px;
+    background-color: #1b72e8;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+
+.passenger-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .passenger-count {
+            background: #eef5ff;
+            color: #1a73e8;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .passenger-text {
+            font-size: 15px;
+            color: #666;
+        }
+        
+        .price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a73e8;
+        }
+        
+        /* Passengers Section */
+        .passengers-section {
+            margin-top: 25px;
+        }
+        
+        .passenger-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .passenger {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .passenger:hover {
+            background: #eef5ff;
+            transform: translateY(-2px);
+        }
+        
+        .passenger-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #1a73e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .passenger-details {
+            flex: 1;
+        }
+        
+        .passenger-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .passenger-route {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+</style>
+
+<main class="main">
+    <div class="wrap">
+        <div class="row">
+            <div class="full-width">
+                  <article class="">
+                      <div class="">
+				        <div class="page-title" th:text="${#temporals.format(trip.startDate, 'EEEE, d MMMM')}"></div>
+
+						  <div class="main-container">
+						    <!-- LEFT SIDE -->
+						    <div class="ride-info">
+						      <div class="ride-box">
+						        <div class="ride-row">
+						          <div>
+						            <div class="ride-time"><span th:text="${trip.startTime}"></span></div>
+						            <div class="ride-location"><strong><span th:text="${#strings.arraySplit(trip.originName, ',')[0]}"></span></strong></div>
+						            <div class="ride-location" style="font-size: 12px;">[[${trip.originName}]]</div>
+						            <div class="ride-connector"></div>
+						            <div class="ride-time">
+						            	<span th:text="${tripArrivalTime}"></span>
+						            </div>
+						            <div class="ride-location"><strong><span th:text="${#strings.arraySplit(trip.destinationName, ',')[0]}"></span></strong></div>
+						            <div class="ride-location" style="font-size: 12px;">[[${trip.destinationName}]]</div>
+						          </div>
+						          <div>
+						            <div style="font-size:13px; color:#666;">
+						            	<span th:text="${tripDuration}"></span>
+									</div>
+						          </div>
+						        </div>
+						      </div>
+						
+						      <div class="driver-box">
+						        <div class="driver-details">
+						          <div class="driver-avatar">👤</div>
+						          <div>
+						            <div class="driver-name">Lucky</div>
+						            <div class="ride-meta">
+						              <div>⚡ Passenger bookings will be confirmed instantly</div>
+						              <div>👥 Max. [[${trip.totalSeats}]] in the back</div>
+						            </div>
+						          </div>
+						        </div>
+						        <div class="arrow">›</div>
+						      </div>
+						      <article class="">
+						      <div class="passengers-section">
+					                <h2 class="section-title"><i class="fas fa-users"></i> Passengers</h2>
+					                
+					                <div class="passenger-list">
+					                    <div class="passenger">
+					                        <div class="passenger-avatar">A</div>
+					                        <div class="passenger-details">
+					                            <div class="passenger-name">Amanath</div>
+					                            <div class="passenger-route">
+					                                <span>Bengaluru</span>
+					                                <i class="fas fa-arrow-right"></i>
+					                                <span>Goduguchinta</span>
+					                            </div>
+					                        </div>
+					                    </div>
+					                    
+					                    <div class="passenger">
+					                        <div class="passenger-avatar">A</div>
+					                        <div class="passenger-details">
+					                            <div class="passenger-name">Adhi</div>
+					                            <div class="passenger-route">
+					                                <span>Bengaluru</span>
+					                                <i class="fas fa-arrow-right"></i>
+					                                <span>Goduguchinta</span>
+					                            </div>
+					                        </div>
+					                    </div>
+					                    
+					                    <div class="passenger">
+					                        <div class="passenger-avatar">D</div>
+					                        <div class="passenger-details">
+					                            <div class="passenger-name">Deepa</div>
+					                            <div class="passenger-route">
+					                                <span>Bengaluru</span>
+					                                <i class="fas fa-arrow-right"></i>
+					                                <span>Goduguchinta</span>
+					                            </div>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					           </article> 
+						    </div>
+						
+						    <!-- RIGHT SIDE -->
+						    <div class="summary">
+						      <div class="info-box">
+						        This is your ride as it is seen by passengers.<br>
+						        Only your booked stopovers are shown.
+						      </div>
+						
+						     <div class="summary-date" th:text="${#temporals.format(trip.startDate, 'EEEE, d MMMM')}"></div>
+						
+						      <div class="summary-route">
+						        <div class="summary-time"><span th:text="${trip.startTime}"></span> — <span th:text="${#strings.arraySplit(trip.originName, ',')[0]}"></span></div>
+						        <div class="summary-loc" style="font-size: 12px;">[[${trip.originName}]]</div>
+						        <div class="ride-connector"></div>
+						        <div class="summary-time">
+									<span th:text="${tripArrivalTime}"></span>
+ 									— <span th:text="${#strings.arraySplit(trip.destinationName, ',')[0]}"></span>
+ 								</div>
+						        <div class="summary-loc" style="font-size: 12px;">[[${trip.destinationName}]]</div>
+						      </div>
+						
+						      <div class="summary-driver">
+						        <div class="summary-driver-avatar">👤</div>
+						        <div>
+						          <div class="summary-driver-name">Lucky</div>
+						          <div style="font-size:13px;color:#666;">
+						          	<span th:switch="${trip.vehicleType?.name()}">
+									    <span th:case="'CAR'">🚗 Car</span>
+									    <span th:case="'BIKE'">🛵 Bike</span>
+									    <span th:case="'VAN'">🚐 Van</span>
+									    <span th:case="'TRUCK'">🚚 Truck</span>
+									    <span th:case="'TRACTOR'">🚜 Tractor</span>
+									    <span th:case="'TEMPO'">🚛 Tempo</span>
+									    <span th:case="'AUTO'">🚙 Auto</span>
+									    <span th:case="*">🚘 Vehicle</span>
+									</span>
+						            - Driver</div>
+						        </div>
+						      </div>
+						
+						      <div class="summary-fare">
+						        <span>1 passenger</span>
+						        <strong>₹[[${trip.pricePerSeat}]]</strong>
+						      </div>
+								
+						    <!--  <a th:if="${!isKycVerified}"
+								   th:href="@{'/user/ride/offer?id=' + ${trip.id}}"
+								   class="manage-btn">Manage ride offer</a>
+								   
+							 <a th:if="${isKycVerified}"
+								   th:href="@{'/user/ride/offer?id=' + ${trip.id}}"
+								   class="manage-btn">Request to book</a> -->
+								   
+								   <a   th:href="@{'/user/ride/booking/checkout?id=' + ${trip.id}}"
+								   class="manage-btn">Request to book</a> 
+						    </div>
+						  </div>
+					  </div>
+					  
+					  
+                 </article>
+                </div>
+          </div>      
+    </div>
+</main>
+
+ 
+
+<div th:replace="common/footer :: footerbar"></div>
+<div th:replace="common/header :: body-bottom-scripts"></div>
+</body>
+</html>

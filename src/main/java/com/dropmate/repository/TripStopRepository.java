@@ -9,5 +9,5 @@ import com.dropmate.entity.TripStop;
 
 @Repository
 public interface TripStopRepository extends JpaRepository<TripStop, String> {
-    List<TripStop> findByTrip_IdOrderByStopOrderAsc(String tripId);
+   // List<TripStop> findByTrip_IdOrderByStopOrderAsc(String tripId);
 }

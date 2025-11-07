@@ -65,7 +65,8 @@
 					<ul class="slimmenu" id="nav">
 						
 						<li th:class="${activePage == 'dashboard'} ? 'current'"><a th:href="@{/user/dashboard}" title="Dashboard" >Dashboard</a></li>
-						<li th:class="${activePage == 'ridelist'} ? 'current'"><a th:href="@{/user/ride/list}" title="Rides" >Your rides</a></li>
+						<li th:class="${activePage == 'ridelist'} ? 'current'"><a th:href="@{/user/ride/history}" title="Rides" >Your Rides</a></li>
+						<li th:class="${activePage == 'bookinglist'} ? 'current'"><a th:href="@{/user/ride/booking}" title="Rides" >Booked Rides</a></li>
 						<li th:class="${activePage == 'profile'} ? 'current'"><a th:href="@{/user/profile}" title="Profile" >Profile</a></li>
 						<li class=""><a href="#" title="Transfers" >Transfers</a></li>
 						<li class=""><a href="#" title="Payments & refunds" >Payments & refunds</a></li>

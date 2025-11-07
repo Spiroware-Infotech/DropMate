@@ -37,8 +37,7 @@
 						<div class="row">
 							<div class="f-item full-width">
 								<label for="destination3">Pick Up</label>
-								<input id="source" type="text"  placeholder="Enter source location" required>
-								<input type="hidden" name="source" id="sourceID">
+								<input id="source" name="source" type="text"  placeholder="Enter source location" required>
 								<input id="sourcePlaceId" name="sourcePlaceId" type="hidden">
 						        <!-- <input type="hidden" name="sourceLat" id="sourceLat">
 						        <input type="hidden" name="sourceLng" id="sourceLng"> -->
@@ -53,7 +52,7 @@
 									<div class="f-item full-width">
 										<label for="destination4">Drop Off</label>
 										<input id="destination" type="text" name="destination" placeholder="Enter destination" required>
-										<input id="destinationPlaceId" name="destinationPlaceId" type="hidden">
+										<input id="destinationPlaceId" name="destPlaceId" type="hidden">
 								        <!-- <input type="hidden" name="destLat" id="destLat">
 								        <input type="hidden" name="destLng" id="destLng"> -->
 									</div>
@@ -96,7 +95,7 @@
 							  </div>
 							
 							  <!-- Hidden input that will be submitted in the form -->
-							  <input type="hidden" id="passenger-count" name="seats" value="1">
+							  <input type="hidden" id="passenger-count" name="requiredSeats" value="1">
 							</div>
 
 						</div>	

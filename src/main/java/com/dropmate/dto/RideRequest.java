@@ -1,5 +1,9 @@
 package com.dropmate.dto;
 
+import java.util.List;
+
+import com.dropmate.entity.TripStop;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,4 +31,5 @@ public class RideRequest {
 	private String vehicleType; // e.g., "CAR"
 	private String bookingType; // INSTANT OR REVIEW
 	private String returnRideOption; //YES or LATER
+	List<TripStop> stops;
 }

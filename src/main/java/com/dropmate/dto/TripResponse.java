@@ -11,7 +11,7 @@ public class TripResponse {
 	private LocalDate tripDate;
 	private String startTime;
 	private String endTime;
-	private BigDecimal pricePerSeat;
+	private Double pricePerSeat;
 	private String startLocation;
 	private String sourcePlaceId;
 	private String endLocation;

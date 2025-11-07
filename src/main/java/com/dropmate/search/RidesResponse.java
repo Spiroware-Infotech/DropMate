@@ -37,5 +37,6 @@ public class RidesResponse {
     // Optional: additional info
     private String vehicleNumber;         // Vehicle registration number
     private Double totalDistanceKm;       // Total trip distance
-    private Double estimatedArrivalTime;  // ETA in hours
+    private String estimatedArrivalTime;  // ETA in hours
+    private String duration;
 }

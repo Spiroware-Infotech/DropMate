@@ -26,6 +26,7 @@ import com.dropmate.entity.User;
 import com.dropmate.enums.TripStatus;
 import com.dropmate.enums.TripType;
 import com.dropmate.repository.DriverProfileRepository;
+import com.dropmate.repository.RidesRepository;
 import com.dropmate.repository.TripRepository;
 import com.dropmate.repository.TripStopRepository;
 import com.dropmate.repository.UserRepository;
@@ -51,6 +52,8 @@ public class TripService {
 	private final TripStopRepository tripStopRepository;
 	private final DriverProfileRepository driverProfileRepository;
 	private final GeocodingService geocodingService;
+	private final DriverProfileRepository profileRepository;
+	private final RidesRepository ridesRespository;
 	 
 	public Trip createTrip(Long driverId, Trip trip, List<TripStop> stops) {
 		User user = userRepository.findById(driverId).orElseThrow(() -> new RuntimeException("Driver not found"));
@@ -63,14 +66,17 @@ public class TripService {
 		trip.setUpdatedAt(LocalDateTime.now());
 		Trip savedTrip = tripRepository.save(trip);
 
-		if (stops != null) {
-			for (TripStop stop : stops) {
-				stop.setTrip(savedTrip);
-				tripStopRepository.save(stop);
-			}
-		}
+//		if (stops != null) {
+//			for (TripStop stop : stops) {
+//				stop.setTrip(savedTrip);
+//				tripStopRepository.save(stop);
+//			}
+//		}
 		return savedTrip;
 	}
+	
+	
+	
 
 	public void cancelTrip(String tripId) {
 		Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new RuntimeException("Trip not found"));
@@ -305,8 +311,8 @@ public class TripService {
 		response.setDistance(RouteUtils.formatDistance(trip.getDistance()));
 		response.setSourceJson(trip.getSourceJson());
 		response.setDestinationJson(trip.getDestinationJson());
-		response.setPricePerSeat(trip.getPricePerSeat());
-		response.setDriverName(trip.getDriver().getUser().getFirstname());
+		//response.setPricePerSeat(trip.getPricePerSeat());
+		//response.setDriverName(trip.getDriver().getFirstname());
 		response.setAvailableSeats(trip.getAvailableSeats());
 		return response;
 	}

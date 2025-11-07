@@ -15,10 +15,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -36,14 +34,14 @@ import lombok.NoArgsConstructor;
 public class DriverProfile {
 	
 	@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "driver_id", length = 36)
     private Long id;
-
-	@OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 	
+	@Column(name = "firstname")
+	private String firstname;
+	
+	private String vehiclename;
+	 
     @Enumerated(EnumType.STRING)
     @Column(name = "vehicle_type", nullable = false)
     private VehicleType vehicleType;
@@ -67,13 +65,13 @@ public class DriverProfile {
     @Column(name = "community_vouched")
     private Boolean communityVouched = false;
 
-    @Column(name = "rating_avg", precision = 3, scale = 2)
+    @Column(name = "rating_avg")
     private Integer ratingAvg;
 
     @Column(name = "trips_count")
     private Integer tripsCount = 0;
 
-    @Column(columnDefinition = "JSON")
+    @Column(columnDefinition = "TEXT")
     private String details;
 
     @CreationTimestamp
@@ -84,8 +82,15 @@ public class DriverProfile {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     
+    private boolean isEmailVerified;
+    private boolean isIdVerified;
+    private boolean isPhoneVerified;
     
     // One driver can create many trips
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Trip> trips = new ArrayList<>();
+    
+    @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private UserExperience userExperience;
+    
 }

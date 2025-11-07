@@ -1,7 +1,9 @@
 package com.dropmate.entity;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,8 +25,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -75,6 +77,8 @@ public class User implements UserDetails {
 	@Column(name = "is_verified")
 	private Boolean isVerified = false;
 
+	private LocalDate dob;
+	
 	@Lob
 	private byte[] profile_photo;
 
@@ -130,6 +134,10 @@ public class User implements UserDetails {
 		return isVerified;
 	}
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-	private DriverProfile driverProfile;
+	@Transient
+    public String getAge() {
+        if (dob == null) return "N/A";
+        int years = Period.between(dob, LocalDate.now()).getYears();
+        return years + " y/o";
+    }
 }

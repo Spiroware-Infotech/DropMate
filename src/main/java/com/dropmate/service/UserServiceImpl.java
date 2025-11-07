@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 		user.setRoles(userRoles);
 		user.setCreatedAt(LocalDateTime.now());
 		user.setIsVerified(true);
-
+		user.setDob(registrationDto.getDob());
 		User info = userRepository.save(user);
 
 		PublicUser publicUser = new PublicUser();

@@ -15,4 +15,6 @@ public interface DriverProfileService {
 
 	DriverProfile saveDriverProfile(DriverProfile driverProfile);
 
+	DriverProfile findById(Long userId);
+
 }

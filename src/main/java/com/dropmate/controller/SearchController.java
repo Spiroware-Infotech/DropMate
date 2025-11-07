@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.dropmate.dto.TripSearchRequest;
 import com.dropmate.entity.Trip;
 import com.dropmate.search.RidesResponse;
-import com.dropmate.service.SearchRidesService;
+import com.dropmate.search.SearchRidesService;
 import com.dropmate.service.TripService;
 
 import lombok.RequiredArgsConstructor;

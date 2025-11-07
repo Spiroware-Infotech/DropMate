@@ -13,27 +13,30 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.dropmate.dto.TripBookingDTO;
 import com.dropmate.dto.TripRequest;
 import com.dropmate.dto.TripResponse;
+import com.dropmate.entity.Booking;
 import com.dropmate.entity.Trip;
 import com.dropmate.entity.User;
+import com.dropmate.service.BookingService;
 import com.dropmate.service.DriverProfileService;
 import com.dropmate.service.TripService;
-import com.dropmate.service.UserService;
 import com.dropmate.utils.RouteUtils;
 import com.dropmate.utils.TimeUtils;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
-@RequestMapping("/user/ride")
+@RequestMapping("/user/trip")
 @RequiredArgsConstructor
 public class TripController {
 
 	private final TripService tripService;
-	
 	private final DriverProfileService driverProfileService;
-
+	private final BookingService bookingService;
 
 	// 1. Show all trips
 	@GetMapping("/list")
@@ -126,8 +129,9 @@ public class TripController {
 		model.addAttribute("tripArrivalTime", TimeUtils.calculateArrivalTime(String.valueOf(trip.getStartTime()),trip.getDuration()));
 		model.addAttribute("isKycVerified", 
 			    trip != null && trip.getDriver() != null && "VERIFIED".equals(trip.getDriver().getKycStatus()));
-		return "user/trip/ride-details"; // trip/detail.html
+		return "user/trip/trip-details"; // trip/detail.html
 	}
+	
 	
 	@GetMapping("/offer")
 	public String getTripOffer(@RequestParam String id, Model model) {
@@ -137,9 +141,43 @@ public class TripController {
 		model.addAttribute("tripArrivalTime", TimeUtils.calculateArrivalTime(String.valueOf(trip.getStartTime()),trip.getDuration()));
 		model.addAttribute("isKycVerified", 
 			    trip != null && trip.getDriver() != null && "VERIFIED".equals(trip.getDriver().getKycStatus()));
-		return "user/trip/ride-plan"; // trip/detail.html
+		return "user/trip/trip-plan"; 
 	}
 
+	
+
+	@GetMapping("/booking/checkout")
+	public String booking(@RequestParam String id, Model model) {
+		Trip trip = tripService.getTripById(id);
+		model.addAttribute("trip", trip);
+		model.addAttribute("tripDuration", RouteUtils.formatHoursAndMinutes(trip.getDuration()));
+		model.addAttribute("tripArrivalTime", TimeUtils.calculateArrivalTime(String.valueOf(trip.getStartTime()),trip.getDuration()));
+		model.addAttribute("isKycVerified", 
+			    trip != null && trip.getDriver() != null && "VERIFIED".equals(trip.getDriver().getKycStatus()));
+		model.addAttribute("tripId", id);
+		return "user/trip/trip-booking"; 
+	}
+	
+	
+
+	@PostMapping("/booking")
+	public String bookingSubmit(@ModelAttribute TripBookingDTO bookingDTO, Model model, Principal principal) {
+		log.info("Ride Booking Submit....");
+		User user = driverProfileService.findByUsername(principal.getName()).orElse(null);
+		
+		Booking booking = bookingService.createPassengerBooking(bookingDTO.getTripId(), user.getUserId(), 1);
+		
+		return "redirect:/user/ride/booking-success/"+booking.getId(); 
+	}
+	
+	
+	@GetMapping("/booking-success/{id}")
+	public String success(@PathVariable String id, Model model) {
+		
+		 model.addAttribute("id", id);
+		return "user/trip/booking-success";
+	}
+	
 	// 8. Search trips (simple form -> results)
 	@GetMapping("/search")
 	public String searchTrips(@RequestParam String from, @RequestParam String to,

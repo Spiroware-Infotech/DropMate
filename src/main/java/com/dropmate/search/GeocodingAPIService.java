@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class GeocodingService {
+public class GeocodingAPIService {
 
     @Value("${serverkey.google.maps.api.key:null}")
     private String apiKey;
@@ -26,7 +26,7 @@ public class GeocodingService {
 
     private final RestTemplate restTemplate;
 
-    public GeocodingService() {
+    public GeocodingAPIService() {
         this.restTemplate = new RestTemplate();
     }
 

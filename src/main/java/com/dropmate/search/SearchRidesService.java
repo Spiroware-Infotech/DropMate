@@ -1,4 +1,4 @@
-package com.dropmate.service;
+package com.dropmate.search;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,12 +13,13 @@ import com.dropmate.dto.PlaceInfo;
 import com.dropmate.dto.TripSearchRequest;
 import com.dropmate.entity.Rides;
 import com.dropmate.repository.DriverProfileRepository;
-import com.dropmate.repository.RidesRespository;
+import com.dropmate.repository.RidesRepository;
 import com.dropmate.repository.TripStopRepository;
 import com.dropmate.repository.UserRepository;
-import com.dropmate.search.RidesResponse;
 import com.dropmate.utils.GeoUtils;
 import com.dropmate.utils.LocationUtils;
+import com.dropmate.utils.RouteUtils;
+import com.dropmate.utils.TimeUtils;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class SearchRidesService {
 
-	private final RidesRespository ridesRespository;
+	private final RidesRepository ridesRespository;
 	private final UserRepository userRepository;
 	private final TripStopRepository tripStopRepository;
 	private final DriverProfileRepository driverProfileRepository;
-	private final com.dropmate.search.GeocodingService geocodingService;
+	private final GeocodingAPIService geocodingAPIService;
 	
 
 
@@ -94,9 +95,9 @@ public class SearchRidesService {
     private double[] getCoordinates(String placeId, String fallbackName) {
         try {
             if (placeId != null && !placeId.isBlank()) {
-                return geocodingService.getCoordinatesByPlaceId(placeId);
+                return geocodingAPIService.getCoordinatesByPlaceId(placeId);
             } else {
-                return geocodingService.getCoordinates(fallbackName);
+                return geocodingAPIService.getCoordinates(fallbackName);
             }
         } catch (Exception e) {
             log.warn("Geocoding failed for placeId={}, fallbackName={}", placeId, fallbackName);
@@ -157,8 +158,8 @@ public class SearchRidesService {
 
         return RidesResponse.builder()
                 .rideId(trip.getId())
-                .driverId(trip.getDriver().getId())
-                .driverName(trip.getDriver().getUser().getFirstname())
+                .driverId(trip.getDriver().getUserId())
+                .driverName(trip.getDriver().getFirstname())
                 .source(trip.getSource())
                 .destination(trip.getDestination())
                 .sourceJson(sourceInfo)
@@ -166,12 +167,14 @@ public class SearchRidesService {
                 .startDate(trip.getStartDate())
                 .startTime(trip.getStartTime())
                 .availableSeats(trip.getAvailableSeats())
-                .vehicleType(trip.getVehicleType())
+               // .vehicleType(trip.getVehicleType())
                 .price(trip.getPrice())
                 .status(trip.getStatus())
                 .isActive(trip.getIsActive())
                 .distanceFromUser(distanceFromUser)
                 .totalDistanceKm(trip.getDistanceKm())
+                .duration(RouteUtils.formatHoursAndMinutes(trip.getDurationInSec()))
+                .estimatedArrivalTime(TimeUtils.calculateArrivalTime(String.valueOf(trip.getStartTime()),trip.getDurationInSec()))
                 .build();
     }
 }

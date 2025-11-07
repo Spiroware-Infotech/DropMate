@@ -350,7 +350,7 @@
             <div class="full-width">
                   <article class="">
                       <div class="">
-				        <div class="page-title" th:text="${#temporals.format(trip.startDate, 'EEEE, d MMMM')}"></div>
+				        <div class="page-title" th:text="${#temporals.format(ride.startDate, 'EEEE, d MMMM')}"></div>
 
 						  <div class="main-container">
 						    <!-- LEFT SIDE -->
@@ -358,15 +358,15 @@
 						      <div class="ride-box">
 						        <div class="ride-row">
 						          <div>
-						            <div class="ride-time"><span th:text="${trip.startTime}"></span></div>
-						            <div class="ride-location"><strong><span th:text="${#strings.arraySplit(trip.originName, ',')[0]}"></span></strong></div>
-						            <div class="ride-location" style="font-size: 12px;">[[${trip.originName}]]</div>
+						            <div class="ride-time"><span th:text="${ride.startTime}"></span></div>
+						            <div class="ride-location"><strong><span th:text="${#strings.arraySplit(ride.source, ',')[0]}"></span></strong></div>
+						            <div class="ride-location" style="font-size: 12px;">[[${ride.source}]]</div>
 						            <div class="ride-connector"></div>
 						            <div class="ride-time">
 						            	<span th:text="${tripArrivalTime}"></span>
 						            </div>
-						            <div class="ride-location"><strong><span th:text="${#strings.arraySplit(trip.destinationName, ',')[0]}"></span></strong></div>
-						            <div class="ride-location" style="font-size: 12px;">[[${trip.destinationName}]]</div>
+						            <div class="ride-location"><strong><span th:text="${#strings.arraySplit(ride.destination, ',')[0]}"></span></strong></div>
+						            <div class="ride-location" style="font-size: 12px;">[[${ride.destination}]]</div>
 						          </div>
 						          <div>
 						            <div style="font-size:13px; color:#666;">
@@ -383,7 +383,7 @@
 						            <div class="driver-name">Lucky</div>
 						            <div class="ride-meta">
 						              <div>⚡ Passenger bookings will be confirmed instantly</div>
-						              <div>👥 Max. [[${trip.seatsTotal}]] in the back</div>
+						              <div>👥 Max. [[${ride.totalSeats}]] in the back</div>
 						            </div>
 						          </div>
 						        </div>
@@ -441,17 +441,17 @@
 						        Only your booked stopovers are shown.
 						      </div>
 						
-						     <div class="summary-date" th:text="${#temporals.format(trip.startDate, 'EEEE, d MMMM')}"></div>
+						     <div class="summary-date" th:text="${#temporals.format(ride.startDate, 'EEEE, d MMMM')}"></div>
 						
 						      <div class="summary-route">
-						        <div class="summary-time"><span th:text="${trip.startTime}"></span> — <span th:text="${#strings.arraySplit(trip.originName, ',')[0]}"></span></div>
-						        <div class="summary-loc" style="font-size: 12px;">[[${trip.originName}]]</div>
+						        <div class="summary-time"><span th:text="${ride.startTime}"></span> — <span th:text="${#strings.arraySplit(ride.source, ',')[0]}"></span></div>
+						        <div class="summary-loc" style="font-size: 12px;">[[${ride.source}]]</div>
 						        <div class="ride-connector"></div>
 						        <div class="summary-time">
 									<span th:text="${tripArrivalTime}"></span>
- 									— <span th:text="${#strings.arraySplit(trip.destinationName, ',')[0]}"></span>
+ 									— <span th:text="${#strings.arraySplit(ride.destination, ',')[0]}"></span>
  								</div>
-						        <div class="summary-loc" style="font-size: 12px;">[[${trip.destinationName}]]</div>
+						        <div class="summary-loc" style="font-size: 12px;">[[${ride.destination}]]</div>
 						      </div>
 						
 						      <div class="summary-driver">
@@ -459,7 +459,7 @@
 						        <div>
 						          <div class="summary-driver-name">Lucky</div>
 						          <div style="font-size:13px;color:#666;">
-						          	<span th:switch="${trip.vehicleType?.name()}">
+						          	<span th:switch="${ride.vehicleType?.name()}">
 									    <span th:case="'CAR'">🚗 Car</span>
 									    <span th:case="'BIKE'">🛵 Bike</span>
 									    <span th:case="'VAN'">🚐 Van</span>
@@ -475,16 +475,24 @@
 						
 						      <div class="summary-fare">
 						        <span>1 passenger</span>
-						        <strong>₹[[${trip.pricePerSeat}]]</strong>
+						        <strong>₹[[${ride.price}]]</strong>
 						      </div>
 								
-						     <a th:if="${!isKycVerified}"
+						    <!--  <a th:if="${!isKycVerified}"
 								   th:href="@{'/user/ride/offer?id=' + ${trip.id}}"
 								   class="manage-btn">Manage ride offer</a>
 								   
 							 <a th:if="${isKycVerified}"
 								   th:href="@{'/user/ride/offer?id=' + ${trip.id}}"
-								   class="manage-btn">Request to book</a>
+								   class="manage-btn">Request to book</a> -->
+								
+								   
+								  <div th:if="${ride?.driver?.userId != currentUser?.userId}">
+									    <a th:href="@{'/user/ride/booking/checkout?id=' + ${ride.id}}" class="manage-btn">Request to Book Ride</a>
+									</div>
+									<div th:if="${ride?.driver?.userId == currentUser?.userId}">
+										<a th:href="@{'/user/ride/offer?id=' + ${ride.id}}" class="manage-btn">Manage ride offer</a>
+									</div>
 						    </div>
 						  </div>
 					  </div>

@@ -15,7 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 @Service
-public class GoogleMapsService {
+public class GoogleMapsService1 {
     
     @Value("${serverkey.google.maps.api.key}")
     private String apiKey;
@@ -25,7 +25,7 @@ public class GoogleMapsService {
     
     private final WebClient webClient;
     
-    public GoogleMapsService(WebClient.Builder webClientBuilder) {
+    public GoogleMapsService1(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.build();
     }
     

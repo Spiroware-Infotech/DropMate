@@ -1,9 +1,21 @@
 package com.dropmate.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -12,29 +24,35 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "ratings")
 public class Rating {
-    @Id
-    @Column(length = 36)
-    private String id;
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "booking_id")
-    private Booking booking;
+    // Who gave the rating
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rated_by_user_id", nullable = false)
+    private User ratedBy;
 
-    @ManyToOne
-    @JoinColumn(name = "rater_id")
-    private User rater;
+    // Who received the rating
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rated_to_user_id", nullable = false)
+    private User ratedTo;
 
-    @ManyToOne
-    @JoinColumn(name = "rated_id")
-    private User rated;
+    // Related ride
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ride_id", nullable = false)
+    private Rides rides;
 
+    // Rating value (1–5 stars)
     @Column(nullable = false)
-    private Integer stars;
-
-    @Column(columnDefinition = "TEXT")
+    private double ratingValue;
+    
+    // Optional feedback/comment
+    @Column(length = 1000)
     private String comment;
 
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    // Auto timestamps
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
 }

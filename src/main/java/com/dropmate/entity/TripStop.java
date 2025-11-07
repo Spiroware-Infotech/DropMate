@@ -30,7 +30,7 @@ public class TripStop {
 
     @ManyToOne
     @JoinColumn(name = "trip_id")
-    private Trip trip;
+    private Rides rides;
 
     @Column(name = "stop_order")
     private Integer stopOrder;
