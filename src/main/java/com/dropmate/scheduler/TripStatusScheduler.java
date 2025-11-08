@@ -26,14 +26,15 @@ public class TripStatusScheduler {
      * Cron format: second minute hour day month weekday
      * -> 0 5 0 * * * means 12:05 AM daily
      */
-    @Scheduled(cron = "0 5 0 * * *")
+    @Scheduled(cron = "0 0/5 * * * *")
+    //@Scheduled(cron = "0 5 0 * * *")
     public void updateTripStatuses() {
         LocalDate today = LocalDate.now();
-        logger.info("🚀 Trip Scheduler started at " + today);
+        logger.info("🚀 Rides Scheduler started at " + today);
 
         // ✅ Get all trips from DB
         List<Trip> allTrips = tripRepository.findAll();
-        
+        logger.info("Rides Size: {}" , allTrips.size());
         //optimize by loading only relevant trips
         //List<Trip> trips = tripRepository.findByStatusIn(List.of(TripStatus.UPCOMING, TripStatus.ONGOING));
 
@@ -58,6 +59,7 @@ public class TripStatusScheduler {
                      trip.getStatus() != TripStatus.CANCELLED) {
 
                 trip.setStatus(TripStatus.ARCHIVED);
+                trip.setIsActive(false);
                 archivedCount++;
             }
         }
@@ -65,12 +67,12 @@ public class TripStatusScheduler {
         // ✅ Save only if any trips were updated
         if (ongoingCount > 0 || archivedCount > 0) {
             tripRepository.saveAll(allTrips);
-            logger.info("✅ Updated " + ongoingCount + " trips to ONGOING and " +
-                               archivedCount + " trips to ARCHIVED");
+            logger.info("✅ Updated " + ongoingCount + " rides to ONGOING and " +
+                               archivedCount + " rides to ARCHIVED");
         } else {
-        	logger.info("ℹ️ No trip updates required today");
+        	logger.info("ℹ️ No ride updates required today");
         }
 
-        logger.info("🏁 Trip Scheduler completed.");
+        logger.info("🏁 Ride Scheduler completed.");
     }
 }

@@ -6,10 +6,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class OrganizationServiceApplication {
+public class DropMateServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OrganizationServiceApplication.class, args);
+		SpringApplication.run(DropMateServiceApplication.class, args);
 	}
 
 }
