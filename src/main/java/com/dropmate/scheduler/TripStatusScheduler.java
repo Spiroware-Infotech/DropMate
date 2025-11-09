@@ -26,8 +26,8 @@ public class TripStatusScheduler {
      * Cron format: second minute hour day month weekday
      * -> 0 5 0 * * * means 12:05 AM daily
      */
-    @Scheduled(cron = "0 0/5 * * * *")
-    //@Scheduled(cron = "0 5 0 * * *")
+    //@Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0 5 0 * * *")
     public void updateTripStatuses() {
         LocalDate today = LocalDate.now();
         logger.info("🚀 Rides Scheduler started at " + today);
